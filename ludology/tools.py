@@ -130,9 +130,3 @@ def simplify(G):
 
 
 canonicalize = simplify
-
-
-def game_tree(G):
-    """
-    """
-    tree = nx.DiGraph()
