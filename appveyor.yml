@@ -4,15 +4,18 @@ environment:
       PYTHON_VERSION: "3.6"
       PYTHON_ARCH: "64"
 
+init:
+  - ECHO %PYTHON% %PYTHON_VERSION% %PYTHON_ARCH%
+
 install:
-  # We need wheel installed to build wheels
-  - pip install .
-  - pip install -r requirements_dev.txt
+  - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
+  - python --version
+  - pip install -e .[dev]
 
 build: off
 
 test_script:
-  - pytest  --cov=ludology
+  - pytest  --cov
 
 after_test:
   - codecov
