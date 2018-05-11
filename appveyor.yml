@@ -12,7 +12,7 @@ install:
 build: off
 
 test_script:
-  - pytest .
+  - pytest  --cov=ludology
 
 after_test:
   - codecov
