@@ -178,3 +178,40 @@ def test_birthday(g, bday):
     """
     """
     assert g.birthday == bday
+
+
+@pytest.mark.parametrize(['a', 'b', 'c'], [
+    (zero, zero, zero),
+    (star, star, zero),
+    (one, none, zero),
+    (one, zero, one),
+    (zero, one, one),
+    (one, 0, one),
+    (0, one, one),
+    (one, star, Game({one}, {one})),
+    (star, one, Game({one}, {one})),
+])
+def test_add(a, b, c):
+    assert a + b == c
+
+
+@pytest.mark.parametrize(['a', 'b', 'c'], [
+    (zero, zero, zero),
+    (star, star, star),
+    (one, none, -1),
+    (one+1, 1, 2),
+    (2, one, one+one),
+])
+def test_mul(a, b, c):
+    assert a * b == c
+
+
+@pytest.mark.parametrize(['g', 'o'], [
+    (zero, 'P'),
+    (star, 'N'),
+    (one, 'L'),
+    (up, 'L'),
+    (-up, 'R'),
+])
+def test_outcome(g, o):
+    assert g.outcome == o
