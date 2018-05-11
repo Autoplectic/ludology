@@ -62,56 +62,39 @@ def right_stop(G):
         return min((left_stop(G_R) for G_R in G._right), key=stop_order)
 
 
-@lru_cache(maxsize=None)
 def remove_dominated(G):
     """
     """
-    old_left = list(G._left)
-    G._left = set()
-    while old_left:
-        G_L = old_left.pop()
-        if not any(G_L < g for g in old_left):
-            G._left.add(G_L)
-
-    old_right = list(G._right)
-    G._right = set()
-    while old_right:
-        G_R = old_right.pop()
-        if not any(G_R > g for g in old_right):
-            G._right.add(G_R)
-
-    # G._left = {g for g in G._left if not any(g < G_L for G_L in G._left)}
-    # G._right = {g for g in G._right if not any(g > G_R for G_R in G._right)}
+    G._left = {g for g in G._left if not any(g < G_L for G_L in G._left)}
+    G._right = {g for g in G._right if not any(g > G_R for G_R in G._right)}
 
 
-@lru_cache(maxsize=None)
 def replace_reversible(G):
     """
     """
-    old_left = list(G._left)
-    G._left = set()
-    while old_left:
-        G_L = old_left.pop()
+    new_left_set = set()
+    for G_L in G._left:
         for G_LR in G_L._right:
-            if G >= G_LR:  # G_L is reversible through G_LR
-                G._left |= G_LR._left
+            if G_LR <= G:  # G_L is reversible through G_LR
+                for G_LRL in G_LR._left:
+                    new_left_set.add(G_LRL)
                 break
-        else:  # Not reversible
-            G._left.add(G_L)
+        else:   # Not reversible
+            new_left_set.add(G_L)
+    G._left = new_left_set
 
-    old_right = list(G._right)
-    G._right = set()
-    while old_right:
-        G_R = old_right.pop()
+    new_right_set = set()
+    for G_R in G._right:
         for G_RL in G_R._left:
             if G_RL >= G:  # G_R is reversible through G_RL
-                G._right |= G_RL._right
+                for G_RLR in G_RL._right:
+                    new_right_set.add(G_RLR)
                 break
         else:  # Not reversible
-            G._right.add(G_R)
+            new_right_set.add(G_R)
+    G._right = new_right_set
 
 
-@lru_cache(maxsize=None)
 def simplify(G):
     """
     """
@@ -126,7 +109,7 @@ def simplify(G):
         remove_dominated(G)
         replace_reversible(G)
 
-    return(G)
+    return G
 
 
 canonicalize = simplify
