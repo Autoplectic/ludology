@@ -84,7 +84,7 @@ setup(
     # for example:
     # $ pip install -e .[dev,test]
     extras_require={
-        'dev': ['codecov', 'pytest', 'pytest-cov'],
+        'dev': ['codecov', 'hypothesis', 'pytest', 'pytest-cov'],
         'test': [],
     },
 
