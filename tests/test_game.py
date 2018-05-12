@@ -2,6 +2,8 @@
 """
 
 import pytest
+from hypothesis import given
+from hypothesis.strategies import integers
 
 from ludology import Game
 from ludology.tools import canonicalize
@@ -12,6 +14,7 @@ half = Game(1/2)
 one = Game(1)
 none = Game(-1)
 star = Game({zero}, {zero})
+star2 = Game({zero, star}, {zero, star})
 up = Game({zero}, {star})
 down = -up
 pm = Game({1}, {-1})
@@ -123,7 +126,7 @@ def test_equiv_2():
 @pytest.mark.parametrize('g', [
     zero,
     star,
-    Game({zero, star}, {zero, star})
+    star2,
 ])
 def test_impartial(g):
     """
@@ -136,7 +139,7 @@ def test_impartial(g):
     half,
     up,
     up + star,
-    Game({1}, {-1})
+    pm,
 ])
 def test_not_impartial(g):
     """
@@ -172,7 +175,7 @@ def test_not_switch(g):
     (none, 1),
     (star, 1),
     (up, 2),
-    (canonicalize(up+star), 2),
+    (canonicalize(up + star), 2),
     (half, 2),
 ])
 def test_birthday(g, bday):
@@ -200,8 +203,8 @@ def test_add(a, b, c):
     (zero, zero, zero),
     (star, star, star),
     (one, none, -1),
-    (one+1, 1, 2),
-    (2, one, one+one),
+    (one + 1, 1, 2),
+    (2, one, one + one),
 ])
 def test_mul(a, b, c):
     assert a * b == c
@@ -219,23 +222,34 @@ def test_outcome(g, o):
 
 
 @pytest.mark.parametrize(['g', 'v'], [
-    (zero, '0'),
     (star, '∗'),
-    (one, '1'),
-    (half, '1/2'),
     (pm, '±1'),
     (Game({Game(3)}, {Game(1)}), '2±1'),
     (up, '↑'),
-    (2*up, '2·↑'),
+    (2 * up, '2·↑'),
     (up + star, '↑∗'),
     (up + up + star, '2·↑∗'),
     (down, '↓'),
-    (2*down, '2·↓'),
+    (2 * down, '2·↓'),
     (down + star, '↓∗'),
     (down + down + star, '2·↓∗'),
     (Game({one}, {1}), '1∗'),
     (Game({0}, {Game({0}, {-2})}), '➕_2'),
     (Game({Game({2}, {0})}, {0}), '➖_2'),
+    (star2, '∗2'),
+    (Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}), '{5/2,3±1|-2±2,-3/2±1/2}'),
+    (Game({0}, {star2}), '{0|∗2}'),
+    (Game({star2}, {0}), '{∗2|0}'),
 ])
 def test_value(g, v):
     assert g.value == v
+
+
+@given(integers(min_value=-7, max_value=7), integers(min_value=0, max_value=3))
+def test_value_dyadic_rational(m, j):
+    """
+    """
+    f = m/2**j
+    n, d = f.as_integer_ratio()
+    g = Game(f)
+    assert g.value == (f"{n}/{d}" if d > 1 else f"{n}")

@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
         "canonicalize"
-    ]
+    ],
+    "python.pythonPath": "/home/autoplectic/miniconda3/bin/python"
 }

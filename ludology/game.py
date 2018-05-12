@@ -342,15 +342,16 @@ def _value_str(G):
 
         # dyadic rational
         # "simplest number l < x < r...
-        d = 2**floor(log(rf - lf, 2))
-        if ceil(lf) > lf and ceil(lf) < rf:
-            x = ceil(lf)
-        elif lf % d:
-            x = ((lf // d) + 1) * d
-        else:
-            x = (lf + rf) / 2
+        # d = 2**floor(log(rf - lf, 2))
+        # if ceil(lf) > lf and ceil(lf) < rf:
+        #     x = ceil(lf)
+        # elif lf % d:
+        #     x = ((lf // d) + 1) * d
+        # else:
+        #     x = (lf + rf) / 2
 
-        return str(x)
+        # return str(x)
+        return str((lf + rf) / 2)
 
     if len(G._left) == len(G._right) == 1:
         G_L, G_R = next(iter(G._left)), next(iter(G._right))
@@ -367,7 +368,7 @@ def _value_str(G):
                     return f"±{diff}"
 
             # tepid games
-            elif G_L == G_R:
+            else:  # G_L == G_R, G_L < G_R caught by numbers above.
                 return f"{G_L.value}∗"
 
     if G._left == {zero} and len(G._right) == 1:
