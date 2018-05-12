@@ -380,7 +380,7 @@ def _value_str(G):
         G_L = next(iter(G._left))
         if G_L._right == {zero} and len(G_L._left) == 1:
             G_LL = next(iter(G_L._left))
-            return f"➖_{(-G_LL).value}"
+            return f"➖_{(G_LL).value}"
 
     #todo: sums
 

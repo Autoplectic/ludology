@@ -13,6 +13,7 @@ one = Game(1)
 none = Game(-1)
 star = Game({zero}, {zero})
 up = Game({zero}, {star})
+down = -up
 pm = Game({1}, {-1})
 
 
@@ -215,3 +216,26 @@ def test_mul(a, b, c):
 ])
 def test_outcome(g, o):
     assert g.outcome == o
+
+
+@pytest.mark.parametrize(['g', 'v'], [
+    (zero, '0'),
+    (star, '∗'),
+    (one, '1'),
+    (half, '1/2'),
+    (pm, '±1'),
+    (Game({Game(3)}, {Game(1)}), '2±1'),
+    (up, '↑'),
+    (2*up, '2·↑'),
+    (up + star, '↑∗'),
+    (up + up + star, '2·↑∗'),
+    (down, '↓'),
+    (2*down, '2·↓'),
+    (down + star, '↓∗'),
+    (down + down + star, '2·↓∗'),
+    (Game({one}, {1}), '1∗'),
+    (Game({0}, {Game({0}, {-2})}), '➕_2'),
+    (Game({Game({2}, {0})}, {0}), '➖_2'),
+])
+def test_value(g, v):
+    assert g.value == v
