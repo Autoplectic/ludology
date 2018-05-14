@@ -15,6 +15,8 @@ class Nimber(Game):
         elif isinstance(n, int):
             options = {Nimber(i) for i in range(n)}
         else:
+            msg = "Nimbers must have an integer value."
+            raise ValueError(msg)
 
         self._left = self._right = options
         self._n = n
@@ -26,9 +28,9 @@ class Nimber(Game):
         if G._n == 0:
             return '0'
         elif G._n == 1:
-            return '*'
+            return '∗'
         else:
-            return f"*{G._n}"
+            return f"∗{G._n}"
 
     @property
     def is_number(G):
@@ -90,6 +92,11 @@ class Nimber(Game):
             return super().__eq__(H)
         else:
             return NotImplemented
+
+    def __hash__(G):
+        """
+        """
+        return hash(G._n)
 
 def _mul(n1, n2):
     """

@@ -18,10 +18,10 @@ def test_add_nimbers():
 def test_mul_nimbers():
     """
     """
-    a = Nimber(5)
+    a = Nimber(2)
     b = Nimber(6)
-    c = Nimber(8)
-    assert a + b == c
+    c = Nimber(11)
+    assert a * b == c
 
 
 def test_neg_nimbers():
