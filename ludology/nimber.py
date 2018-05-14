@@ -12,8 +12,10 @@ class Nimber(Game):
         """
         if n == 0:
             options = set()
-        else:
+        elif isinstance(n, int):
             options = {Nimber(i) for i in range(n)}
+        else:
+
         self._left = self._right = options
         self._n = n
 
@@ -80,6 +82,14 @@ class Nimber(Game):
         """
         """
         return G.__mul__(H)
+
+    def __eq__(G, H):
+        if isinstance(H, Nimber):
+            return G._n == H._n
+        elif isinstance(H, Game):
+            return super().__eq__(H)
+        else:
+            return NotImplemented
 
 def _mul(n1, n2):
     """
