@@ -49,8 +49,8 @@ class Game(object):
                 G._right = {Game(v + 1/d)}
         # passed in a game
         elif isinstance(left, Game):
-            G._left = copy(left._left)
-            G._right = copy(left._right)
+            G._left = {Game(_) for _ in left._left}
+            G._right = {Game(_) for _ in left._right}
         # passed in sets
         else:
             if left is not None:

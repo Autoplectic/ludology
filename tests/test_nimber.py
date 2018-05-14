@@ -3,7 +3,7 @@
 
 import pytest
 
-from ludology import Nimber
+from ludology import Game, Nimber
 
 
 def test_add_nimbers():
@@ -15,12 +15,30 @@ def test_add_nimbers():
     assert a + b == c
 
 
+def test_add_nimber_game():
+    """
+    """
+    a = Nimber(3)
+    b = Game(Nimber(2))
+    c = Game(Nimber(1))
+    assert a + b == c
+
+
 def test_mul_nimbers():
     """
     """
     a = Nimber(2)
     b = Nimber(6)
     c = Nimber(11)
+    assert a * b == c
+
+
+def test_mul_nimber_game():
+    """
+    """
+    a = Nimber(2)
+    b = Game(Nimber(2))
+    c = Game(Nimber(3))
     assert a * b == c
 
 
@@ -80,3 +98,17 @@ def test_nimber_birthday(n):
     """
     """
     assert Nimber(n).birthday == n
+
+
+def test_unsupported_1():
+    """
+    """
+    with pytest.raises(TypeError):
+        Nimber(4) + 2
+
+
+def test_unsupported_2():
+    """
+    """
+    with pytest.raises(TypeError):
+        Nimber(4) * 2
