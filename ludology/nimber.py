@@ -65,11 +65,6 @@ class Nimber(Game):
         else:
             return NotImplemented
 
-    def __radd__(G, H):
-        """
-        """
-        return G.__add__(H)
-
     def __mul__(G, H):
         """
         """
@@ -79,11 +74,6 @@ class Nimber(Game):
             return super().__mul__(H)
         else:
             return NotImplemented
-
-    def __rmul__(G, H):
-        """
-        """
-        return G.__mul__(H)
 
     def __eq__(G, H):
         if isinstance(H, Nimber):
@@ -97,6 +87,7 @@ class Nimber(Game):
         """
         """
         return hash(G._n)
+
 
 def _mul(n1, n2):
     """

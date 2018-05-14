@@ -49,6 +49,14 @@ def test_neg_nimbers():
     assert a == -a
 
 
+def test_eq_nimber_game():
+    """
+    """
+    a = Nimber(3)
+    b = Game(3)
+    assert not a == b
+
+
 def test_fail():
     """
     """
@@ -112,3 +120,10 @@ def test_unsupported_2():
     """
     with pytest.raises(TypeError):
         Nimber(4) * 2
+
+
+def test_unsupported_2():
+    """
+    """
+    with pytest.raises(TypeError):
+        Nimber(4) == slice()
