@@ -10,7 +10,7 @@ init:
 install:
   - set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%
   - python --version
-  - pip install -e .[dev]
+  - pip install -e .[all]
 
 build: off
 

@@ -16,6 +16,23 @@ here = path.abspath(path.dirname(__file__))
 with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+requires = [
+    'networkx',
+    'numpy',
+    'scipy',
+]
+
+requires_dev = [
+    'codecov',
+    'hypothesis',
+    'pytest',
+    'pytest-cov',
+]
+
+requires_plotting = [
+    'matplotlib',
+]
+
 setup(
     name='ludology',
 
@@ -74,19 +91,16 @@ setup(
     # your project is installed. For an analysis of "install_requires" vs pip's
     # requirements files see:
     # https://packaging.python.org/en/latest/requirements.html
-    install_requires=[
-        'networkx',
-        'numpy',
-        'scipy',
-    ],
+    install_requires=requires,
 
     # List additional groups of dependencies here (e.g. development
     # dependencies). You can install these using the following syntax,
     # for example:
     # $ pip install -e .[dev,test]
     extras_require={
-        'dev': ['codecov', 'hypothesis', 'pytest', 'pytest-cov'],
-        'test': [],
+        'dev': requires_dev,
+        'plotting': requires_plotting,
+        'all': requires_dev + requires_plotting,
     },
 
     # If there are data files included in your packages that need to be

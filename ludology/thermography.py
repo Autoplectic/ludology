@@ -7,8 +7,6 @@ from functools import lru_cache
 import numpy as np
 from scipy.optimize import brentq
 
-import matplotlib.pyplot as plt
-
 from .game import Game
 
 
@@ -176,6 +174,7 @@ def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
     """
     """
     if ax is None:
+        import matplotlib.pyplot as plt
         fig = plt.figure(figsize=(10, 5))
         ax = fig.gca()
 

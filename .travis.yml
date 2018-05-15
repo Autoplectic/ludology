@@ -6,7 +6,7 @@ python:
 
 # command to install dependencies
 install:
-  - pip install -e .[dev]
+  - pip install -e .[all]
 
 # command to run tests
 script:
