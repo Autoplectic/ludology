@@ -42,6 +42,9 @@ exclude_lines =
     # runtime errors
     except RuntimeError
 
+    # not implemented forms of binary methods:
+    return NotImplemented
+
     # hard to test (potentially long running)
 
 ignore_errors = True
