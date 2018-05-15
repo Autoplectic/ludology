@@ -48,7 +48,7 @@ def test_cooling(g, t, v):
 
 
 @pytest.mark.parametrize(['g', 't', 'v'], [
-    (Game({1}, {-1}), 1.0, Game({2}, {-2})),
+    (Game({1}, {-1}), Game(1), Game({2}, {-2})),
     (Game(2), 1.0, Game(2)),
 ])
 def test_heating(g, t, v):
