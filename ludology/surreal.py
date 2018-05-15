@@ -8,4 +8,9 @@ from .game import Game
 class Surreal(Game, numbers.Number):
     """
     """
-    pass
+
+    @property
+    def is_number(G):
+        """
+        """
+        return True
