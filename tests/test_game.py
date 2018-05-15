@@ -5,7 +5,7 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from ludology import Game
+from ludology import Game, Outcome
 from ludology.tools import canonicalize
 
 
@@ -211,11 +211,11 @@ def test_mul(a, b, c):
 
 
 @pytest.mark.parametrize(['g', 'o'], [
-    (zero, 'P'),
-    (star, 'N'),
-    (one, 'L'),
-    (up, 'L'),
-    (-up, 'R'),
+    (zero, Outcome.PREVIOUS),
+    (star, Outcome.NEXT),
+    (one, Outcome.LEFT),
+    (up, Outcome.LEFT),
+    (-up, Outcome.RIGHT),
 ])
 def test_outcome(g, o):
     assert g.outcome == o
