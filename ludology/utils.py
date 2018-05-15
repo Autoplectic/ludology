@@ -14,7 +14,7 @@ __all__ = [
 def mex(s):
     """
     """
-    for i in count():
+    for i in count():  # pragma: no branch
         if i not in s:
             return i
 

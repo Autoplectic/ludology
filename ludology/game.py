@@ -202,8 +202,8 @@ class Game(object):
     def __repr__(G):
         """
         """
-        lefts = ','.join(G_L.value for G_L in sorted(G._left))
-        rights = ','.join(G_R.value for G_R in sorted(G._right))
+        lefts = ','.join(G_L.value for G_L in sorted(G._left, key=str))
+        rights = ','.join(G_R.value for G_R in sorted(G._right, key=str))
         return '{{{}|{}}}'.format(lefts, rights)
 
     @property
