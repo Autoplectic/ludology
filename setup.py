@@ -77,6 +77,7 @@ setup(
     install_requires=[
         'networkx',
         'numpy',
+        'scipy',
     ],
 
     # List additional groups of dependencies here (e.g. development
