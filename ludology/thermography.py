@@ -99,7 +99,7 @@ def overheat(G, t):
     return Game(lefts, rights)
 
 
-def cooled_left_stop(G):
+def cooled_left_stop(G):  # pragma: no cover
     """
     The left stop of `G` cooled down.
 
@@ -121,7 +121,7 @@ def cooled_left_stop(G):
     return inner
 
 
-def cooled_right_stop(G):
+def cooled_right_stop(G):  # pragma: no cover
     """
     """
     m = mean(G)
@@ -132,7 +132,7 @@ def cooled_right_stop(G):
     return inner
 
 
-def _cooled_left_stop(G):
+def _cooled_left_stop(G):  # pragma: no cover
     """
     """
     crss = [cooled_right_stop(G_L) for G_L in G._left]
@@ -142,7 +142,7 @@ def _cooled_left_stop(G):
     return inner
 
 
-def _cooled_right_stop(G):
+def _cooled_right_stop(G):  # pragma: no cover
     """
     """
     clss = [cooled_left_stop(G_R) for G_R in G._right]
@@ -153,7 +153,7 @@ def _cooled_right_stop(G):
 
 
 @lru_cache(maxsize=None)
-def integer_height(G):
+def integer_height(G):  # pragma: no cover
     """
     """
     if G.is_number:
@@ -162,7 +162,7 @@ def integer_height(G):
         return max(integer_height(g) for g in G._left | G._right) + 1
 
 
-def _thermograph(G, ax, T, lw):
+def _thermograph(G, ax, T, lw):  # pragma: no cover
     """
     """
     ts = np.linspace(0, T, 101)
@@ -172,7 +172,7 @@ def _thermograph(G, ax, T, lw):
     ax.plot(rs(ts), ts, lw=2*lw, c=line.get_color())
 
 
-def thermograph(G, with_options=True, ax=None, T=None):
+def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
     """
     """
     if ax is None:

@@ -62,7 +62,7 @@ class Nimber(Game):
             return Nimber(G._n ^ H._n)
         elif isinstance(H, Game):
             return super().__add__(H)
-        else:
+        else:  # pragma: no branch
             return NotImplemented
 
     def __mul__(G, H):
@@ -72,7 +72,7 @@ class Nimber(Game):
             return Nimber(_mul(G._n, H._n))
         elif isinstance(H, Game):
             return super().__mul__(H)
-        else:
+        else:  # pragma: no branch
             return NotImplemented
 
     def __eq__(G, H):
@@ -80,7 +80,7 @@ class Nimber(Game):
             return G._n == H._n
         elif isinstance(H, Game):
             return super().__eq__(H)
-        else:
+        else:  # pragma: no branch
             return NotImplemented
 
     def __hash__(G):

@@ -106,24 +106,3 @@ def test_nimber_birthday(n):
     """
     """
     assert Nimber(n).birthday == n
-
-
-def test_unsupported_1():
-    """
-    """
-    with pytest.raises(TypeError):
-        Nimber(4) + 2
-
-
-def test_unsupported_2():
-    """
-    """
-    with pytest.raises(TypeError):
-        Nimber(4) * 2
-
-
-def test_unsupported_2():
-    """
-    """
-    with pytest.raises(TypeError):
-        Nimber(4) == slice()
