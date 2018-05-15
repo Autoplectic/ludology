@@ -5,7 +5,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from ludology import Game, Outcome
+from ludology import Game
+from ludology.game import Outcome
 from ludology.tools import canonicalize
 
 
