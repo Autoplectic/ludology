@@ -1,10 +1,10 @@
 """
+The basic Game class.
 """
 
-from copy import copy, deepcopy
+from copy import copy
 from fractions import Fraction
 from functools import lru_cache, wraps
-from math import ceil, floor, inf, log
 
 from .tools import canonicalize
 
@@ -25,10 +25,21 @@ def gamify_inputs(f):
 
 class Game(object):
     """
+    A game consists of a *left set* and a *right set*, and is often written: { G_L | G_R }, where G_L is the left set of Games, and G_R is the right set of Games. The trivial game, {|}, is known as 0.
     """
 
     def __init__(G, left=None, right=None):
         """
+        Construct a game.
+
+        Parameters
+        ----------
+        left : iterable, number, Game, None
+            If an iterable, it is the left set of the game. If a number,
+            construct the game corresponding to that number. If a Game, use
+            its left set, and if None, treat the left set as empty.
+        right : iterable, None
+            The right set of the game. If None, treat the right set as empty.
         """
         # passed in a number
         if isinstance(left, (int, float, Fraction)):
