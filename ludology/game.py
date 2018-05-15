@@ -232,6 +232,26 @@ class Game(object):
 
     @gamify_inputs
     @lru_cache(maxsize=None)
+    def __ror__(G, H):
+        """
+        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        fuzzy : bool
+            G | H.
+        """
+        return not (G >= H or H >= G)
+
+    @gamify_inputs
+    @lru_cache(maxsize=None)
     def __neg__(G):
         """
         -{G_L | G_R} is recursively defined as {-G_R | -G_L}.
