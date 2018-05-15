@@ -28,12 +28,12 @@ def mean(G):
     if G.is_number:
         return float(Fraction(value))
     elif G.is_switch:
-        mean, _ = value.split('±')
-        if mean:
-            mean = float(Fraction(mean))
+        m, _ = value.split('±')
+        if m:
+            m = float(Fraction(mean))
         else:
-            mean = 0.0
-        return mean
+            m = 0.0
+        return m
     else:
         return float(_cooled_left_stop(G)(temperature(G)))
 

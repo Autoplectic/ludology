@@ -1,10 +1,8 @@
 """
 """
 
-from copy import copy, deepcopy
+from copy import copy
 from functools import lru_cache
-
-import networkx as nx
 
 
 __all__ = [

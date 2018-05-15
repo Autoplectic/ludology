@@ -3,6 +3,7 @@ The basic Game class.
 """
 
 from copy import copy
+from enum import IntFlag, auto
 from fractions import Fraction
 from functools import lru_cache, wraps
 
@@ -15,6 +16,19 @@ __all__ = [
 
 
 def gamify_inputs(f):
+    """
+    A decorator to cast all arguments to a function into Games.
+
+    Parameters
+    ----------
+    f : func
+        The function to decorate.
+
+    Returns
+    -------
+    inner : func
+        The decorated function.
+    """
     @wraps(f)
     def inner(*args):
         args = tuple(Game(_) for _ in args)
@@ -23,21 +37,38 @@ def gamify_inputs(f):
     return inner
 
 
+class Outcome(IntFlag):
+    """
+    Representing the outcome classes of Games.
+    """
+    PREVIOUS = auto()
+    NEXT = auto()
+    LEFT = auto()
+    RIGHT = auto()
+
+
 class Game(object):
     """
-    A game consists of a *left set* and a *right set*, and is often written: { G_L | G_R }, where G_L is the left set of Games, and G_R is the right set of Games. The trivial game, {|}, is known as 0.
+    A game consists of a *left set* and a *right set*, and is often written:
+
+        { G_L | G_R }
+
+    where G_L is the left set of Games, and G_R is the right set of Games. The trivial game, {|},
+    is known as 0 and is said to have been born on day 0. Recursively, we can define games born
+    on day `n` as all possible games whose left set and right set consist of Games having birthdays
+    no later than day `n-1`.
     """
 
     def __init__(G, left=None, right=None):
         """
-        Construct a game.
+        Construct a Game.
 
         Parameters
         ----------
         left : iterable, number, Game, None
-            If an iterable, it is the left set of the game. If a number,
-            construct the game corresponding to that number. If a Game, use
-            its left set, and if None, treat the left set as empty.
+            If an iterable, it is the left set of the game. If a number, construct the game
+            corresponding to that number. If a Game, use its left set, and if None, treat the left
+            set as empty.
         right : iterable, None
             The right set of the game. If None, treat the right set as empty.
         """
@@ -77,6 +108,20 @@ class Game(object):
     # @lru_cache(maxsize=None)
     def __ge__(G, H):
         """
+        A Game G is greater than or equal to a Game H so long as there are no G_R such that
+        H >= G_R and there are no H_L such that H_L >= G.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        ge : bool
+            G >= H.
         """
         a = all(not H >= G_R for G_R in G._right)
         b = all(not H_L >= G for H_L in H._left)
@@ -86,6 +131,19 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __le__(G, H):
         """
+        G <= H if H >= G.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        le : bool
+            G <= H.
         """
         return H >= G
 
@@ -93,6 +151,19 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __gt__(G, H):
         """
+        G > H if G >= H and not G == H.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        gt : bool
+            G > H.
         """
         return G >= H and not H >= G
 
@@ -100,6 +171,19 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __lt__(G, H):
         """
+        G < H if G <= H and not G == H.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        lt : bool
+            G < H.
         """
         return H > G
 
@@ -107,6 +191,19 @@ class Game(object):
     # @lru_cache(maxsize=None)
     def __eq__(G, H):
         """
+        G == H if G >= H and G <= H.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        eq : bool
+            G == H.
         """
         if hash(G) == hash(H):
             return True
@@ -117,20 +214,37 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __or__(G, H):
         """
+        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H.
+
+        Parameters
+        ----------
+        G : Game
+            The first game.
+        H : Game
+            The second game.
+
+        Returns
+        -------
+        fuzzy : bool
+            G | H.
         """
         return not (G >= H or H >= G)
 
     @gamify_inputs
     @lru_cache(maxsize=None)
-    def __ror__(G, H):
-        """
-        """
-        return G | H
-
-    @gamify_inputs
-    @lru_cache(maxsize=None)
     def __neg__(G):
         """
+        -{G_L | G_R} is recursively defined as {-G_R | -G_L}.
+
+        Parameters
+        ----------
+        G : Game
+            The game to negate.
+
+        Returns
+        -------
+        ng : Game
+            -G.
         """
         return Game({-G_R for G_R in G._right}, {-G_L for G_L in G._left})
 
@@ -138,6 +252,20 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __add__(G, H):
         """
+        The disjoint sum of two games:
+            G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GplusH : Game
+            The sum of G and H.
         """
         if not G.is_number and H.is_number:
             lefts = {G_L + H for G_L in G._left}
@@ -158,6 +286,20 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __radd__(G, H):
         """
+        The disjoint sum of two games:
+            G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GplusH : Game
+            The sum of G and H.
         """
         return G + H
 
@@ -165,6 +307,20 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __sub__(G, H):
         """
+        The disjoint difference of two games:
+            G - H = G + (-H)
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GminusH : Game
+            The difference of G and H.
         """
         return G + (-H)
 
@@ -172,6 +328,19 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __mul__(G, H):
         """
+        The Norton product of G and H.
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GtimesH : Game
+            The product of G and H.
         """
         left_a = {G_L * H + G * H_L - G_L * H_L for G_L in G._left for H_L in H._left}
         left_b = {G_R * H + G * H_R - G_R * H_R for G_R in G._right for H_R in H._right}
@@ -183,6 +352,19 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __rmul__(G, H):
         """
+        The Norton product of G and H.
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GtimesH : Game
+            The product of G and H.
         """
         return G * H
 
@@ -197,11 +379,27 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __div__(G, H):
         """
+        The Norton quotient of G by H:
+
+            G / H = G * (1/H)
+
+        Parameters
+        ----------
+        G : Game
+            The first Game.
+        H : Game
+            The second Game.
+
+        Returns
+        -------
+        GdivH : Game
+            The quotient of G by H.
         """
         return G * H._inverse()
 
     def __hash__(G):
         """
+        Define the hash of a game as the hash of the left and right options.
         """
         return hash((frozenset(G._left), frozenset(G._right)))
 
@@ -220,6 +418,18 @@ class Game(object):
     @property
     def is_impartial(G):
         """
+        A game is impartial if its left options equal its right options, and each of its options
+        are impartial.
+
+        Parameters
+        ----------
+        G : Game
+            The game of interest.
+
+        Returns
+        -------
+        impartial : bool
+            Whether G is impartial or not.
         """
         a = G._left == G._right
         b = all(G_L.is_impartial for G_L in G._left)
@@ -228,6 +438,24 @@ class Game(object):
     @property
     def is_number(G):
         """
+        A game is a (surreal) number if each of it left options is less than each of its right
+        options, and all its options are also numbers.
+
+        Parameters
+        ----------
+        G : Game
+            The game of interest.
+
+        Returns
+        -------
+        number : bool
+            Whether G is a number or not.
+
+        Note
+        ----
+        The definition implies that, in canonical form, the number has at most one left option and
+        one right option, because one must dominate. Also, if either of the two sets of options is
+        empty, the number is an integer.
         """
         a = all(g.is_number for g in G._left | G._right)
         b = all(G_L < G_R for G_L in G._left for G_R in G._right)
@@ -247,6 +475,18 @@ class Game(object):
     @property
     def birthday(G):
         """
+        The birthday of a game G is defined as the one more than the maximum birthday of its
+        options.
+
+        Parameters
+        ----------
+        G : Game
+            The game of interest.
+
+        Returns
+        -------
+        bday : int
+            G's birthday.
         """
         if G._left == G._right == set():
             bday = 0
@@ -258,20 +498,37 @@ class Game(object):
     @property
     def outcome(G):
         """
+        The outcome of a Game belongs to one of four equivalence classes:
+
+            P : A win for the second player.
+            N : A win for the first player.
+            L : A win for the left player, regardless of play order.
+            R : A win for the right player, regardless of play order.
+
+        Parameters
+        ----------
+        G : Game
+            The game of interest.
+
+        Returns
+        -------
+        o : Outcome
+            The outcome class of game G.
         """
         zero = Game()
         if G == zero:
-            return 'P'
+            return Outcome.PREVIOUS
         elif G > zero:
-            return 'L'
+            return Outcome.LEFT
         elif G < zero:
-            return 'R'
+            return Outcome.RIGHT
         else:
-            return 'N'
+            return Outcome.NEXT
 
     @property
     def value(G):
         """
+        The value of the game in short-hand.
         """
         return _value_str(G)
 
@@ -279,6 +536,17 @@ class Game(object):
 @lru_cache(maxsize=None)
 def _value_str(G):
     """
+    A string representation of the game, accounting for named special games.
+
+    Parameters
+    ----------
+    G : Game
+        The game to compute the representation of.
+
+    Returns
+    -------
+    s : str
+        The name of the game.
     """
     G = canonicalize(G)
     G_hash = hash(G)
