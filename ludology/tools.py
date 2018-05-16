@@ -17,6 +17,19 @@ __all__ = [
 @lru_cache(maxsize=None)
 def left_incentives(G):
     """
+    Compute the left incentives of G:
+
+        { G_L - G }
+
+    Parameters
+    ----------
+    G : Game
+        The game of interest.
+
+    Returns
+    -------
+    incentives : set
+        The left incentives of G.
     """
     return {simplify(G_L - G) for G_L in G._left}
 
@@ -24,6 +37,19 @@ def left_incentives(G):
 @lru_cache(maxsize=None)
 def right_incentives(G):
     """
+    Compute the right incentives of G:
+
+        { G - G_R }
+
+    Parameters
+    ----------
+    G : Game
+        The game of interest.
+
+    Returns
+    -------
+    incentives : set
+        The right incentives of G.
     """
     return {simplify(G - G_R) for G_R in G._right}
 
@@ -43,6 +69,19 @@ def stop_order(item):
 @lru_cache(maxsize=None)
 def left_stop(G):
     """
+    Compute the left stop of G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    LS : Game
+        The left stop of G.
+    initiative : str
+        '+' if it is left's turn, '-' if right's.
     """
     if G.is_number:
         return (G, '+')
@@ -53,6 +92,19 @@ def left_stop(G):
 @lru_cache(maxsize=None)
 def right_stop(G):
     """
+    Compute the right stop of G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    RS : Game
+        The right stop of G.
+    initiative : str
+        '+' if it is left's turn, '-' if right's.
     """
     if G.is_number:
         return (G, '-')
