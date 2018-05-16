@@ -3,7 +3,7 @@ The basic Game class.
 """
 
 from copy import copy
-from enum import IntFlag, auto
+from enum import Enum
 from fractions import Fraction
 from functools import lru_cache, wraps
 
@@ -37,14 +37,14 @@ def gamify_inputs(f):
     return inner
 
 
-class Outcome(IntFlag):
+class Outcome(Enum):
     """
     Representing the outcome classes of Games.
     """
-    PREVIOUS = auto()
-    NEXT = auto()
-    LEFT = auto()
-    RIGHT = auto()
+    PREVIOUS = 'P'
+    NEXT     = 'N'
+    LEFT     = 'L'
+    RIGHT    = 'R'
 
 
 class Game(object):
