@@ -23,6 +23,18 @@ __al__ = [
 @lru_cache(maxsize=None)
 def mean(G):
     """
+    Compute the mean value of a Game. The mean value is defined as the value to which a Game cools
+    to. It is, by definition, a surreal number.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    m : float
+        The mean value of G.
     """
     value = G.value
     if G.is_number:
@@ -41,6 +53,18 @@ def mean(G):
 @lru_cache(maxsize=None)
 def temperature(G):
     """
+    Compute the temperature of a game. It is the amount by which a Game must be cooled in order to
+    become a number.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    temp : float
+        The temperature of G.
     """
     if G.is_number:
         return 0.0
@@ -51,17 +75,36 @@ def temperature(G):
     else:
         fl = _cooled_left_stop(G)
         fr = _cooled_right_stop(G)
+
         def f(t):
             return fl(t) - fr(t)
+
         upper = 1
         while f(upper) > 0:
             upper *= 2
+
         return float(brentq(f, 0, upper + 1))
 
 
 @lru_cache(maxsize=None)
 def cool(G, t):
     """
+    Cool a game down. To cool a game, one taxes each player for the right to play. This results in
+    both players having less incentive to play. At some point both the left stop and the right stop
+    of the game coincide, at which point the game has become tepid (infinitesimally close to a
+    number) and cooling by any more will make the game cold (a number).
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+    t : Game, float
+        The amount to cool G by.
+
+    Returns
+    -------
+    CG : Game
+        The Game resulting from cooling G by t.
     """
     if t <= temperature(G):
         t = Game(t)
