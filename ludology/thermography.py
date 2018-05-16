@@ -30,7 +30,7 @@ def mean(G):
     elif G.is_switch:
         m, _ = value.split('±')
         if m:
-            m = float(Fraction(mean))
+            m = float(Fraction(m))
         else:
             m = 0.0
         return m
