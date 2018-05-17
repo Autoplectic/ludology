@@ -7,7 +7,7 @@ import pytest
 from ludology import Surreal
 
 
-@pytest.mark.paramtrize('n', [
+@pytest.mark.parametrize('n', [
     Surreal(0),
     Surreal(1/2),
     Surreal(0.125),
@@ -20,7 +20,7 @@ def test_is_number(n):
     assert n.is_number
 
 
-@pytest.mark.paramtrize(['n', 'v'], [
+@pytest.mark.parametrize(['n', 'v'], [
     (Surreal(0), True),
     (Surreal(1/2), False),
     (Surreal(0.125), False),
@@ -33,7 +33,7 @@ def test_is_impartial(n, v):
     assert n.is_impartial == v
 
 
-@pytest.mark.paramtrize('n', [
+@pytest.mark.parametrize('n', [
     Surreal(0),
     Surreal(1/2),
     Surreal(0.125),
