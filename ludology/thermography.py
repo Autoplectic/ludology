@@ -1,4 +1,5 @@
 """
+Functions related to the calculation of thermographic properties.
 """
 
 from fractions import Fraction
@@ -156,20 +157,39 @@ def cooled_left_stop(G):  # pragma: no cover
     """
     m = mean(G)
     crss = [cooled_right_stop(G_L) for G_L in G._left]
+
     @np.vectorize
     def inner(t):
+        """
+        """
         return max([crs(t) - t for crs in crss] + [m])
+
     return inner
 
 
 def cooled_right_stop(G):  # pragma: no cover
     """
+    The right stop of `G` cooled down.
+
+    Parameters
+    ----------
+    G : Game
+        The game of interest.
+
+    Returns
+    -------
+    crs : func
+        A function which returns the right stop of `G` cooled by `t`.
     """
     m = mean(G)
     clss = [cooled_left_stop(G_R) for G_R in G._right]
+
     @np.vectorize
     def inner(t):
+        """
+        """
         return min([cls(t) + t for cls in clss] + [m])
+
     return inner
 
 
@@ -177,9 +197,13 @@ def _cooled_left_stop(G):  # pragma: no cover
     """
     """
     crss = [cooled_right_stop(G_L) for G_L in G._left]
+
     @np.vectorize
     def inner(t):
+        """
+        """
         return np.max([crs(t) - t for crs in crss])
+
     return inner
 
 
@@ -187,24 +211,53 @@ def _cooled_right_stop(G):  # pragma: no cover
     """
     """
     clss = [cooled_left_stop(G_R) for G_R in G._right]
+
     @np.vectorize
     def inner(t):
+        """
+        """
         return np.min([cls(t) + t for cls in clss])
+
     return inner
 
 
 @lru_cache(maxsize=None)
-def integer_height(G):  # pragma: no cover
+def number_height(G):  # pragma: no cover
     """
+    Return the height of the game tree truncated at numbers.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    height : int
+        The hight of the number-truncated game tree.
     """
     if G.is_number:
         return 1
     else:
-        return max(integer_height(g) for g in G._left | G._right) + 1
+        return max(number_height(g) for g in G._left | G._right) + 1
 
 
 def _thermograph(G, ax, t_min, t_max, lw):  # pragma: no cover
     """
+    Plot a single thermograph.
+
+    Parameters
+    ----------
+    G : Game
+        The Game whose thermograph is to be plotted.
+    ax : plt.axis
+        The matplotlib axis to plot on.
+    t_min : float
+        The minimum temperature to plot.
+    t_max : float
+        The maximum temperature to plot.
+    lw : float
+        The line width to plot with.
     """
     temp = temperature(G)
     ts = np.linspace(t_min, temp, 101)
@@ -220,6 +273,21 @@ def _thermograph(G, ax, t_min, t_max, lw):  # pragma: no cover
 
 def thermograph(G, with_options=True, ax=None):  # pragma: no cover
     """
+    Plot a thermograph of G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game to plot the thermograph of.
+    with_options : bool
+        If True, plot the thermographs of the options of G as well. Defaults to True.
+    ax : plt.axis, None
+        The axis to plot on. If not provided, construct one.
+
+    Returns
+    -------
+    ax : plt.axis
+        The axis with the thermograph plotted.
     """
     if ax is None:
         import matplotlib.pyplot as plt
@@ -230,7 +298,7 @@ def thermograph(G, with_options=True, ax=None):  # pragma: no cover
     t_max = max([0.25 + temperature(G), 1.0])
 
     if with_options:
-        lw = 2 * integer_height(G)
+        lw = 2 * number_height(G)
     else:
         lw = 2
 
@@ -249,8 +317,7 @@ def thermograph(G, with_options=True, ax=None):  # pragma: no cover
             i += 2
             options = new_options
 
-    xlims = ax.get_xlim()
-    ax.set_xlim(xlims[1], xlims[0])
+    ax.set_xlim(*reversed(ax.get_xlim()))
     ax.set_ylim(t_min, t_max + 0.1 * (t_max - t_min))
 
     ax.grid(True)
