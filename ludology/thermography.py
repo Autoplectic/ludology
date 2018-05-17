@@ -67,7 +67,7 @@ def temperature(G):
         The temperature of G.
     """
     if G.is_number:
-        return 0.0
+        return -1/Fraction(G.value).denominator
     elif G.is_switch:
         _, temp = G.value.split('±')
         temp = float(Fraction(temp))
@@ -203,17 +203,24 @@ def integer_height(G):  # pragma: no cover
         return max(integer_height(g) for g in G._left | G._right) + 1
 
 
-def _thermograph(G, ax, T, lw):  # pragma: no cover
+def _thermograph(G, ax, T_min, lw):  # pragma: no cover
     """
     """
-    ts = np.linspace(0, T, 101)
+    temp = temperature(G)
+    ts = np.linspace(T_min, (1.1*temp if temp > 0 else 0), 101)
     ls, rs = cooled_left_stop(G), cooled_right_stop(G)
+    thermograph_height = temp if temp > 0 else 1 + temp
+    mast_height = 0.2 * thermograph_height
+    mast_height = max([mast_height, 0.5])
 
     line, = ax.plot(ls(ts), ts, lw=2*lw, label=G.value)
     ax.plot(rs(ts), ts, lw=2*lw, c=line.get_color())
 
+    ax.arrow(mean(G), max([temp, T_min]), 0, mast_height, width=2*lw/72,
+             color=line.get_color(), length_includes_head=True)
 
-def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
+
+def thermograph(G, with_options=True, ax=None, T_min=None, T=None):  # pragma: no cover
     """
     """
     if ax is None:
@@ -221,15 +228,21 @@ def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
         fig = plt.figure(figsize=(10, 5))
         ax = fig.gca()
 
+    if T_min is None:
+        if G.is_number:
+            T_min = -1.0
+        else:
+            T_min = 0.0
+
     if T is None:
-        T = 1.1 * temperature(G)
+        T = max([temperature(G), 0.125])
 
     if with_options:
         lw = integer_height(G)
     else:
         lw = 2
 
-    _thermograph(G, ax, T, lw)
+    _thermograph(G, ax, T_min, lw)
 
     if with_options:
         options = G._left | G._right
@@ -237,7 +250,7 @@ def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
         while any(not g.is_number for g in options):
             new_options = set()
             for g in options:
-                _thermograph(g, ax, T, lw=i)
+                _thermograph(g, ax, T_min, lw=i)
                 g_opts = g._left | g._right
                 if any(not _.is_number for _ in g_opts):
                     new_options |= g_opts
@@ -246,6 +259,7 @@ def thermograph(G, with_options=True, ax=None, T=None):  # pragma: no cover
 
     xlims = ax.get_xlim()
     ax.set_xlim(xlims[1], xlims[0])
+    ax.set_ylim(T_min, 1.3*T)
 
     ax.grid(True)
 

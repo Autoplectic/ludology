@@ -28,8 +28,10 @@ def test_mean(g, m):
 
 @pytest.mark.parametrize(['g', 't'], [
     (Game({1}, {-1}), 1.0),
-    (Game({3}), 0.0),
+    (Game({3}), -1.0),
     (g1, 2.5),
+    (Game(1/2), -1/2),
+    (Game(3/4), -1/4),
 ])
 def test_temperature(g, t):
     """
