@@ -67,53 +67,79 @@ def stop_order(item):
 
 
 @lru_cache(maxsize=None)
-def left_stop(G):
+def left_stop(G, adorn=True):
     """
-    Compute the left stop of G.
+    Compute the (adorned) left stop of G.
 
     Parameters
     ----------
     G : Game
         The Game of interest.
+    adorn : bool
+        Whether to adorn the stop or not. Defaults to True.
 
     Returns
     -------
     LS : Game
         The left stop of G.
     initiative : str
-        '+' if it is left's turn, '-' if right's.
+        '+' if it is left's turn, '-' if right's. Only returned if adorn is True.
     """
     if G.is_number:
-        return (G, '+')
+        ls = (G, '+')
     else:
-        return max((right_stop(G_L) for G_L in G._left), key=stop_order)
+        ls = max((right_stop(G_L) for G_L in G._left), key=stop_order)
+
+    if adorn:
+        return ls
+    else:
+        return ls[0]
 
 
 @lru_cache(maxsize=None)
-def right_stop(G):
+def right_stop(G, adorn=True):
     """
-    Compute the right stop of G.
+    Compute the (adorned) right stop of G.
 
     Parameters
     ----------
     G : Game
         The Game of interest.
+    adorn : bool
+        Whether to adorn the stop or not. Defaults to True.
 
     Returns
     -------
     RS : Game
         The right stop of G.
     initiative : str
-        '+' if it is left's turn, '-' if right's.
+        '+' if it is left's turn, '-' if right's. Only returned if adorn is True.
     """
     if G.is_number:
-        return (G, '-')
+        rs = (G, '-')
     else:
-        return min((left_stop(G_R) for G_R in G._right), key=stop_order)
+        rs = min((left_stop(G_R) for G_R in G._right), key=stop_order)
+
+    if adorn:
+        return rs
+    else:
+        return rs[0]
 
 
 def remove_dominated(G):
     """
+    Remove the dominated options of G.
+
+    A left option is dominated if there exists another left option greater than
+    it. A right option is dominated if there exists another right option less
+    than it. In essence, it would always be a "bad idea" to move to a dominated
+    option, because there exists a different option which was objectively and
+    strictly superior.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
     """
     G._left = {g for g in G._left if not any(g < G_L for G_L in G._left)}
     G._right = {g for g in G._right if not any(g > G_R for G_R in G._right)}
@@ -121,6 +147,19 @@ def remove_dominated(G):
 
 def replace_reversible(G):
     """
+    Remove the reversable options of G.
+
+    A left option is reversible if it has a right option which is less than G.
+    In this case, that left option can be replaced with it's right option's left options.
+    Essentially, this means that if left were to make a move to an option from which right
+    has the ability to move to a position which is strictly better for her than G, it is a
+    "no brainer" to do so, and so that left option might as well be replaced with the options
+    available after right makes the obvious responce.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
     """
     new_left_set = set()
     for G_L in G._left:
@@ -129,7 +168,7 @@ def replace_reversible(G):
                 for G_LRL in G_LR._left:
                     new_left_set.add(G_LRL)
                 break
-        else:   # Not reversible
+        else:  # Not reversible
             new_left_set.add(G_L)
     G._left = new_left_set
 
@@ -145,13 +184,24 @@ def replace_reversible(G):
     G._right = new_right_set
 
 
-def simplify(G):
+def canonicalize(G):
     """
+    Return the canonical form of the game G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    K : Game
+        The Game G in canonical form.
     """
     G = copy(G)
 
-    G._left = {simplify(G_L) for G_L in G._left}
-    G._right = {simplify(G_R) for G_R in G._right}
+    G._left = {canonicalize(G_L) for G_L in G._left}
+    G._right = {canonicalize(G_R) for G_R in G._right}
 
     old_left, old_right = set(), set()
     while G._left != old_left or G._right != old_right:
@@ -160,6 +210,3 @@ def simplify(G):
         replace_reversible(G)
 
     return G
-
-
-canonicalize = simplify
