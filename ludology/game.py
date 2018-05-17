@@ -579,7 +579,7 @@ def _value_str(G):
     star = Game({zero}, {zero})
 
     if G_hash == hash(star):
-        return '∗'
+        return '*'
 
     up = hash(Game({zero}, {star}))
     up_star = hash(Game({zero, star}, {zero}))
@@ -589,11 +589,11 @@ def _value_str(G):
     if G_hash == up:
         return '↑'
     elif G_hash == up_star:
-        return '↑∗'
+        return '↑*'
     elif G_hash == down:
         return '↓'
     elif G_hash == down_star:
-        return '↓∗'
+        return '↓*'
 
     g = copy(G)
     i = 1
@@ -603,9 +603,9 @@ def _value_str(G):
             g = next(iter(g._right))
             g_hash = hash(g)
             if g_hash == up:
-                return f"{i}·↑" + "∗" * ((i+1) % 2)
+                return f"{i}·↑" + "*" * ((i+1) % 2)
             elif g_hash == up_star:
-                return f"{i}·↑" + "∗" * (i % 2)
+                return f"{i}·↑" + "*" * (i % 2)
         else:
             break
 
@@ -617,15 +617,15 @@ def _value_str(G):
             g = next(iter(g._left))
             g_hash = hash(g)
             if g_hash == down:
-                return f"{i}·↓" + "∗" * ((i+1) % 2)
+                return f"{i}·↓" + "*" * ((i+1) % 2)
             elif g_hash == down_star:
-                return f"{i}·↓" + "∗" * (i % 2)
+                return f"{i}·↓" + "*" * (i % 2)
         else:
             break
 
     # nimbers
     if G.is_impartial:
-        return f"∗{len(G._left)}"
+        return f"*{len(G._left)}"
 
     if G.is_number:
         # non-zero integer
@@ -657,7 +657,7 @@ def _value_str(G):
 
             # tepid games
             else:  # G_L == G_R; G_L < G_R caught by numbers above.
-                return f"{G_L.value}∗"
+                return f"{G_L.value}*"
 
     if G._left == {zero} and len(G._right) == 1:
         G_R = next(iter(G._right))
