@@ -31,7 +31,7 @@ def left_incentives(G):
     incentives : set
         The left incentives of G.
     """
-    return {simplify(G_L - G) for G_L in G._left}
+    return {canonicalize(G_L - G) for G_L in G._left}
 
 
 @lru_cache(maxsize=None)
@@ -51,7 +51,7 @@ def right_incentives(G):
     incentives : set
         The right incentives of G.
     """
-    return {simplify(G - G_R) for G_R in G._right}
+    return {canonicalize(G - G_R) for G_R in G._right}
 
 
 def stop_order(item):
