@@ -2,10 +2,13 @@
 """
 
 from fractions import Fraction
+from functools import lru_cache, total_ordering
 import numbers
 
 from .game import Game
 
+
+@total_ordering
 class Surreal(Game, numbers.Number):
     """
     """
@@ -44,3 +47,70 @@ class Surreal(Game, numbers.Number):
         """
         """
         return False
+
+    def __hash__(G):
+        """
+        """
+        return hash(G._n)
+
+    @lru_cache(maxsize=None)
+    def __ge__(G, H):
+        """
+        """
+        if isinstance(H, Surreal):
+            return G._n >= H._n
+        elif isinstance(H, Game):
+            return super().__ge__(H)
+        else:
+            return NotImplemented
+
+    def __eq__(G, H):
+        """
+        """
+        if isinstance(H, Surreal):
+            return Surreal(G._n == H._n)
+        elif isinstance(H, Game):
+            return super().__eq__(H)
+        else:
+            return NotImplemented
+
+    @lru_cache(maxsize=None)
+    def __add__(G, H):
+        """
+        """
+        if isinstance(H, Surreal):
+            return Surreal(G._n + H._n)
+        elif isinstance(H, Game):
+            return super().__add__(H)
+        else:
+            return NotImplemented
+
+    @lru_cache(maxsize=None)
+    def __mul__(G, H):
+        """
+        """
+        if isinstance(H, Surreal):
+            return Surreal(G._n * H._n)
+        elif isinstance(H, Game):
+            return super().__mul__(H)
+        else:
+            return NotImplemented
+
+
+    @lru_cache(maxsize=None)
+    def __truediv__(G, H):
+        """
+        """
+        if isinstance(H, Surreal):
+            return Surreal(G._n / H._n)
+        elif isinstance(H, Game):
+            return super().__truediv__(H)
+        else:
+            return NotImplemented
+
+
+    @lru_cache(maxsize=None)
+    def _invert(G):
+        """
+        """
+        return Surreal(1/G._n)

@@ -1,6 +1,7 @@
 """
 """
 
+from functools import lru_cache
 from itertools import chain, combinations, count
 
 

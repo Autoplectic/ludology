@@ -397,7 +397,7 @@ class Game(object):
 
     @gamify_inputs
     @lru_cache(maxsize=None)
-    def __div__(G, H):
+    def __truediv__(G, H):
         """
         The Norton quotient of G by H:
 

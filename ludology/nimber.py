@@ -1,8 +1,16 @@
 """
 """
 
+from functools import lru_cache
+
 from .game import Game
 from .utils import mex
+
+
+__all__ = [
+    'Nimber',
+]
+
 
 class Nimber(Game):
     """
@@ -55,6 +63,7 @@ class Nimber(Game):
         """
         return G
 
+    @lru_cache(maxsize=None)
     def __add__(G, H):
         """
         """
@@ -65,6 +74,7 @@ class Nimber(Game):
         else:
             return NotImplemented
 
+    @lru_cache(maxsize=None)
     def __mul__(G, H):
         """
         """

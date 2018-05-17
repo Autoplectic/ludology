@@ -10,6 +10,12 @@ from .tools import canonicalize
 from .utils import powerset
 
 
+__all__ = [
+    'all_games_gen',
+    'build_poset_lattice',
+]
+
+
 def build_poset_lattice(nodes):
     """
     """
