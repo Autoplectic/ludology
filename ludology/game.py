@@ -392,7 +392,14 @@ class Game(object):
     @lru_cache(maxsize=None)
     def _inverse(G):
         """
+        Invert the Game G.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
         """
+        # TODO: implement this.
         pass
 
     @gamify_inputs
@@ -420,16 +427,49 @@ class Game(object):
     def __hash__(G):
         """
         Define the hash of a game as the hash of the left and right options.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Returns
+        -------
+        hash : str
+            The hash of G.
         """
         return hash((frozenset(G._left), frozenset(G._right)))
 
     def __str__(G):
         """
+        The value of G as a string.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Returns
+        -------
+        s : str
+            The value of G as a string.
         """
         return G.value
 
     def __repr__(G):
         """
+        Construct a representation of G. It is of the form {G_L|G_R}, where the options are
+        their shorthand values if possible.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Returns
+        -------
+        r : str
+            A representation of G.
         """
         lefts = ','.join(G_L.value for G_L in sorted(G._left, key=str))
         rights = ','.join(G_R.value for G_R in sorted(G._right, key=str))
@@ -484,6 +524,17 @@ class Game(object):
     @property
     def is_switch(G):
         """
+        A game is a switch if it's left and right options are numbers, and G_L > G_R.
+
+        Parameters
+        ----------
+        G : Game
+            The game of interest.
+
+        Returns
+        -------
+        number : bool
+            Whether G is a switch or not.
         """
         if len(G._left) == len(G._right) == 1:
             G_L = next(iter(G._left))
@@ -549,6 +600,16 @@ class Game(object):
     def value(G):
         """
         The value of the game in short-hand.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Returns
+        -------
+        v : str
+            The value of the Game as a string.
         """
         return _value_str(G)
 

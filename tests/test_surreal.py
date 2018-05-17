@@ -157,7 +157,7 @@ def test_mul_game(a, b):
 ])
 def test_mul_game_2(a, b):
     """
-    Test the multiplication of two surreals.
+    Test the multiplication of two Surreals.
     """
     assert Surreal(a) * Surreal(b) == Game(a * b)
 
@@ -169,6 +169,7 @@ def test_mul_game_2(a, b):
 ])
 def test_div(a, b):
     """
+    Test the division of two Surreals.
     """
     assert Surreal(a) / Surreal(b) == Surreal(a / b)
 
@@ -181,6 +182,7 @@ def test_div(a, b):
 ])
 def test_div_game(a, b):
     """
+    Test the division of a Surreal by a Game.
     """
     assert Surreal(a) / Game(b) == Game(a / b)
 
@@ -194,5 +196,6 @@ def test_div_game(a, b):
 ])
 def test_invert(n):
     """
+    Test the inversion of a Surreal.
     """
     assert Surreal(n)._invert() == Surreal(1/n)
