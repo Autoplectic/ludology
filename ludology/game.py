@@ -475,6 +475,24 @@ class Game(object):
         rights = ','.join(G_R.value for G_R in sorted(G._right, key=str))
         return '{{{}|{}}}'.format(lefts, rights)
 
+    def subpositions(G):
+        """
+        Return an iterator over all subpositions of G.
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Yields
+        ------
+        g : Game
+            A subposition of G.
+        """
+        for g in G._left | G._right:
+            yield g
+            yield from g.subpositions()
+
     @property
     def is_impartial(G):
         """
@@ -493,6 +511,28 @@ class Game(object):
         """
         a = G._left == G._right
         b = all(G_L.is_impartial for G_L in G._left)
+        return a and b
+
+    @property
+    def is_infinitesimal(G):
+        """
+        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
+        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
+        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+
+        Parameters
+        ----------
+        G : Game
+            The Game of interest.
+
+        Returns
+        -------
+        infinitesimal : bool
+            Whether the game is infinitesimal or not.
+        """
+        from .tools import left_stop, right_stop
+        a = left_stop(G) == right_stop(G) == 0
+        b = G != 0
         return a and b
 
     @property

@@ -89,6 +89,25 @@ class Nimber(Game):
         return True
 
     @property
+    def is_infinitesimal(G):
+        """
+        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
+        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
+        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+
+        Parameters
+        ----------
+        G : Nimber
+            The Nimber of interest.
+
+        Returns
+        -------
+        infinitesimal : bool
+            Whether the Nimber is infinitesimal or not (it is, unless it is zero).
+        """
+        return G._n != 0
+
+    @property
     def birthday(G):
         """
         The Nimber's birthday.

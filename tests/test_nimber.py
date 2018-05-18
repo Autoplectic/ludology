@@ -104,6 +104,25 @@ def test_nimber_is_number_2():
 
 
 @pytest.mark.parametrize('n', [
+    Nimber(3),
+    Nimber(4),
+    Nimber(7),
+])
+def test_nimber_is_infinitesimal(n):
+    """
+    Test that Nimbers (other than 0) are infinitesimal.
+    """
+    assert n.is_infinitesimal
+
+
+def test_nimber_is_infinitesimal_2():
+    """
+    Test that the Nimber 0 is not infinitesimal.
+    """
+    assert not Nimber(0).is_infinitesimal
+
+
+@pytest.mark.parametrize('n', [
     Nimber(0),
     Nimber(3),
     Nimber(7),

@@ -160,6 +160,32 @@ def test_not_impartial(g):
 
 
 @pytest.mark.parametrize('g', [
+    star,
+    up,
+    -up,
+    Game({0}, {Game({0}, {-1})}),
+])
+def test_infinitesimal(g):
+    """
+    Test that these games are infinitesimal.
+    """
+    assert g.is_infinitesimal
+
+
+@pytest.mark.parametrize('g', [
+    half,
+    one,
+    zero,
+    pm,
+])
+def test_not_infinitesimal(g):
+    """
+    Test that these games are not infinitesimal.
+    """
+    assert not g.is_infinitesimal
+
+
+@pytest.mark.parametrize('g', [
     pm,
     Game({2}, {1}),
 ])

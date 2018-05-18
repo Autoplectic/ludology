@@ -76,6 +76,25 @@ class Surreal(Game, numbers.Number):
         return G._n == 0
 
     @property
+    def is_infinitesimal(G):
+        """
+        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
+        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
+        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+
+        Parameters
+        ----------
+        G : Surreal
+            The Surreal of interest.
+
+        Returns
+        -------
+        infinitesimal : bool
+            Whether the Surreal is infinitesimal or not (it is not).
+        """
+        return False
+
+    @property
     def is_switch(G):
         """
         Whether the Surreal number is a switch or not. By definition, this is not the case.
