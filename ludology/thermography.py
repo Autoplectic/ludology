@@ -48,7 +48,7 @@ def mean(G):
             m = 0.0
         return m
     else:
-        return float(_cooled_left_stop(G)(temperature(G)))
+        return float(_left_scaffold(G)(temperature(G)))
 
 
 @lru_cache(maxsize=None)
@@ -74,8 +74,8 @@ def temperature(G):
         temp = float(Fraction(temp))
         return temp
     else:
-        fl = _cooled_left_stop(G)
-        fr = _cooled_right_stop(G)
+        fl = _left_scaffold(G)
+        fr = _right_scaffold(G)
 
         def f(t):
             return fl(t) - fr(t)
@@ -119,6 +119,19 @@ def cool(G, t):
 @lru_cache(maxsize=None)
 def heat(G, t):
     """
+    Heat up a game. In some sense, heating is the opposite of cooling.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+    t : Game, float
+        The amount to heat G by.
+
+    Returns
+    -------
+    HG : Game
+        The Game resulting from heating G by t.
     """
     if G.is_number:
         return G
@@ -133,6 +146,19 @@ def heat(G, t):
 @lru_cache(maxsize=None)
 def overheat(G, t):
     """
+    Overheat a game. This is similar to heating, except applies to numbers also.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+    t : Game, float
+        The amount to overheat G by.
+
+    Returns
+    -------
+    HG : Game
+        The Game resulting from overheating G by t.
     """
     if not isinstance(t, Game):
         t = Game(t)
@@ -143,7 +169,7 @@ def overheat(G, t):
 
 def cooled_left_stop(G):  # pragma: no cover
     """
-    The left stop of `G` cooled down.
+    The left stop of `G` cooled down. Useful for plotting thermographs.
 
     Parameters
     ----------
@@ -161,6 +187,17 @@ def cooled_left_stop(G):  # pragma: no cover
     @np.vectorize
     def inner(t):
         """
+        Compute the cooled left stop.
+
+        Parameters
+        ----------
+        t : float
+            The amount to cool by.
+
+        Returns
+        -------
+        cls : float
+            The left stop of the cooled Game.
         """
         return max([crs(t) - t for crs in crss] + [m])
 
@@ -169,7 +206,7 @@ def cooled_left_stop(G):  # pragma: no cover
 
 def cooled_right_stop(G):  # pragma: no cover
     """
-    The right stop of `G` cooled down.
+    The right stop of `G` cooled down. Useful for plotting thermographs.
 
     Parameters
     ----------
@@ -187,34 +224,89 @@ def cooled_right_stop(G):  # pragma: no cover
     @np.vectorize
     def inner(t):
         """
+        Compute the cooled right stop.
+
+        Parameters
+        ----------
+        t : float
+            The amount to cool by.
+
+        Returns
+        -------
+        cls : float
+            The right stop of the cooled Game.
         """
         return min([cls(t) + t for cls in clss] + [m])
 
     return inner
 
 
-def _cooled_left_stop(G):  # pragma: no cover
+def _left_scaffold(G):
     """
+    Compute the left scaffold of the thermograph of G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    ls : func
+        The left scaffold as a function of temperature.
     """
     crss = [cooled_right_stop(G_L) for G_L in G._left]
 
     @np.vectorize
     def inner(t):
         """
+        Compute the left scaffold of G as a function t.
+
+        Parameters
+        ----------
+        t : float
+            The temperature.
+
+        Returns
+        -------
+        ls : float
+            The left scaffold of G at temperature t.
         """
         return np.max([crs(t) - t for crs in crss])
 
     return inner
 
 
-def _cooled_right_stop(G):  # pragma: no cover
+def _right_scaffold(G):
     """
+    Compute the right scaffold of the thermograph of G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    rs : func
+        The right scaffold as a function of temperature.
     """
     clss = [cooled_left_stop(G_R) for G_R in G._right]
 
     @np.vectorize
     def inner(t):
         """
+        Compute the right scaffold of G as a function t.
+
+        Parameters
+        ----------
+        t : float
+            The temperature.
+
+        Returns
+        -------
+        rs : float
+            The right scaffold of G at temperature t.
         """
         return np.min([cls(t) + t for cls in clss])
 

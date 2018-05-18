@@ -1,4 +1,5 @@
 """
+Various tools for computing properties of Games.
 """
 
 from copy import copy
