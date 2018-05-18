@@ -531,7 +531,7 @@ class Game(object):
             Whether the game is infinitesimal or not.
         """
         from .tools import left_stop, right_stop
-        a = left_stop(G) == right_stop(G) == 0
+        a = left_stop(G, adorn=False) == right_stop(G, adorn=False) == 0
         b = G != 0
         return a and b
 
