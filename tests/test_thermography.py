@@ -1,4 +1,5 @@
 """
+Tests for ludology.thermography.
 """
 
 import pytest
@@ -22,6 +23,7 @@ g1 = Game({G_L1, G_L2}, {G_R1, G_R2})
 ])
 def test_mean(g, m):
     """
+    Test that several mean values are correct.
     """
     assert mean(g) == m
 
@@ -35,6 +37,7 @@ def test_mean(g, m):
 ])
 def test_temperature(g, t):
     """
+    Test that several temperatures are correct.
     """
     assert temperature(g) == t
 
@@ -45,6 +48,7 @@ def test_temperature(g, t):
 ])
 def test_cooling(g, t, v):
     """
+    Test that several cooled Games are correct.
     """
     assert cool(g, t) == v
 
@@ -56,6 +60,7 @@ def test_cooling(g, t, v):
 ])
 def test_heating(g, t, v):
     """
+    Test that several heated Games are correct.
     """
     assert heat(g, t) == v
 
@@ -67,5 +72,6 @@ def test_heating(g, t, v):
 ])
 def test_overheating(g, t, v):
     """
+    Test that several overheated Games are correct.
     """
     assert overheat(g, t) == v

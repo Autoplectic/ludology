@@ -1,4 +1,5 @@
 """
+Tests for ludology.game.
 """
 
 import pytest
@@ -35,6 +36,7 @@ pm = Game({1}, {-1})
 ])
 def test_ge(g1, g2):
     """
+    Test the ordering of several Games.
     """
     assert g1 >= g2
 
@@ -51,6 +53,7 @@ def test_ge(g1, g2):
 ])
 def test_gt(g1, g2):
     """
+    Test the ordering of several Games.
     """
     assert g1 > g2
 
@@ -69,6 +72,7 @@ def test_gt(g1, g2):
 ])
 def test_le(g1, g2):
     """
+    Test the ordering of several Games.
     """
     assert g1 <= g2
 
@@ -85,6 +89,7 @@ def test_le(g1, g2):
 ])
 def test_lt(g1, g2):
     """
+    Test the ordering of several Games.
     """
     assert g1 < g2
 
@@ -99,12 +104,14 @@ def test_lt(g1, g2):
 ])
 def test_fuzzy_1(g1, g2):
     """
+    Test the ordering of several Games.
     """
     assert g1 | g2
 
 
 def test_fuzzy_2():
     """
+    Test the ordering of several Games.
     """
     assert star | 0
     assert 0 | star
@@ -112,6 +119,7 @@ def test_fuzzy_2():
 
 def test_equiv_1():
     """
+    Test the ordering of several Games.
     """
     g = Game({star})
     assert g == zero
@@ -119,6 +127,7 @@ def test_equiv_1():
 
 def test_equiv_2():
     """
+    Test the ordering of several Games.
     """
     g = Game(right={star})
     assert g == zero
@@ -131,6 +140,7 @@ def test_equiv_2():
 ])
 def test_impartial(g):
     """
+    Test that these games are impartial.
     """
     assert g.is_impartial
 
@@ -144,6 +154,7 @@ def test_impartial(g):
 ])
 def test_not_impartial(g):
     """
+    Test that these games are not impartial.
     """
     assert not g.is_impartial
 
@@ -154,6 +165,7 @@ def test_not_impartial(g):
 ])
 def test_switch(g):
     """
+    Test that these games are switches.
     """
     assert g.is_switch
 
@@ -166,6 +178,7 @@ def test_switch(g):
 ])
 def test_not_switch(g):
     """
+    Test that these games are not switches.
     """
     assert not g.is_switch
 
@@ -181,6 +194,7 @@ def test_not_switch(g):
 ])
 def test_birthday(g, bday):
     """
+    Test some birthdays.
     """
     assert g.birthday == bday
 
@@ -197,6 +211,9 @@ def test_birthday(g, bday):
     (star, one, Game({one}, {one})),
 ])
 def test_add(a, b, c):
+    """
+    Test Game addition.
+    """
     assert a + b == c
 
 
@@ -208,6 +225,9 @@ def test_add(a, b, c):
     (2, one, one + one),
 ])
 def test_mul(a, b, c):
+    """
+    Test Game multiplication.
+    """
     assert a * b == c
 
 
@@ -219,6 +239,9 @@ def test_mul(a, b, c):
     (-up, Outcome.RIGHT),
 ])
 def test_outcome(g, o):
+    """
+    Test the outcome class of several games.
+    """
     assert g.outcome == o
 
 
@@ -243,12 +266,16 @@ def test_outcome(g, o):
     (Game({star2}, {0}), '{*2|0}'),
 ])
 def test_value(g, v):
+    """
+    Test that several games evaluate to the correct short-hand value.
+    """
     assert g.value == v
 
 
 @given(integers(min_value=-7, max_value=7), integers(min_value=0, max_value=3))
 def test_value_dyadic_rational(m, j):
     """
+    Test the construction of dyadic rationals.
     """
     f = m/2**j
     n, d = f.as_integer_ratio()

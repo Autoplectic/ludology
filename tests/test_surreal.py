@@ -112,7 +112,7 @@ def test_add_game(a, b, c):
 ])
 def test_add_game_2(a, b):
     """
-    Test the addition of two surreals.
+    Test the addition of two Surreals.
     """
     assert Surreal(a) + Surreal(b) == Game(a + b)
 
@@ -127,7 +127,7 @@ def test_add_game_2(a, b):
 ])
 def test_mul(a, b):
     """
-    Test the multiplication of two surreals.
+    Test the multiplication of two Surreals.
     """
     assert Surreal(a) * Surreal(b) == Surreal(a * b)
 
@@ -142,7 +142,7 @@ def test_mul(a, b):
 ])
 def test_mul_game(a, b):
     """
-    Test the multiplication of two surreals.
+    Test the multiplication of two Surreals.
     """
     assert Surreal(a) * Game(b) == Surreal(a * b)
 

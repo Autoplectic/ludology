@@ -1,4 +1,5 @@
 """
+Tests for ludology.tools.
 """
 
 import pytest

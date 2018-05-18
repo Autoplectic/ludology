@@ -1,4 +1,5 @@
 """
+Tests for ludology.utils.
 """
 
 import pytest
@@ -13,6 +14,7 @@ from ludology.utils import mex, powerset
 ])
 def test_mex(s, v):
     """
+    Test that several mex's are correct.
     """
     assert mex(s) == v
 
@@ -20,5 +22,6 @@ def test_mex(s, v):
 @pytest.mark.parametrize('n', range(6))
 def test_powerset(n):
     """
+    Test that powersets have the correct size.
     """
     assert len(list(powerset(range(n)))) == 2**n
