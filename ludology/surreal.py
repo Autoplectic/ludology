@@ -27,7 +27,10 @@ class Surreal(Game, numbers.Number):
             The value for the Surreal number.
         """
         G._n = Fraction(value)
-        if G._n.denominator == 1:
+        if G._n.denominator > 1024:
+            msg = f"{G._n} would result in a very deep game tree."
+            raise ValueError(msg)
+        elif G._n.denominator == 1:
             if G._n == 0:
                 G._left = set()
                 G._right = set()

@@ -213,3 +213,11 @@ def test_invert(n):
     Test the inversion of a Surreal.
     """
     assert Surreal(n)._invert() == Surreal(1/n)
+
+
+def test_surreal_fail():
+    """
+    Test that Surreal doesn't try to construct things like 1/3.
+    """
+    with pytest.raises(ValueError):
+        Surreal(1/3)
