@@ -4,7 +4,7 @@ Tests for ludology.nimber.
 
 import pytest
 
-from ludology import Game, Nimber
+from ludology import Game, Nimber, FarStar
 
 
 def test_add_nimbers():
@@ -144,3 +144,23 @@ def test_nimber_birthday(n):
     Test that Nimbers have the right birthdays.
     """
     assert Nimber(n).birthday == n
+
+
+@pytest.mark.parametrize('n', [
+    Nimber(0),
+    Nimber(1),
+    Nimber(2),
+])
+def test_far_star_sum(n):
+    """
+    Test that far-star sums to far-star.
+    """
+    fs = FarStar()
+    assert fs + n == fs
+
+
+def test_far_star_value():
+    """
+    Test that far star has the right value.
+    """
+    assert FarStar().value == "☆"

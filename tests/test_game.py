@@ -316,3 +316,11 @@ def test_value_dyadic_rational(m, j):
     n, d = f.as_integer_ratio()
     g = Game(f)
     assert g.value == (f"{n}/{d}" if d > 1 else f"{n}")
+
+
+def test_game_fail():
+    """
+    Test that Game punts of constructing "deep" games.
+    """
+    with pytest.raises(ValueError):
+        Game(1/3)

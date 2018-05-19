@@ -3,6 +3,7 @@ Nimbers are the values of impartial games.
 """
 
 from functools import lru_cache
+from math import inf
 
 from .game import Game
 from .utils import mex
@@ -10,6 +11,7 @@ from .utils import mex
 
 __all__ = [
     'Nimber',
+    'FarStar',
 ]
 
 
@@ -17,7 +19,7 @@ class Nimber(Game):
     """
     A Nimber is the value of an impartial game.
     """
-    def __init__(self, n):
+    def __init__(G, n):
         """
         Construct the `n`th Nimber.
 
@@ -34,18 +36,18 @@ class Nimber(Game):
             msg = "Nimbers must have an integer value."
             raise ValueError(msg)
 
-        self._left = self._right = options
-        self._n = n
+        G._left = G._right = options
+        G._n = n
 
     @property
     def value(G):
         """
         Return the value of the Nimber.
 
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
+        Returns
+        -------
+        v : str
+            The value of `G`.
         """
         if G._n == 0:
             return '0'
@@ -59,11 +61,6 @@ class Nimber(Game):
         """
         Whether the Nimber is a number or not. Only the Nimber 0 is a number.
 
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
-
         Returns
         -------
         number : bool
@@ -75,11 +72,6 @@ class Nimber(Game):
     def is_impartial(G):
         """
         Whether the Nimber is impartial or not. All Nimbers are impartial.
-
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
 
         Returns
         -------
@@ -95,11 +87,6 @@ class Nimber(Game):
         than any negative number. Equivalently, it's left and right stops are both zero. Note, this
         does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
 
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
-
         Returns
         -------
         infinitesimal : bool
@@ -112,11 +99,6 @@ class Nimber(Game):
         """
         The Nimber's birthday.
 
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
-
         Returns
         -------
         bday : int >= 0
@@ -127,11 +109,6 @@ class Nimber(Game):
     def __neg__(G):
         """
         The negation of the Nimber `G`. A Nimber is its own inverse.
-
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
 
         Returns
         -------
@@ -147,10 +124,8 @@ class Nimber(Game):
 
         Parameters
         ----------
-        G : Nimber
-            The first Nimber.
         H : Nimber, Game
-            The second Nimber or Game.
+            The Nimber or Game to add by.
 
         Returns
         -------
@@ -171,10 +146,8 @@ class Nimber(Game):
 
         Parameters
         ----------
-        G : Nimber
-            The first Nimber.
         H : Nimber, Game
-            The second Nimber or Game.
+            The Nimber or Game to multiply by.
 
         Returns
         -------
@@ -194,10 +167,8 @@ class Nimber(Game):
 
         Parameters
         ----------
-        G : Nimber
-            The first Nimber.
         H : Nimber, Game
-            The second Nimber or Game.
+            The Nimber or Game equate to `G`.
 
         Returns
         -------
@@ -215,17 +186,49 @@ class Nimber(Game):
         """
         Define the hash of a Nimber as the hash of its value.
 
-        Parameters
-        ----------
-        G : Nimber
-            The Nimber of interest.
-
         Returns
         -------
         hash : str
             The hash of G.
         """
         return hash(G._n)
+
+
+class FarStar(Nimber):
+    """
+    The far-star represents an arbitrarily large Nimber.
+    """
+    def __init__(G):
+        """
+        """
+        # TODO: probably need to hack a pseudo left/right set which contains all nimbers.
+        G._n = inf
+
+    @property
+    def value(G):
+        """
+        A white star is used to represented far-star.
+        """
+        return "☆"
+
+    def __add__(G, H):
+        """
+        The sum of far-star with any Nimber is far-star.
+
+        Parameters
+        ----------
+        H : Nimber
+            The Nimber to add to far-star.
+
+        Returns
+        -------
+        fs : FarStar
+            The far-star.
+        """
+        if isinstance(H, Nimber):
+            return FarStar()
+        else:
+            return NotImplemented
 
 
 def _mul(n1, n2):

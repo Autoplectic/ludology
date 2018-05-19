@@ -3,7 +3,7 @@ Ludology is a package for the study of combinatorial game theory.
 """
 
 
-from .game import Game
-from .nimber import Nimber
-from .surreal import Surreal
+from .game import *
+from .nimber import *
+from .surreal import *
 from .tools import *

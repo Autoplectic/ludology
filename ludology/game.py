@@ -87,6 +87,9 @@ class Game(object):
                     G._right = {Game(v+1)}
             else:
                 _, d = v.as_integer_ratio()
+                if d > 1024:
+                    msg = f"{v} would result in a very deep game tree."
+                    raise ValueError(msg)
                 G._left = {Game(v - 1/d)}
                 G._right = {Game(v + 1/d)}
         # passed in a game
