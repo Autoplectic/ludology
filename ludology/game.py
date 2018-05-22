@@ -512,9 +512,26 @@ class Game(object):
         impartial : bool
             Whether G is impartial or not.
         """
-        a = G._left == G._right
-        b = all(G_L.is_impartial for G_L in G._left)
-        return a and b
+        if G._left == G._right:
+            if all(G_L.is_impartial for G_L in G._left):
+                return True
+        return False
+
+    @property
+    def is_dicotic(G):
+        """
+        A dicotic, or all-small, Game is one where either both or neither player have options
+        at every subposition.
+
+        Returns
+        -------
+        dicotic : bool
+            Whether the Game is dicotic or not.
+        """
+        if not (bool(G._left) ^ bool(G._right)):
+            if all(g.is_dicotic for g in G._left | G._right):
+                return True
+        return False
 
     @property
     def is_infinitesimal(G):

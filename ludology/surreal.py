@@ -79,6 +79,23 @@ class Surreal(Game, numbers.Number):
         return G._n == 0
 
     @property
+    def is_dicotic(G):
+        """
+        Whether the Surreal number is dicotic or not. Only the Surreal 0 is dicotic.
+
+        Parameters
+        ----------
+        G : Surreal
+            The Surreal of interest.
+
+        Returns
+        -------
+        dicotic : bool
+            Whether this number is dicotic.
+        """
+        return G._n == 0
+
+    @property
     def is_infinitesimal(G):
         """
         A game is infinitesimal if it is non-zero and smaller than any positive number and greater

@@ -35,6 +35,20 @@ def test_is_impartial(n, v):
     assert n.is_impartial == v
 
 
+@pytest.mark.parametrize(['n', 'v'], [
+    (Surreal(0), True),
+    (Surreal(1/2), False),
+    (Surreal(0.125), False),
+    (Surreal(-1), False),
+    (Surreal(2), False),
+])
+def test_is_dicotic(n, v):
+    """
+    Test that all Surreals (other than 0) are not dicotic.
+    """
+    assert n.is_dicotic == v
+
+
 @pytest.mark.parametrize('n', [
     Surreal(0),
     Surreal(1/2),

@@ -135,6 +135,18 @@ def test_nimber_is_impartial(n):
 
 
 @pytest.mark.parametrize('n', [
+    Nimber(0),
+    Nimber(3),
+    Nimber(7),
+])
+def test_nimber_is_dicotic(n):
+    """
+    Test that all Nimbers are dicotic.
+    """
+    assert n.is_dicotic
+
+
+@pytest.mark.parametrize('n', [
     0,
     3,
     7,

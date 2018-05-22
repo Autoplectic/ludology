@@ -95,6 +95,19 @@ class Nimber(Game):
         return G._n != 0
 
     @property
+    def is_dicotic(G):
+        """
+        A dicotic, or all-small, Game is one where either both or neither player have options
+        at every subposition. All Nimbers are dicotic by definition of an impartial game.
+
+        Returns
+        -------
+        dicotic : bool
+            Whether the Game is dicotic or not (it is).
+        """
+        return True
+
+    @property
     def birthday(G):
         """
         The Nimber's birthday.

@@ -209,6 +209,29 @@ def test_not_switch(g):
     assert not g.is_switch
 
 
+@pytest.mark.parametrize('g', [
+    zero,
+    star,
+    up,
+])
+def test_dicotic(g):
+    """
+    Test that these games are dicotic.
+    """
+    assert g.is_dicotic
+
+
+@pytest.mark.parametrize('g', [
+    one,
+    Game({0}, {Game({0}, {-1})}),
+])
+def test_not_dicotic(g):
+    """
+    Test that these games are not dicotic.
+    """
+    assert not g.is_dicotic
+
+
 @pytest.mark.parametrize(['g', 'bday'], [
     (zero, 0),
     (one, 1),
