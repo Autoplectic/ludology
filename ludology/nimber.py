@@ -234,14 +234,14 @@ class FarStar(Nimber):
         """
         The "left set" of far-star.
         """
-        return (Nimber(i) for i in count())
+        return (Nimber(i) for i in count())  # pragma: no branch
 
     @property
     def _right(G):
         """
         The "right set" of far-star.
         """
-        return (Nimber(i) for i in count())
+        return (Nimber(i) for i in count())  # pragma: no branch
 
     @property
     def value(G):

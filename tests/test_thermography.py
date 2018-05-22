@@ -4,8 +4,9 @@ Tests for ludology.thermography.
 
 import pytest
 
-from ludology import Game
-from ludology.thermography import mean, temperature, cool, heat, overheat
+from ludology import Game, Nimber, Surreal
+from ludology.thermography import (mean, temperature, cool, heat, overheat,
+                                   is_cold, is_tepid, is_hot)
 
 
 G_L1 = Game(5/2)
@@ -75,3 +76,39 @@ def test_overheating(g, t, v):
     Test that several overheated Games are correct.
     """
     assert overheat(g, t) == v
+
+
+@pytest.mark.parametrize('g', [
+    Game(3),
+    Surreal(1/4),
+    Game(0),
+    Game(-4),
+])
+def test_is_cold(g):
+    """
+    Assert that Numbers are cold.
+    """
+    assert is_cold(g)
+
+
+@pytest.mark.parametrize('g', [
+    Game({0}, {0}),
+    Game({2}, {2}),
+    Game(5) + Game({0}, {Game({0}, {0})}),
+])
+def test_is_tepid(g):
+    """
+    Assert that Numbers are tepid.
+    """
+    assert is_tepid(g)
+
+
+@pytest.mark.parametrize('g', [
+    Game({1}, {-1}),
+    g1,
+])
+def test_is_hot(g):
+    """
+    Assert that Numbers are hot.
+    """
+    assert is_hot(g)

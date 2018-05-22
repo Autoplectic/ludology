@@ -139,6 +139,18 @@ def test_nimber_is_impartial(n):
     Nimber(3),
     Nimber(7),
 ])
+def test_nimber_is_numberish(n):
+    """
+    Test that all Nimbers are numberish.
+    """
+    assert n.is_numberish
+
+
+@pytest.mark.parametrize('n', [
+    Nimber(0),
+    Nimber(3),
+    Nimber(7),
+])
 def test_nimber_is_dicotic(n):
     """
     Test that all Nimbers are dicotic.
@@ -176,3 +188,27 @@ def test_far_star_value():
     Test that far star has the right value.
     """
     assert FarStar().value == "☆"
+
+
+@pytest.mark.parametrize('n', [
+    Nimber(0),
+    Nimber(2),
+    Nimber(7),
+])
+def test_far_star_left(n):
+    """
+    Test that far star's left set contains an arbitrary Nimber.
+    """
+    assert n in FarStar()._left
+
+
+@pytest.mark.parametrize('n', [
+    Nimber(0),
+    Nimber(2),
+    Nimber(7),
+])
+def test_far_star_right(n):
+    """
+    Test that far star's right set contains an arbitrary Nimber.
+    """
+    assert n in FarStar()._right

@@ -5,7 +5,7 @@ Tests for ludology.lattice.
 import pytest
 
 from ludology import Game
-from ludology.lattice import all_games_gen, build_poset_lattice
+from ludology.lattice import all_games_gen, build_poset_lattice, companion, is_lonely
 
 
 def test_all_games_gen_1():
@@ -31,3 +31,27 @@ def test_build_poset_lattice():
     """
     lattice = build_poset_lattice(all_games_gen(2))
     assert len(lattice.edges()) == 36
+
+
+@pytest.mark.parametrize(['g1', 'g2'], [
+    (Game(), Game({0}, {0})),
+    (Game(1), Game(1)),
+    (Game({0}, {Game({0}, {0})}), Game({Game({0}, {0}), 0}, {0})),
+    (Game({-1}, {-3}), Game({-1}, {-3})),
+])
+def test_companion(g1, g2):
+    """
+    Test companionship.
+    """
+    assert companion(g1) == g2
+
+
+@pytest.mark.parametrize('g', [
+    Game(1),
+    Game({-1}, {-3}),
+])
+def test_is_lonely(g):
+    """
+    Test that certain Games are lonely.
+    """
+    assert is_lonely(g)

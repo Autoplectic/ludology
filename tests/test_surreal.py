@@ -70,6 +70,20 @@ def test_is_infinitesimal(n):
     Surreal(-1),
     Surreal(2),
 ])
+def test_is_numberish(n):
+    """
+    Test that all Surreals are numberish.
+    """
+    assert n.is_numberish
+
+
+@pytest.mark.parametrize('n', [
+    Surreal(0),
+    Surreal(1/2),
+    Surreal(0.125),
+    Surreal(-1),
+    Surreal(2),
+])
 def test_is_switch(n):
     """
     Test that no Surreals are switches.

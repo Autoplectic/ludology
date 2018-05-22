@@ -232,6 +232,31 @@ def test_not_dicotic(g):
     assert not g.is_dicotic
 
 
+@pytest.mark.parametrize('g', [
+    star,
+    up,
+    -up,
+    one + star,
+    -3 + up,
+])
+def test_numberish(g):
+    """
+    Test that these games are numberish.
+    """
+    assert g.is_numberish
+
+
+@pytest.mark.parametrize('g', [
+    pm,
+    Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}),
+])
+def test_not_numberish(g):
+    """
+    Test that these games are not numberish.
+    """
+    assert not g.is_numberish
+
+
 @pytest.mark.parametrize(['g', 'bday'], [
     (zero, 0),
     (one, 1),

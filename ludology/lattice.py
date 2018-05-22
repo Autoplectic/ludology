@@ -127,3 +127,4 @@ def is_lonely(G):
     lonely : bool
         Whether G is lonely or not.
     """
+    return G == companion(G)
