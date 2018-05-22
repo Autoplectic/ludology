@@ -62,6 +62,18 @@ class Surreal(Game, numbers.Number):
         return True
 
     @property
+    def is_numberish(G):
+        """
+        A Game is numberish if it is infinitesimally close to a number. All Numbers are numberish.
+
+        Returns
+        -------
+        numberish : bool
+            Whether G is numberish or not (it is).
+        """
+        return True
+
+    @property
     def is_impartial(G):
         """
         Whether the Surreal number is impartial or not. Only the Surreal 0 is impartial.

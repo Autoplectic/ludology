@@ -3,6 +3,7 @@ Nimbers are the values of impartial games.
 """
 
 from functools import lru_cache
+from itertools import count
 from math import inf
 
 from .game import Game
@@ -67,6 +68,18 @@ class Nimber(Game):
             Whether the Nimber is a number or not.
         """
         return G._n == 0
+
+    @property
+    def is_numberish(G):
+        """
+        A Game is numberish if it is infinitesimally close to a number. All Nimbers are numberish.
+
+        Returns
+        -------
+        numberish : bool
+            Whether G is numberish or not (it is).
+        """
+        return True
 
     @property
     def is_impartial(G):
@@ -214,8 +227,21 @@ class FarStar(Nimber):
     def __init__(G):
         """
         """
-        # TODO: probably need to hack a pseudo left/right set which contains all nimbers.
         G._n = inf
+
+    @property
+    def _left(G):
+        """
+        The "left set" of far-star.
+        """
+        return (Nimber(i) for i in count())
+
+    @property
+    def _right(G):
+        """
+        The "right set" of far-star.
+        """
+        return (Nimber(i) for i in count())
 
     @property
     def value(G):

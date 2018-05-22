@@ -582,6 +582,19 @@ class Game(object):
         return a and b
 
     @property
+    def is_numberish(G):
+        """
+        A Game is numberish if it is infinitesimally close to a number.
+
+        Returns
+        -------
+        numberish : bool
+            Whether G is numberish or not.
+        """
+        from .tools import left_stop, right_stop
+        return left_stop(G, adorn=False) == right_stop(G, adorn=False)
+
+    @property
     def is_switch(G):
         """
         A game is a switch if it's left and right options are numbers, and G_L > G_R.

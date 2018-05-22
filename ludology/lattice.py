@@ -14,6 +14,8 @@ from .utils import powerset
 __all__ = [
     'all_games_gen',
     'build_poset_lattice',
+    'companion',
+    'is_lonely',
 ]
 
 
@@ -81,3 +83,47 @@ def all_games_gen(n):
         antichains = {games for games in powerset(priors) if is_antichain(games)}
         news = {canonicalize(Game(a, b)) for a, b in product(antichains, repeat=2)}
         return priors | news
+
+
+def companion(G):
+    """
+    The companion of a Game G is the dual of G under the unique order-preserving automorphism of
+    Games born by day n.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    c : Game
+        G's companion.
+    """
+    cleft = {companion(G_L) for G_L in G._left}
+    cright = {companion(G_R) for G_R in G._right}
+    if G == 0:
+        c = Game({0} | cleft, {0} | cright)
+    elif G > 0:
+        c = Game({0} | cleft, cright)
+    elif G < 0:
+        c = Game(cleft, {0} | cright)
+    else:
+        c = Game(cleft, cright)
+    return canonicalize(c)
+
+
+def is_lonely(G):
+    """
+    A Game is lonely if it is its own companion.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    lonely : bool
+        Whether G is lonely or not.
+    """

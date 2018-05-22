@@ -18,6 +18,9 @@ __al__ = [
     'heat',
     'overheat',
     'thermograph',
+    'is_cold',
+    'is_tepid',
+    'is_hot',
 ]
 
 
@@ -417,3 +420,55 @@ def thermograph(G, with_options=True, ax=None):  # pragma: no cover
     ax.legend(loc='best')
 
     return ax
+
+
+def is_cold(G):
+    """
+    A Game is cold if it is a number.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    cold : bool
+        Whether the Game is cold or not.
+    """
+    return G.is_number
+
+
+def is_tepid(G):
+    """
+    A Game is tepid if it is numberish, but not a number; that is, it differs from a number by an
+    infinitesimal amount.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    tepid : bool
+        Whether the Game is tepid or not.
+    """
+    return G.is_numberish and not G.is_number
+
+
+def is_hot(G):
+    """
+    A Game is hot if it is not numberish; that is, it's left and right stops do not coincide.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    hot : bool
+        Whether the Game is hot or not.
+    """
+    return not G.is_numberish
