@@ -116,8 +116,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -138,8 +136,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -158,8 +154,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -178,8 +172,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -198,8 +190,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -221,8 +211,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -241,8 +229,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first game.
         H : Game
             The second game.
 
@@ -258,11 +244,6 @@ class Game(object):
     def __neg__(G):
         """
         -{G_L | G_R} is recursively defined as {-G_R | -G_L}.
-
-        Parameters
-        ----------
-        G : Game
-            The game to negate.
 
         Returns
         -------
@@ -280,8 +261,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -314,8 +293,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -335,8 +312,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -355,8 +330,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -379,8 +352,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -397,10 +368,10 @@ class Game(object):
         """
         Invert the Game G.
 
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
+        Returns
+        -------
+        Ginv : Game
+            The inverse of G.
         """
         # TODO: implement this.
         pass
@@ -415,8 +386,6 @@ class Game(object):
 
         Parameters
         ----------
-        G : Game
-            The first Game.
         H : Game
             The second Game.
 
@@ -431,11 +400,6 @@ class Game(object):
         """
         Define the hash of a game as the hash of the left and right options.
 
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
-
         Returns
         -------
         hash : str
@@ -446,11 +410,6 @@ class Game(object):
     def __str__(G):
         """
         The value of G as a string.
-
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
 
         Returns
         -------
@@ -464,11 +423,6 @@ class Game(object):
         Construct a representation of G. It is of the form {G_L|G_R}, where the options are
         their shorthand values if possible.
 
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
-
         Returns
         -------
         r : str
@@ -481,11 +435,6 @@ class Game(object):
     def subpositions(G):
         """
         Return an iterator over all subpositions of G.
-
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
 
         Yields
         ------
@@ -501,11 +450,6 @@ class Game(object):
         """
         A game is impartial if its left options equal its right options, and each of its options
         are impartial.
-
-        Parameters
-        ----------
-        G : Game
-            The game of interest.
 
         Returns
         -------
@@ -540,11 +484,6 @@ class Game(object):
         than any negative number. Equivalently, it's left and right stops are both zero. Note, this
         does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
 
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
-
         Returns
         -------
         infinitesimal : bool
@@ -560,11 +499,6 @@ class Game(object):
         """
         A game is a (surreal) number if each of it left options is less than each of its right
         options, and all its options are also numbers.
-
-        Parameters
-        ----------
-        G : Game
-            The game of interest.
 
         Returns
         -------
@@ -599,11 +533,6 @@ class Game(object):
         """
         A game is a switch if it's left and right options are numbers, and G_L > G_R.
 
-        Parameters
-        ----------
-        G : Game
-            The game of interest.
-
         Returns
         -------
         number : bool
@@ -621,11 +550,6 @@ class Game(object):
         """
         The birthday of a game G is defined as the one more than the maximum birthday of its
         options.
-
-        Parameters
-        ----------
-        G : Game
-            The game of interest.
 
         Returns
         -------
@@ -649,11 +573,6 @@ class Game(object):
             L : A win for the left player, regardless of play order.
             R : A win for the right player, regardless of play order.
 
-        Parameters
-        ----------
-        G : Game
-            The game of interest.
-
         Returns
         -------
         o : Outcome
@@ -673,11 +592,6 @@ class Game(object):
     def value(G):
         """
         The value of the game in short-hand.
-
-        Parameters
-        ----------
-        G : Game
-            The Game of interest.
 
         Returns
         -------
