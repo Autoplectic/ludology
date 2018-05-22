@@ -49,11 +49,6 @@ class Surreal(Game, numbers.Number):
         """
         Whether the Surreal number is a number or not. By definition, this is True.
 
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
-
         Returns
         -------
         number : bool
@@ -78,11 +73,6 @@ class Surreal(Game, numbers.Number):
         """
         Whether the Surreal number is impartial or not. Only the Surreal 0 is impartial.
 
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
-
         Returns
         -------
         impartial : bool
@@ -94,11 +84,6 @@ class Surreal(Game, numbers.Number):
     def is_dicotic(G):
         """
         Whether the Surreal number is dicotic or not. Only the Surreal 0 is dicotic.
-
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
 
         Returns
         -------
@@ -114,11 +99,6 @@ class Surreal(Game, numbers.Number):
         than any negative number. Equivalently, it's left and right stops are both zero. Note, this
         does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
 
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
-
         Returns
         -------
         infinitesimal : bool
@@ -131,11 +111,6 @@ class Surreal(Game, numbers.Number):
         """
         Whether the Surreal number is a switch or not. By definition, this is not the case.
 
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
-
         Returns
         -------
         switch : bool
@@ -146,11 +121,6 @@ class Surreal(Game, numbers.Number):
     def __hash__(G):
         """
         Define the hash of a Surreal as the hash of its value.
-
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
 
         Returns
         -------
@@ -166,8 +136,6 @@ class Surreal(Game, numbers.Number):
 
         Parameters
         ----------
-        G : Surreal
-            The first Surreal.
         H : Surreal, Game
             The second Surreal/Game.
 
@@ -188,8 +156,6 @@ class Surreal(Game, numbers.Number):
 
         Parameters
         ----------
-        G : Surreal
-            The first Surreal.
         H : Surreal, Game
             The second Surreal/Game.
 
@@ -211,8 +177,6 @@ class Surreal(Game, numbers.Number):
 
         Parameters
         ----------
-        G : Surreal
-            The first Surreal.
         H : Surreal, Game
             The second Surreal/Game.
 
@@ -235,8 +199,6 @@ class Surreal(Game, numbers.Number):
 
         Parameters
         ----------
-        G : Surreal
-            The first Surreal.
         H : Surreal, Game
             The second Surreal/Game.
 
@@ -260,8 +222,6 @@ class Surreal(Game, numbers.Number):
 
         Parameters
         ----------
-        G : Surreal
-            The first Surreal.
         H : Surreal, Game
             The second Surreal/Game.
 
@@ -282,11 +242,6 @@ class Surreal(Game, numbers.Number):
     def _invert(G):
         """
         The inverse of G.
-
-        Parameters
-        ----------
-        G : Surreal
-            The Surreal of interest.
 
         Returns
         -------
