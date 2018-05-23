@@ -5,6 +5,7 @@ Tests for ludology.surreal.
 import pytest
 
 from ludology import Game, Surreal
+from ludology.closet import zero, one, star
 
 
 @pytest.mark.parametrize('n', [
@@ -107,9 +108,9 @@ def test_order(a, b):
 
 
 @pytest.mark.parametrize(['a', 'b'], [
-    (Surreal(0), Game(0)),
-    (Surreal(1/2), Game(0)),
-    (Surreal(3/4), Game({0}, {0})),
+    (Surreal(0), zero),
+    (Surreal(1/2), zero),
+    (Surreal(3/4), star),
 ])
 def test_order_game(a, b):
     """
@@ -134,8 +135,8 @@ def test_add(a, b):
 
 
 @pytest.mark.parametrize(['a', 'b', 'c'], [
-    (Surreal(1), Game({0}, {0}), Game({1}, {1})),
-    (Surreal(2), Game(3), Surreal(5)),
+    (Surreal(1), star, one + star),
+    (Surreal(2), 3 * one, Surreal(5)),
 ])
 def test_add_game(a, b, c):
     """

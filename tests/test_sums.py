@@ -5,16 +5,12 @@ Tests for ludology.sums.
 import pytest
 
 from ludology import Game, canonicalize
+from ludology.closet import zero, one, star, pm_one, up
 from ludology.sums import (disjunctive, conjunctive, selective, diminished_disjunctive,
                            continued_conjunctive, shortened_selective, ordinal, side, sequential)
 
 
-zero = Game(0)
-one = Game(1)
-star = Game({0}, {0})
-pm = Game({1}, {-1})
-G = Game({0}, {pm})
-up = Game({0}, {star})
+G = Game({0}, {pm_one})
 
 
 @pytest.mark.parametrize(['G', 'H', 'J'], [
@@ -42,7 +38,7 @@ def test_conjunctive(G, H, J):
 
 
 @pytest.mark.parametrize(['G', 'H', 'J'], [
-    (G, up, Game({1}, {Game({1, one + star}, {-1, -one + star}), Game({1}, {1, pm})})),
+    (G, up, Game({1}, {Game({1, one + star}, {-1, -one + star}), Game({1}, {1, pm_one})})),
     (G, zero, G),
     (zero, G, G),
 ])
@@ -90,7 +86,7 @@ def test_shortened_selective(G, H, J):
 
 
 @pytest.mark.parametrize(['G', 'H', 'J'], [
-    (G, up, Game({1}, {Game({1}, {1, pm}), pm})),
+    (G, up, Game({1}, {Game({1}, {1, pm_one}), pm_one})),
     (G, zero, G),
     (zero, G, G),
 ])
@@ -102,7 +98,7 @@ def test_ordinal(G, H, J):
 
 
 @pytest.mark.parametrize(['G', 'H', 'J'], [
-    (G, up, Game({0}, {Game({0}, {1})})),
+    (G, up, Game({0}, {1/2})),
     (G, zero, G),
     (zero, G, G),
 ])

@@ -7,26 +7,16 @@ from hypothesis import given
 from hypothesis.strategies import integers
 
 from ludology import Game
+from ludology.closet import zero, half, one, star, star2, up, pm_one
 from ludology.game import Outcome
 from ludology.tools import canonicalize
-
-
-zero = Game(0)
-half = Game(1/2)
-one = Game(1)
-none = Game(-1)
-star = Game({zero}, {zero})
-star2 = Game({zero, star}, {zero, star})
-up = Game({zero}, {star})
-down = -up
-pm = Game({1}, {-1})
 
 
 @pytest.mark.parametrize(['g1', 'g2'], [
     (one, zero),
     (one, half),
-    (one, none),
-    (zero, none),
+    (one, -one),
+    (zero, -one),
     (zero, -half),
     (up, zero),
     (half, up),
@@ -44,8 +34,8 @@ def test_ge(g1, g2):
 @pytest.mark.parametrize(['g1', 'g2'], [
     (one, zero),
     (one, half),
-    (one, none),
-    (zero, none),
+    (one, -one),
+    (zero, -one),
     (zero, -half),
     (up, zero),
     (half, up),
@@ -61,8 +51,8 @@ def test_gt(g1, g2):
 @pytest.mark.parametrize(['g1', 'g2'], [
     (zero, one),
     (half, one),
-    (none, one),
-    (none, zero),
+    (-one, one),
+    (-one, zero),
     (-half, zero),
     (zero, up),
     (up, half),
@@ -80,8 +70,8 @@ def test_le(g1, g2):
 @pytest.mark.parametrize(['g1', 'g2'], [
     (zero, one),
     (half, one),
-    (none, one),
-    (none, zero),
+    (-one, one),
+    (-one, zero),
     (-half, zero),
     (zero, up),
     (up, half),
@@ -97,10 +87,10 @@ def test_lt(g1, g2):
 @pytest.mark.parametrize(['g1', 'g2'], [
     (star, zero),
     (star, up),
-    (one, pm),
-    (pm, none),
-    (pm, star),
-    (pm, zero),
+    (one, pm_one),
+    (pm_one, -one),
+    (pm_one, star),
+    (pm_one, zero),
 ])
 def test_fuzzy_1(g1, g2):
     """
@@ -150,7 +140,7 @@ def test_impartial(g):
     half,
     up,
     up + star,
-    pm,
+    pm_one,
 ])
 def test_not_impartial(g):
     """
@@ -176,7 +166,7 @@ def test_infinitesimal(g):
     half,
     one,
     zero,
-    pm,
+    pm_one,
 ])
 def test_not_infinitesimal(g):
     """
@@ -186,7 +176,7 @@ def test_not_infinitesimal(g):
 
 
 @pytest.mark.parametrize('g', [
-    pm,
+    pm_one,
     Game({2}, {1}),
 ])
 def test_switch(g):
@@ -247,7 +237,7 @@ def test_numberish(g):
 
 
 @pytest.mark.parametrize('g', [
-    pm,
+    pm_one,
     Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}),
 ])
 def test_not_numberish(g):
@@ -260,7 +250,7 @@ def test_not_numberish(g):
 @pytest.mark.parametrize(['g', 'bday'], [
     (zero, 0),
     (one, 1),
-    (none, 1),
+    (-one, 1),
     (star, 1),
     (up, 2),
     (canonicalize(up + star), 2),
@@ -285,7 +275,7 @@ def test_subpositions(g, sp):
 @pytest.mark.parametrize(['a', 'b', 'c'], [
     (zero, zero, zero),
     (star, star, zero),
-    (one, none, zero),
+    (one, -one, zero),
     (one, zero, one),
     (zero, one, one),
     (one, 0, one),
@@ -303,7 +293,7 @@ def test_add(a, b, c):
 @pytest.mark.parametrize(['a', 'b', 'c'], [
     (zero, zero, zero),
     (star, star, star),
-    (one, none, -1),
+    (one, -one, -1),
     (one + 1, 1, 2),
     (2, one, one + one),
 ])
@@ -330,16 +320,16 @@ def test_outcome(g, o):
 
 @pytest.mark.parametrize(['g', 'v'], [
     (star, '*'),
-    (pm, '±1'),
+    (pm_one, '±1'),
     (Game({Game(3)}, {Game(1)}), '2±1'),
     (up, '↑'),
     (2 * up, '2·↑'),
     (up + star, '↑*'),
     (up + up + star, '2·↑*'),
-    (down, '↓'),
-    (2 * down, '2·↓'),
-    (down + star, '↓*'),
-    (down + down + star, '2·↓*'),
+    (-up, '↓'),
+    (2 * -up, '2·↓'),
+    (-up + star, '↓*'),
+    (-up + -up + star, '2·↓*'),
     (Game({one}, {1}), '1*'),
     (Game({0}, {Game({0}, {-2})}), '⧾_2'),
     (Game({Game({2}, {0})}, {0}), '⧿_2'),

@@ -5,6 +5,7 @@ Tests for ludology.nimber.
 import pytest
 
 from ludology import Game, Nimber, FarStar
+from ludology.closet import one
 
 
 def test_add_nimbers():
@@ -60,7 +61,7 @@ def test_eq_nimber_game():
     Test that Nimbers and Games equate properly.
     """
     a = Nimber(3)
-    b = Game(3)
+    b = 3 * one
     assert not a == b
 
 

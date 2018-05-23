@@ -5,13 +5,14 @@ Tests for ludology.tools.
 import pytest
 
 from ludology import Game
+from ludology.closet import zero, pm_one, star
 from ludology.tools import left_stop, right_stop, left_incentives, right_incentives
 
 
 @pytest.mark.parametrize(['g', 'v'], [
-    (Game(0), (0, '+')),
-    (Game({1}, {-1}), (1, '-')),
-    (Game({0}, {0}), (0, '-')),
+    (zero, (0, '+')),
+    (pm_one, (1, '-')),
+    (star, (0, '-')),
 ])
 def test_left_stop_1(g, v):
     """
@@ -21,9 +22,9 @@ def test_left_stop_1(g, v):
 
 
 @pytest.mark.parametrize(['g', 'v'], [
-    (Game(0), 0),
-    (Game({1}, {-1}), 1),
-    (Game({0}, {0}), 0),
+    (zero, 0),
+    (pm_one, 1),
+    (star, 0),
 ])
 def test_left_stop_2(g, v):
     """
@@ -33,9 +34,9 @@ def test_left_stop_2(g, v):
 
 
 @pytest.mark.parametrize(['g', 'v'], [
-    (Game(0), (0, '-')),
-    (Game({1}, {-1}), (-1, '+')),
-    (Game({0}, {0}), (0, '+')),
+    (zero, (0, '-')),
+    (pm_one, (-1, '+')),
+    (star, (0, '+')),
 ])
 def test_right_stop_1(g, v):
     """
@@ -45,9 +46,9 @@ def test_right_stop_1(g, v):
 
 
 @pytest.mark.parametrize(['g', 'v'], [
-    (Game(0), 0),
-    (Game({1}, {-1}), -1),
-    (Game({0}, {0}), 0),
+    (zero, 0),
+    (pm_one, -1),
+    (star, 0),
 ])
 def test_right_stop_2(g, v):
     """

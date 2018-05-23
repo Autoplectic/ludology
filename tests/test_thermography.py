@@ -4,7 +4,8 @@ Tests for ludology.thermography.
 
 import pytest
 
-from ludology import Game, Nimber, Surreal
+from ludology import Game, Surreal
+from ludology.closet import zero, quarter, half, one, pm_one, up, star
 from ludology.thermography import (mean, temperature, cool, heat, overheat,
                                    is_cold, is_tepid, is_hot)
 
@@ -17,9 +18,9 @@ g1 = Game({G_L1, G_L2}, {G_R1, G_R2})
 
 
 @pytest.mark.parametrize(['g', 'm'], [
-    (Game({1}, {-1}), 0.0),
-    (Game({2}, {0}), 1.0),
-    (Game(3), 3.0),
+    (pm_one, 0.0),
+    (one + pm_one, 1.0),
+    (3 * one, 3.0),
     (g1, 0.5),
 ])
 def test_mean(g, m):
@@ -30,11 +31,11 @@ def test_mean(g, m):
 
 
 @pytest.mark.parametrize(['g', 't'], [
-    (Game({1}, {-1}), 1.0),
-    (Game({3}), -1.0),
+    (pm_one, 1.0),
+    (3 * one, -1.0),
     (g1, 2.5),
-    (Game(1/2), -1/2),
-    (Game(3/4), -1/4),
+    (half, -1/2),
+    (half + quarter, -1/4),
 ])
 def test_temperature(g, t):
     """
@@ -55,9 +56,9 @@ def test_cooling(g, t, v):
 
 
 @pytest.mark.parametrize(['g', 't', 'v'], [
-    (Game({1}, {-1}), Game(1), Game({2}, {-2})),
-    (Game({1}, {-1}), 1, Game({2}, {-2})),
-    (Game(2), 1.0, Game(2)),
+    (pm_one, one, Game({2}, {-2})),
+    (pm_one, 1, Game({2}, {-2})),
+    (2 * one, 1.0, 2 * one),
 ])
 def test_heating(g, t, v):
     """
@@ -67,9 +68,9 @@ def test_heating(g, t, v):
 
 
 @pytest.mark.parametrize(['g', 't', 'v'], [
-    (Game({1}, {-1}), 1.0, Game({3}, {-3})),
-    (Game({0}, {0}), 1.0, Game({1}, {-1})),
-    (Game({0}, {Game({0}, {0})}), 1.0, Game({1}, {Game({0}, {-2})})),
+    (pm_one, 1.0, Game({3}, {-3})),
+    (star, 1.0, pm_one),
+    (up, 1.0, Game({1}, {Game({0}, {-2})})),
 ])
 def test_overheating(g, t, v):
     """
@@ -79,10 +80,10 @@ def test_overheating(g, t, v):
 
 
 @pytest.mark.parametrize('g', [
-    Game(3),
+    3 * one,
     Surreal(1/4),
-    Game(0),
-    Game(-4),
+    zero,
+    -4 * one,
 ])
 def test_is_cold(g):
     """
@@ -92,9 +93,9 @@ def test_is_cold(g):
 
 
 @pytest.mark.parametrize('g', [
-    Game({0}, {0}),
-    Game({2}, {2}),
-    Game(5) + Game({0}, {Game({0}, {0})}),
+    star,
+    2 + star,
+    5 * one + up,
 ])
 def test_is_tepid(g):
     """
@@ -104,7 +105,7 @@ def test_is_tepid(g):
 
 
 @pytest.mark.parametrize('g', [
-    Game({1}, {-1}),
+    pm_one,
     g1,
 ])
 def test_is_hot(g):
