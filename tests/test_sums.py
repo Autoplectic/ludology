@@ -24,7 +24,7 @@ up = Game({0}, {star})
 ])
 def test_disjunctive(G, H, J):
     """
-    Test that the disjunctive sum matches known result.
+    Test that the disjunctive sum matches known results.
     """
     assert canonicalize(disjunctive(G, H)) == J
 
@@ -36,7 +36,7 @@ def test_disjunctive(G, H, J):
 ])
 def test_conjunctive(G, H, J):
     """
-    Test that the conjunctive sum matches known result.
+    Test that the conjunctive sum matches known results.
     """
     assert canonicalize(conjunctive(G, H)) == J
 
@@ -48,7 +48,7 @@ def test_conjunctive(G, H, J):
 ])
 def test_selective(G, H, J):
     """
-    Test that the selective sum matches known result.
+    Test that the selective sum matches known results.
     """
     assert canonicalize(selective(G, H)) == J
 
@@ -60,7 +60,7 @@ def test_selective(G, H, J):
 ])
 def test_diminished_disjunctive(G, H, J):
     """
-    Test that the diminished disjunctive sum matches known result.
+    Test that the diminished disjunctive sum matches known results.
     """
     assert canonicalize(diminished_disjunctive(G, H)) == J
 
@@ -72,7 +72,7 @@ def test_diminished_disjunctive(G, H, J):
 ])
 def test_continued_conjunctive(G, H, J):
     """
-    Test that the continued conjunctive sum matches known result.
+    Test that the continued conjunctive sum matches known results.
     """
     assert canonicalize(continued_conjunctive(G, H)) == J
 
@@ -84,7 +84,7 @@ def test_continued_conjunctive(G, H, J):
 ])
 def test_shortened_selective(G, H, J):
     """
-    Test that the shortened selective sum matches known result.
+    Test that the shortened selective sum matches known results.
     """
     assert canonicalize(shortened_selective(G, H)) == J
 
@@ -96,7 +96,7 @@ def test_shortened_selective(G, H, J):
 ])
 def test_ordinal(G, H, J):
     """
-    Test that the ordinal sum matches known result.
+    Test that the ordinal sum matches known results.
     """
     assert canonicalize(ordinal(G, H)) == J
 
@@ -108,7 +108,7 @@ def test_ordinal(G, H, J):
 ])
 def test_side(G, H, J):
     """
-    Test that the side sum matches known result.
+    Test that the side sum matches known results.
     """
     assert canonicalize(side(G, H)) == J
 
@@ -120,6 +120,6 @@ def test_side(G, H, J):
 ])
 def test_sequential(G, H, J):
     """
-    Test that the sequential sum matches known result.
+    Test that the sequential sum matches known results.
     """
     assert canonicalize(sequential(G, H)) == J
