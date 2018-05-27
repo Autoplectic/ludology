@@ -25,8 +25,10 @@ requires = [
 requires_dev = [
     'codecov',
     'hypothesis',
+    'ipython[nbconvert]'
     'pytest',
     'pytest-cov',
+    'sphinx',
 ]
 
 requires_plotting = [
