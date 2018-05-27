@@ -25,7 +25,7 @@ requires = [
 requires_dev = [
     'codecov',
     'hypothesis',
-    'ipython[nbconvert]'
+    'ipython[nbconvert]',
     'pytest',
     'pytest-cov',
     'sphinx',
