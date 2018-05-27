@@ -12,6 +12,8 @@ This package is for the study of capital-G Games.
    :maxdepth: 2
    :caption: Contents:
 
+   thermographs
+
 
 
 Indices and tables
