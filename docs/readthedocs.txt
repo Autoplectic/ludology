@@ -1,0 +1,6 @@
+hypothesis
+ipython[nbconvert]
+matplotlib
+numpy
+scipy
+sphinx
