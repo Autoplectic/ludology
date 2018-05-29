@@ -1,0 +1,4 @@
+.. nimbers.rst
+
+Nimbers
+=======

@@ -12,7 +12,10 @@ This package is for the study of capital-G Games.
    :maxdepth: 2
    :caption: Contents:
 
-   thermographs
+   content/games
+   content/surreals
+   content/nimbers
+   content/thermographs
 
 
 
