@@ -1,4 +1,5 @@
 .. thermographs.rst
+.. include:: definitions.rst
 
 Thermographs
 ============
