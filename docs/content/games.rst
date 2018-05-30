@@ -27,3 +27,8 @@ From here three new Games can be constructed:
    -1 &\equiv \Game{}{0} = \Game{}{\Game{}{}}
 
    *  &\equiv \Game{0}{0} = \Game{\Game{}{}}{\Game{}{}}
+
+
+.. math::
+
+   G + H = \Game{G + \altleftoption, \leftoption + H}{G + \altrightoption, \rightoption + H}
