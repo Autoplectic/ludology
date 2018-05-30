@@ -4,6 +4,9 @@
 Thermographs
 ============
 
-.. ipython::
+.. plot::
 
-   In [1]: pass
+   from ludology.closet import g1
+   from ludology.thermography import thermograph
+
+   thermograph(g1)

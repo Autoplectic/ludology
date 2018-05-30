@@ -16,6 +16,7 @@ __all__ = [
     'up',
     'tiny',
     'pm_one',
+    'g1',
 ]
 
 
@@ -37,3 +38,6 @@ tiny = Game({0}, {Game({0}, {-1})})
 
 # switch
 pm_one = Game({1}, {-1})
+
+# more complex examples
+g1 = Game({5/2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})})

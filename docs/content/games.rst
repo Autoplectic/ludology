@@ -28,6 +28,16 @@ From here three new Games can be constructed:
 
    *  &\equiv \Game{0}{0} = \Game{\Game{}{}}{\Game{}{}}
 
+Operations
+----------
+
+The negation of a Game is equivalent to swapping players:
+
+.. math::
+
+   -G = \Game{-\rightoption}{-\leftoption}
+
+The (disjoint) sum of two Games is defined by:
 
 .. math::
 
