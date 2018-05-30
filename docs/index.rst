@@ -6,7 +6,7 @@
 ludology: the study of Games
 ============================
 
-This package is for the study of capital-G Games.
+This package is for the study of Games, mathematical abstractions for the analysis of partizan games.
 
 .. toctree::
    :maxdepth: 2
@@ -15,7 +15,7 @@ This package is for the study of capital-G Games.
    content/games
    content/surreals
    content/nimbers
-   content/thermographs
+   content/thermography
 
 
 

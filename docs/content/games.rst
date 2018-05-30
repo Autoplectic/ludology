@@ -46,6 +46,6 @@ The (disjoint) sum of two Games is defined by:
 
 .. math::
 
-   G + H = \Game{G + \altleftoption, \leftoption + H}{G + \altrightoption, \rightoption + H}
+   G + H = \Game{G + \leftoption{H}, \leftoption + H}{G + \rightoption{H}, \rightoption + H}
 
 and subtraction is defined as :math:`G - H = G + (-H)`.
