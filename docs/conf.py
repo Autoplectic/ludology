@@ -54,12 +54,6 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
 ]
 
-ipython_mplbackend = 'agg'
-ipython_execlines = [
-    'from ludology import *',
-]
-ipython_savefig_dir = 'images/'
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -86,6 +80,9 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
+
+# Remove the ludology prefix from the module index.
+modindex_common_prefix = ['ludology.']
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -180,3 +177,11 @@ texinfo_documents = [
 
 # If true, `todo` and `todoList` produce output, else they produce nothing.
 todo_include_todos = True
+
+# -- Options for ipython_directive extension ---------------------------------
+
+ipython_mplbackend = 'agg'
+ipython_execlines = [
+    'from ludology import *',
+]
+ipython_savefig_dir = 'images/'
