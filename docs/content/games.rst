@@ -1,8 +1,13 @@
 .. games.rst
+.. py:module:: ludology.game
 .. include:: definitions.rst
 
 Games
 =====
+
+.. note::
+
+   We use the term Game (capital G) to refer to a mathematical object defined below, and the term game (lower case) to refer to particular games such as Amazons, Domineering, or Hackenbush.
 
 A Game :math:`G` is defined as two sets of Games, a left set and a right set, and is typically denoted:
 
@@ -10,7 +15,7 @@ A Game :math:`G` is defined as two sets of Games, a left set and a right set, an
 
    G = \Game{\leftoption}{\rightoption}
 
-where :math:`\leftoption` denotes a typical member of the left set and :math:`\rightoption` denotes a typical member of the right set.
+where :math:`\leftoption` denotes a typical member of the left set and :math:`\rightoption` denotes a typical member of the right set. A Game represents the current state of a game, where the left set consists of the possible game states the Left player can transition the game to, while the right set consists of the possible game states the Right player can transition the game to.
 
 This recursive definition requires a base case, which in this case in given by both sets being empty, and we define this game to be ":math:`0`":
 
@@ -42,3 +47,5 @@ The (disjoint) sum of two Games is defined by:
 .. math::
 
    G + H = \Game{G + \altleftoption, \leftoption + H}{G + \altrightoption, \rightoption + H}
+
+and subtraction is defined as :math:`G - H = G + (-H)`.
