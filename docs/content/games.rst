@@ -22,8 +22,8 @@ From here three new Games can be constructed:
 
 .. math::
 
-   1  &\equiv& \Game{0}{} &=& \Game{\Game{}{}}{}
+   1  &\equiv \Game{0}{} = \Game{\Game{}{}}{}
 
-   -1 &\equiv& \Game{}{0} &=& \Game{}{\Game{}{}}
+   -1 &\equiv \Game{}{0} = \Game{}{\Game{}{}}
 
-   *  &\equiv& \Game{0}{0} &=& \Game{\Game{}{}}{\Game{}{}}
+   *  &\equiv \Game{0}{0} = \Game{\Game{}{}}{\Game{}{}}
