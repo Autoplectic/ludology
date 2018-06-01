@@ -281,7 +281,7 @@ def thermal_dissociation(G):
 
 
 ###############################################################################
-#
+# scaffolds, mostly helpers for thermograph plotting
 
 
 def cooled_left_stop(G):  # pragma: no cover
@@ -452,7 +452,7 @@ def number_height(G):  # pragma: no cover
 
 
 ###############################################################################
-#
+# plotting of thermographs
 
 
 def _thermograph(G, ax, t_min, t_max, lw):  # pragma: no cover
