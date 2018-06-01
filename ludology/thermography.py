@@ -2,6 +2,8 @@
 Functions related to the calculation of thermographic properties.
 """
 
+from collections import namedtuple
+from copy import copy
 from fractions import Fraction
 from functools import lru_cache
 
@@ -9,19 +11,81 @@ import numpy as np
 from scipy.optimize import brentq
 
 from .game import Game
+from .tools import canonicalize
 
 
 __al__ = [
+    'is_cold',
+    'is_tepid',
+    'is_hot',
     'mean',
     'temperature',
     'cool',
     'heat',
     'overheat',
+    'thermal_dissociation',
     'thermograph',
-    'is_cold',
-    'is_tepid',
-    'is_hot',
 ]
+
+
+###############################################################################
+# hot, cold, or tepid? [Siegel pg. 112]
+
+
+def is_cold(G):
+    """
+    A Game is cold if it is a number.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    cold : bool
+        Whether the Game is cold or not.
+    """
+    return G.is_number
+
+
+def is_tepid(G):
+    """
+    A Game is tepid if it is numberish, but not a number; that is, it differs from a number by an
+    infinitesimal amount.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    tepid : bool
+        Whether the Game is tepid or not.
+    """
+    return G.is_numberish and not G.is_number
+
+
+def is_hot(G):
+    """
+    A Game is hot if it is not numberish; that is, it's left and right stops do not coincide.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    hot : bool
+        Whether the Game is hot or not.
+    """
+    return not G.is_numberish
+
+
+###############################################################################
+# mean and temperature
 
 
 @lru_cache(maxsize=None)
@@ -88,6 +152,10 @@ def temperature(G):
             upper *= 2
 
         return float(brentq(f, 0, upper + 1))
+
+
+###############################################################################
+# heating and cooling of games
 
 
 @lru_cache(maxsize=None)
@@ -168,6 +236,49 @@ def overheat(G, t):
     lefts = {overheat(G_L, t) + t for G_L in G._left}
     rights = {overheat(G_R, t) - t for G_R in G._right}
     return Game(lefts, rights)
+
+
+###############################################################################
+# thermal dissociation
+
+
+Particle = namedtuple('Particle', ['particle', 'critical_temperature'])
+
+
+def thermal_dissociation(G):
+    """
+    The thermal dissociation of a Game G is its mean value, plus a series of
+    heated infinitesimals.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    td : tuple
+        A tuple consisting of the mean value, followed by Particles.
+    """
+    g = copy(G)
+
+    m = mean(g)
+
+    particles = []
+
+    while not g.is_infinitesimal and g != 0:
+        t = temperature(g)
+        print(t)
+        p = canonicalize(cool(g, t) - mean(g))
+        particles.append(Particle(p, t))
+        g = canonicalize(g - heat(p, t))
+        print(f"g is now {g} and the particles removed so far are: {particles}")
+
+    return tuple([m] + particles)
+
+
+###############################################################################
+#
 
 
 def cooled_left_stop(G):  # pragma: no cover
@@ -337,6 +448,10 @@ def number_height(G):  # pragma: no cover
         return max(number_height(g) for g in G._left | G._right) + 1
 
 
+###############################################################################
+#
+
+
 def _thermograph(G, ax, t_min, t_max, lw):  # pragma: no cover
     """
     Plot a single thermograph.
@@ -420,55 +535,3 @@ def thermograph(G, with_options=True, ax=None):  # pragma: no cover
     ax.legend(loc='best')
 
     return ax
-
-
-def is_cold(G):
-    """
-    A Game is cold if it is a number.
-
-    Parameters
-    ----------
-    G : Game
-        The Game of interest.
-
-    Returns
-    -------
-    cold : bool
-        Whether the Game is cold or not.
-    """
-    return G.is_number
-
-
-def is_tepid(G):
-    """
-    A Game is tepid if it is numberish, but not a number; that is, it differs from a number by an
-    infinitesimal amount.
-
-    Parameters
-    ----------
-    G : Game
-        The Game of interest.
-
-    Returns
-    -------
-    tepid : bool
-        Whether the Game is tepid or not.
-    """
-    return G.is_numberish and not G.is_number
-
-
-def is_hot(G):
-    """
-    A Game is hot if it is not numberish; that is, it's left and right stops do not coincide.
-
-    Parameters
-    ----------
-    G : Game
-        The Game of interest.
-
-    Returns
-    -------
-    hot : bool
-        Whether the Game is hot or not.
-    """
-    return not G.is_numberish
