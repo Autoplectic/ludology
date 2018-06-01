@@ -8,7 +8,7 @@ from fractions import Fraction
 from functools import lru_cache
 
 import numpy as np
-from scipy.optimize import brentq
+from scipy.optimize import brentq, minimize
 
 from .game import Game
 from .tools import canonicalize
@@ -144,14 +144,19 @@ def temperature(G):
         fl = _left_scaffold(G)
         fr = _right_scaffold(G)
 
-        def f(t):
+        def f1(t):
             return fl(t) - fr(t)
 
+        def f2(t):
+            return abs(fl(t) - fr(t)) + t/2
+
         upper = 1
-        while f(upper) > 0:
+        while f1(upper) > 0:
             upper *= 2
 
-        return float(brentq(f, 0, upper + 1))
+        root = float(brentq(f1, 0, upper + 1))
+
+        return round(float(minimize(f2, root).x), 4)
 
 
 ###############################################################################
@@ -268,11 +273,9 @@ def thermal_dissociation(G):
 
     while not g.is_infinitesimal and g != 0:
         t = temperature(g)
-        print(t)
         p = canonicalize(cool(g, t) - mean(g))
         particles.append(Particle(p, t))
         g = canonicalize(g - heat(p, t))
-        print(f"g is now {g} and the particles removed so far are: {particles}")
 
     return tuple([m] + particles)
 
