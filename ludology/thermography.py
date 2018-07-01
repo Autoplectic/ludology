@@ -530,7 +530,7 @@ def thermograph(G, with_options=True, ax=None):  # pragma: no cover
             i += 2
             options = new_options
 
-    ax.set_xlim(*reversed(ax.get_xlim()))
+    ax.invert_xaxis()
     ax.set_ylim(t_min, t_max + 0.1 * (t_max - t_min))
 
     ax.grid(True)
