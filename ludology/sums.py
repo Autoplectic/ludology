@@ -2,9 +2,51 @@
 A variety of ways of summing games.
 """
 
+from functools import lru_cache, wraps
+
 from .game import Game
+from .tools import canonicalize
+
+__all__ = [
+    'disjunctive',
+    'conjunctive',
+    'selective',
+    'diminished_disjunctive',
+    'continued_conjunctive',
+    'shortened_selective',
+    'ordinal',
+    'side',
+    'sequential',
+]
 
 
+def canon(f):
+    """
+    Add a `canon` option to `f` which toggles canonicalizes the return value of
+    `f`.
+
+    Parameters
+    ----------
+    f : func
+        The function to wrap.
+
+    Returns
+    -------
+    wrapped : func
+        The wrapped form of `f`.
+    """
+    @wraps(f)
+    def wrapped(G, H, canon=True):
+        game = f(G, H)
+        if canon:
+            game = canonicalize(game)
+        return game
+
+    return wrapped
+
+
+@lru_cache
+@canon
 def disjunctive(G, H):
     """
     Move in exactly one component.
@@ -28,6 +70,8 @@ def disjunctive(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
+@lru_cache
+@canon
 def conjunctive(G, H):
     """
     Move in all components. Play ends when any one of them terminates.
@@ -49,6 +93,8 @@ def conjunctive(G, H):
     return Game(left, right)
 
 
+@lru_cache
+@canon
 def selective(G, H):
     """
     Move in any number of components, but at least one.
@@ -74,6 +120,8 @@ def selective(G, H):
     return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
+@lru_cache
+@canon
 def diminished_disjunctive(G, H):
     """
     Move in exactly one component. Play ends immediately when any one of them terminates.
@@ -100,6 +148,8 @@ def diminished_disjunctive(G, H):
         return Game(left_1 | left_2, right_1 | right_2)
 
 
+@lru_cache
+@canon
 def continued_conjunctive(G, H):
     """
     Move in all nonterminal components. Play ends only after all components terminate.
@@ -124,6 +174,8 @@ def continued_conjunctive(G, H):
         return Game(left, right)
 
 
+@lru_cache
+@canon
 def shortened_selective(G, H):
     """
     Move in any number of components. Play ends immediately when any one of them terminates.
@@ -152,6 +204,8 @@ def shortened_selective(G, H):
         return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
+@lru_cache
+@canon
 def ordinal(G, H):
     """
     Move in G or H; any move on G annihilates H.
@@ -175,6 +229,8 @@ def ordinal(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
+@lru_cache
+@canon
 def side(G, H):
     """
     Move in G or H; Left's moves on H annihilate G, and Right's moves on G annihilate H.
@@ -198,6 +254,8 @@ def side(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
+@lru_cache
+@canon
 def sequential(G, H):
     """
     Move in G unless G has terminated; in that case move in H.
