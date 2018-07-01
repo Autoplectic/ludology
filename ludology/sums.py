@@ -45,7 +45,7 @@ def canon(f):
     return wrapped
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def disjunctive(G, H):
     """
@@ -70,7 +70,7 @@ def disjunctive(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def conjunctive(G, H):
     """
@@ -93,7 +93,7 @@ def conjunctive(G, H):
     return Game(left, right)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def selective(G, H):
     """
@@ -120,7 +120,7 @@ def selective(G, H):
     return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def diminished_disjunctive(G, H):
     """
@@ -148,7 +148,7 @@ def diminished_disjunctive(G, H):
         return Game(left_1 | left_2, right_1 | right_2)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def continued_conjunctive(G, H):
     """
@@ -174,7 +174,7 @@ def continued_conjunctive(G, H):
         return Game(left, right)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def shortened_selective(G, H):
     """
@@ -204,7 +204,7 @@ def shortened_selective(G, H):
         return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def ordinal(G, H):
     """
@@ -229,7 +229,7 @@ def ordinal(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def side(G, H):
     """
@@ -254,7 +254,7 @@ def side(G, H):
     return Game(left_1 | left_2, right_1 | right_2)
 
 
-@lru_cache
+@lru_cache(maxsize=None)
 @canon
 def sequential(G, H):
     """
