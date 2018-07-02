@@ -5,10 +5,6 @@
 Games
 =====
 
-.. note::
-
-   We use the term Game (capital G) to refer to a mathematical object defined below, and the term game (lower case) to refer to particular games such as Amazons, Domineering, or Hackenbush.
-
 A Game :math:`G` is defined as two sets of Games, a left set and a right set, and is typically denoted:
 
 .. math::

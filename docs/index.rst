@@ -6,6 +6,10 @@
 ludology: the study of Games
 ============================
 
+.. note::
+
+   We use the term Game (capital G) to refer to a mathematical object defined below, and the term game (lower case) to refer to particular games such as Amazons, Domineering, or Hackenbush.
+
 This package is for the study of Games, mathematical abstractions for the analysis of partizan games.
 
 A partizan game is one such that:
