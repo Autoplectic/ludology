@@ -18,6 +18,8 @@ __all__ = [
     'pm_one',
     'g1',
     'g2',
+    'g3',
+    'g4',
 ]
 
 
@@ -43,3 +45,5 @@ pm_one = Game({1}, {-1})
 # more complex examples
 g1 = Game({5/2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})})
 g2 = Game({Game({4}, {2})}, {Game({Game({0}, {-2})}, {Game({-4}, {-6})})})
+g3 = Game({Game({3}, {one + star})}, {Game({-one + star}, {-two + star}), Game({0}, {-3})})
+g4 = Game({5}, {Game({1}, {-9})})
