@@ -13,6 +13,7 @@ ludology: the study of Games
 This package is for the study of Games, mathematical abstractions for the analysis of partizan games.
 
 A partizan game is one such that:
+
 * there are two players, Left and Right, who alternate turns
 * there are no random elements (dice, shuffled cards, etc)
 * there is no sequence of play which causes the state of the game to repeat
