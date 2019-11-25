@@ -1,0 +1,9 @@
+[build-system]
+requires = ["flit"]
+build-backend = "flit.buildapi"
+
+[tool.flit.metadata]
+module = "ludology"
+author = "Ryan G. James"
+author-email = "ryangregoryjames@gmail.com"
+classifiers = ["License :: OSI Approved :: BSD License"]

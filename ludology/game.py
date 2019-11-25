@@ -375,7 +375,7 @@ class Game(object):
             The inverse of G.
         """
         # TODO: implement this.
-        pass
+        raise NotImplementedError
 
     @gamify_inputs
     @lru_cache(maxsize=None)

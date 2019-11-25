@@ -11,7 +11,7 @@ it would be pretty rare to sample tinies or the like.
 from hypothesis.strategies import composite, lists, recursive, sampled_from, tuples
 
 from .game import Game
-from .lattice import all_games_gen
+from .lattice import all_games
 from .tools import canonicalize
 
 
@@ -64,7 +64,7 @@ def games(draw, base_day=2, max_options=2):  # pragma: no cover
     sample : Game
         A random Game.
     """
-    options = draw(recursive(base=sampled_from(list(all_games_gen(base_day))),
+    options = draw(recursive(base=sampled_from(list(all_games(base_day))),
                              extend=lambda child: tuples(lists(child, max_size=max_options),
                                                          lists(child, max_size=max_options))))
 
