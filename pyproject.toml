@@ -1,12 +1,28 @@
 [build-system]
-requires = ["flit", "setuptools"]
+requires = [
+    "flit",
+]
 build-backend = "flit.buildapi"
 
 [tool.flit.metadata]
 module = "ludology"
 author = "Ryan G. James"
 author-email = "ryangregoryjames@gmail.com"
-classifiers = ["License :: OSI Approved :: BSD License"]
+classifiers = [
+        'Development Status :: 3 - Alpha',
+        'Intended Audience :: Science/Research',
+        'License :: OSI Approved :: BSD License',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+]
+description-file = "README.rst"
+home-page = "https://github.com/autoplectic/ludology"
+keywords = "combinatorial game theory, winning ways, games, nimbers, surreal numbers"
 requires = [
     'numpy',
     'scipy',

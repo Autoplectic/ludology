@@ -1,4 +1,0 @@
-codecov
-hypothesis
-pytest
-pytest-cov
