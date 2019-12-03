@@ -1,21 +1,22 @@
 language: python
 python:
   - "3.6"
-  - "3.7-dev"  # 3.7 development branch
+  - "3.7"
+  - "3.8"
   - "pypy3"
 
 matrix:
   allow_failures:
-    - python: "3.7-dev"
     - python: "pypy3"
 
 # command to install dependencies
 install:
-  - pip install -e .[all]
+  - pip install --upgrade pip flit
+  - flit install
 
 # command to run tests
 script:
-  - pytest --cov
+  - pytest
 
 after_success:
   - codecov

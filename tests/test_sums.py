@@ -26,6 +26,18 @@ def test_disjunctive(G, H, J):
 
 
 @pytest.mark.parametrize(['G', 'H', 'J'], [
+    (G, up, Game({1}, {Game({1}, {1})})),
+    (G, zero, G),
+    (zero, G, G),
+])
+def test_disjunctive_2(G, H, J):
+    """
+    Test that the disjunctive sum matches known results, without canonizing.
+    """
+    assert canonicalize(disjunctive(G, H, canon=False)) == J
+
+
+@pytest.mark.parametrize(['G', 'H', 'J'], [
     (G, up, up),
     (G, zero, zero),
     (zero, G, zero),
