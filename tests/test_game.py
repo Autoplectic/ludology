@@ -264,12 +264,12 @@ def test_birthday(g, bday):
 
 
 @pytest.mark.parametrize(['g', 'sp'], [
-    (up, [zero, star, zero]),
+    (up, {zero, star, zero}),
 ])
 def test_subpositions(g, sp):
     """
     """
-    assert list(g.subpositions()) == sp
+    assert set(g.subpositions()) == sp
 
 
 @pytest.mark.parametrize(['a', 'b', 'c'], [
