@@ -358,7 +358,7 @@ def test_value_dyadic_rational(m, j):
 
 def test_game_fail():
     """
-    Test that Game punts of constructing "deep" games.
+    Test that Game punts when constructing "deep" games.
     """
     with pytest.raises(ValueError):
         Game(1/3)
