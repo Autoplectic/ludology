@@ -13,7 +13,7 @@ matrix:
 install:
   - sudo apt-get install -qq libatlas-base-dev
   - pip install --upgrade pip flit attrs
-  - flit install --extras=dev
+  - flit install --deps=dev
 
 # command to run tests
 script:
