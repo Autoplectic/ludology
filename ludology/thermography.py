@@ -14,7 +14,7 @@ from .game import Game
 from .tools import canonicalize
 
 
-__al__ = [
+__all__ = [
     'is_cold',
     'is_tepid',
     'is_hot',

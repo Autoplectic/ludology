@@ -1,5 +1,9 @@
-Ludology |travis| |appveyor| |codecov| |readthedocs|
-====================================================
+.. README.rst
+
+Ludology
+========
+
+|travis| |appveyor| |codecov| |readthedocs|
 
 ``Ludology`` is a package for the study of combinatorial game theory.
 
