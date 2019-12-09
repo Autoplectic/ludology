@@ -40,6 +40,19 @@ dev = [
     'sphinx',
 ]
 
+doc = [
+    'ipython[nbconvert]',
+    'sphinx',
+]
+
+test = [
+    'codecov',
+    'hypothesis',
+    'pytest >= 4.4.0',
+    'pytest-cov',
+    'pytest-xdist',
+]
+
 plotting = [
     'matplotlib',
 ]
