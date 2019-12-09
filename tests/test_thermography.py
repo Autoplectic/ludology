@@ -112,7 +112,7 @@ def test_is_hot(g):
 
 @pytest.mark.parametrize(['g', 'dissociation'], [
     (pm_one, (0.0, Particle(star, 1))),
-    (g2, (0.0, Particle(star, 3), Particle(), Particle(star, 1))),
+    (g2, (0.0, Particle(star, 3.0), Particle(g5, 2.0), Particle(star, 1.0))),
 ])
 def test_thermal_dissociation(g, dissociation):
     """
