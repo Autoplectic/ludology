@@ -95,8 +95,8 @@ class Game(object):
                 G._right = {Game(v + 1/d)}
         # passed in a game
         elif isinstance(left, Game):
-            G._left = {Game(_) for _ in left._left}
-            G._right = {Game(_) for _ in left._right}
+            G._left = copy(left._left)
+            G._right = copy(left._right)
         # passed in sets
         else:
             if left is not None:
@@ -647,6 +647,28 @@ def _value_str(G, latex=False):
     if G_hash == hash(star):
         return _SYMBOLS['star'][bool(latex)]
 
+    # nimbers
+    if G.is_impartial:
+        return _SYMBOLS['star'][bool(latex)] + f"{len(G._left)}"
+
+    # numbers
+    if G.is_number:
+        # non-zero integer
+        if G._left:
+            lf = Fraction(next(iter(G._left)).value)
+        if G._right:
+            rf = Fraction(next(iter(G._right)).value)
+
+        if not G._right:
+            return str(lf + 1)
+        if not G._left:
+            return str(rf - 1)
+
+        v = (lf + rf) / 2
+        n, d = v.numerator, v.denominator
+        return _SYMBOLS['frac'][bool(latex)](n, d)
+
+    # n↑, n↑*, n↓, n↓*
     up = hash(Game({zero}, {star}))
     up_star = hash(Game({zero, star}, {zero}))
     down = hash(Game({star}, {zero}))
@@ -696,26 +718,6 @@ def _value_str(G, latex=False):
                                 _SYMBOLS['star'][bool(latex)] * (i % 2)
         else:
             break
-
-    # nimbers
-    if G.is_impartial:
-        return _SYMBOLS['star'][bool(latex)] + f"{len(G._left)}"
-
-    if G.is_number:
-        # non-zero integer
-        if G._left:
-            lf = Fraction(next(iter(G._left)).value)
-        if G._right:
-            rf = Fraction(next(iter(G._right)).value)
-
-        if not G._right:
-            return str(lf + 1)
-        if not G._left:
-            return str(rf - 1)
-
-        v = (lf + rf) / 2
-        n, d = v.numerator, v.denominator
-        return _SYMBOLS['frac'][bool(latex)](n, d)
 
     if len(G._left) == len(G._right) == 1:
         G_L, G_R = next(iter(G._left)), next(iter(G._right))

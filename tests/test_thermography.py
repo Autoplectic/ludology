@@ -5,16 +5,11 @@ Tests for ludology.thermography.
 import pytest
 
 from ludology import Game, Surreal
-from ludology.closet import zero, quarter, half, one, pm_one, up, star
+from ludology.closet import (zero, quarter, half, one, pm_one, up, star, g1,
+                             g2, g5)
 from ludology.thermography import (mean, temperature, cool, heat, overheat,
-                                   is_cold, is_tepid, is_hot)
-
-
-G_L1 = Game(5/2)
-G_L2 = Game({Game(4)}, {Game(2)})
-G_R1 = Game({Game(-1)}, {Game(-2)})
-G_R2 = Game({Game()}, {Game(-4)})
-g1 = Game({G_L1, G_L2}, {G_R1, G_R2})
+                                   is_cold, is_tepid, is_hot,
+                                   thermal_dissociation, Particle)
 
 
 @pytest.mark.parametrize(['g', 'm'], [
@@ -113,3 +108,14 @@ def test_is_hot(g):
     Assert that Numbers are hot.
     """
     assert is_hot(g)
+
+
+@pytest.mark.parametrize(['g', 'dissociation'], [
+    (pm_one, (0.0, Particle(star, 1))),
+    (g2, (0.0, Particle(star, 3), Particle(), Particle(star, 1))),
+])
+def test_thermal_dissociation(g, dissociation):
+    """
+    Test the thermal dissociation.
+    """
+    assert thermal_dissociation(g) == dissociation

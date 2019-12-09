@@ -142,8 +142,16 @@ def remove_dominated(G):
     G : Game
         The Game of interest.
     """
-    G._left = {g for g in G._left if not any(g < G_L for G_L in G._left)}
-    G._right = {g for g in G._right if not any(g > G_R for G_R in G._right)}
+    left = copy(G._left)
+    for g in G._left:
+        if any(g < G_L for G_L in left):
+            left.remove(g)
+    right = copy(G._right)
+    for g in G._right:
+        if any(g > G_R for G_R in right):
+            right.remove(g)
+    G._left = left
+    G._right = right
 
 
 def replace_reversible(G):
@@ -185,6 +193,7 @@ def replace_reversible(G):
     G._right = new_right_set
 
 
+@lru_cache(maxsize=None)
 def canonicalize(G):
     """
     Return the canonical form of the game G.
@@ -199,15 +208,15 @@ def canonicalize(G):
     K : Game
         The Game G in canonical form.
     """
-    G = copy(G)
+    cG = copy(G)
 
-    G._left = {canonicalize(G_L) for G_L in G._left}
-    G._right = {canonicalize(G_R) for G_R in G._right}
+    cG._left = {canonicalize(G_L) for G_L in cG._left}
+    cG._right = {canonicalize(G_R) for G_R in cG._right}
 
     old_left, old_right = set(), set()
-    while G._left != old_left or G._right != old_right:
-        old_left, old_right = G._left, G._right
-        remove_dominated(G)
-        replace_reversible(G)
+    while cG._left != old_left or cG._right != old_right:
+        old_left, old_right = cG._left, cG._right
+        remove_dominated(cG)
+        replace_reversible(cG)
 
-    return G
+    return cG

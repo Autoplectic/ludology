@@ -185,11 +185,12 @@ def cool(G, t):
     """
     if t <= temperature(G):
         t = Game(t)
-        lefts = {cool(G_L, t) - t for G_L in G._left}
-        rights = {cool(G_R, t) + t for G_R in G._right}
-        return Game(lefts, rights)
+        lefts = {canonicalize(cool(G_L, t) - t) for G_L in G._left}
+        rights = {canonicalize(cool(G_R, t) + t) for G_R in G._right}
+        cooled = Game(lefts, rights)
     else:
-        return Game(mean(G))
+        cooled = Game(mean(G))
+    return canonicalize(cooled)
 
 
 @lru_cache(maxsize=None)
@@ -214,9 +215,9 @@ def heat(G, t):
     else:
         if not isinstance(t, Game):
             t = Game(t)
-        lefts = {heat(G_L, t) + t for G_L in G._left}
-        rights = {heat(G_R, t) - t for G_R in G._right}
-        return Game(lefts, rights)
+        lefts = {canonicalize(heat(G_L, t) + t) for G_L in G._left}
+        rights = {canonicalize(heat(G_R, t) - t) for G_R in G._right}
+        return canonicalize(Game(lefts, rights))
 
 
 @lru_cache(maxsize=None)
@@ -238,9 +239,9 @@ def overheat(G, t):
     """
     if not isinstance(t, Game):
         t = Game(t)
-    lefts = {overheat(G_L, t) + t for G_L in G._left}
-    rights = {overheat(G_R, t) - t for G_R in G._right}
-    return Game(lefts, rights)
+    lefts = {canonicalize(overheat(G_L, t) + t) for G_L in G._left}
+    rights = {canonicalize(overheat(G_R, t) - t) for G_R in G._right}
+    return canonicalize(Game(lefts, rights))
 
 
 ###############################################################################
