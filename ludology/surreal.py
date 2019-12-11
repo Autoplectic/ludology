@@ -12,10 +12,11 @@ from .game import Game
 @total_ordering
 class Surreal(Game, numbers.Number):
     """
-    The Surreal numbers are the subset of games such that G_L <= G_R, and that is
-    true for all options as well. The Surreal numbers are isomorphic to the hyperreals.
-    All Surreal numbers with finite birthdays correspond to the dyadic rationals, that is,
-    rational numbers whose denominator is a power of 2.
+    The Surreal numbers are the subset of games such that G_L <= G_R, and that
+    is true for all options as well. The Surreal numbers are isomorphic to the
+    hyperreals. All Surreal numbers with finite birthdays correspond to the
+    dyadic rationals, that is, rational numbers whose denominator is a power of
+    2.
     """
     def __init__(G, value):
         """

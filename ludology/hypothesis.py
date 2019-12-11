@@ -8,15 +8,17 @@ increases the likelihood of a number which would dominate any interesting infini
 it would be pretty rare to sample tinies or the like.
 """
 
-from hypothesis.strategies import composite, lists, recursive, sampled_from, tuples
+from hypothesis.strategies import composite, integers, lists, recursive, sampled_from, tuples
 
 from .game import Game
 from .lattice import all_games
+from .nimber import Nimber
 from .tools import canonicalize
 
 
 __all__ = [
     'games',
+    'nimbers',
 ]
 
 
@@ -69,3 +71,25 @@ def games(draw, base_day=2, max_options=2):  # pragma: no cover
                                                          lists(child, max_size=max_options))))
 
     return gamify(options)
+
+
+@composite
+def nimbers(draw, max_value=20):  # pragma: no cover
+    """
+    A Hypothesis strategy for generating Nimbers.
+
+    Parameters
+    ----------
+    draw : func
+        Required by hypothesis.strategies.composite.
+    max_value : int >= 0
+        The maximum Nimber to consider
+
+    Returns
+    -------
+    sample : Nimber
+        A random Nimber.
+    """
+    value = draw(integers(min_value=0, max_value=max_value))
+
+    return Nimber(value)

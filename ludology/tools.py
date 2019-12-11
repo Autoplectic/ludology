@@ -12,6 +12,7 @@ __all__ = [
     'right_incentives',
     'left_stop',
     'right_stop',
+    'remoteness',
 ]
 
 
@@ -220,3 +221,29 @@ def canonicalize(G):
         replace_reversible(cG)
 
     return cG
+
+
+@lru_cache(maxsize=None)
+def remoteness(N):
+    """
+    The remoteness of N.
+
+    Parameters
+    ----------
+    N : Nimber
+        The nimber of interest.
+
+    Returns
+    -------
+    remote : int
+        The remoteness of N.
+    """
+    if N._n == 0:
+        return 0
+
+    remotes = {remoteness(n) for n in N._left}
+
+    if all(remote % 2 == 1 for remote in remotes):
+        return 1 + max(remotes)
+    else:
+        return 1 + min(remote for remote in remotes if remote % 2 == 0)

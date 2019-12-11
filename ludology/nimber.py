@@ -33,6 +33,8 @@ class Nimber(Game):
             options = set()
         elif isinstance(n, int):
             options = {Nimber(i) for i in range(n)}
+        elif isinstance(n, Game) and n.is_impartial:
+            options = {Nimber(i) for i in range(len(n._left))}
         else:
             msg = "Nimbers must have an integer value."
             raise ValueError(msg)

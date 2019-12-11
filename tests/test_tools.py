@@ -4,9 +4,14 @@ Tests for ludology.tools.
 
 import pytest
 
-from ludology import Game
+from hypothesis import given
+from ludology.hypothesis import nimbers
+
+from ludology import Game, Nimber
 from ludology.closet import zero, pm_one, star
-from ludology.tools import left_stop, right_stop, left_incentives, right_incentives
+from ludology.sums import conjunctive
+from ludology.tools import (left_stop, right_stop, left_incentives,
+                            right_incentives, remoteness)
 
 
 @pytest.mark.parametrize(['g', 'v'], [
@@ -73,3 +78,11 @@ def test_right_incentives():
     g = Game({0}, {Game({0}, {-2})})
     ri = {Game({Game({2}, {0}), 2}, {0})}
     assert right_incentives(g) == ri
+
+
+@given(G=nimbers(max_value=5), H=nimbers(max_value=5))
+def test_remoteness(G, H):
+    """
+    Tests for remoteness.
+    """
+    assert remoteness(Nimber(conjunctive(G, H))) == min([remoteness(G), remoteness(H)])
