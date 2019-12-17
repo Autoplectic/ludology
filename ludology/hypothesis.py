@@ -13,12 +13,14 @@ from hypothesis.strategies import composite, integers, lists, recursive, sampled
 from .game import Game
 from .lattice import all_games
 from .nimber import Nimber
+from .surreal import Surreal
 from .tools import canonicalize
 
 
 __all__ = [
     'games',
     'nimbers',
+    'surreals',
 ]
 
 
@@ -93,3 +95,27 @@ def nimbers(draw, max_value=20):  # pragma: no cover
     value = draw(integers(min_value=0, max_value=max_value))
 
     return Nimber(value)
+
+
+@composite
+def surreals(draw, max_numerator=5, max_denominator_exponent=5):  # pragma: no cover
+    """
+    A Hypothesis strategy for generating Surreal Numbers.
+
+    Parameters
+    ----------
+    draw : func
+        Required by hypothesis.strategies.composite.
+    max_numerator : int >= 0
+        The maximum numerator to generate.
+    max_denominator_exponent : int >= 0
+
+    Returns
+    -------
+    sample : Surreal
+        A random Surreal Number.
+    """
+    numerator = draw(integers(min_value=-max_numerator, max_value=max_numerator))
+    denominator_exponent = draw(integers(min_value=0, max_value=max_denominator_exponent))
+
+    return Surreal(numerator / 2**denominator_exponent)
