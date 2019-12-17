@@ -2,7 +2,6 @@
 The basic Game class.
 """
 
-from collections import namedtuple
 from copy import copy
 from enum import Enum
 from fractions import Fraction
@@ -431,7 +430,7 @@ class Game(object):
         """
         lefts = ','.join(G_L.value for G_L in sorted(G._left, key=str))
         rights = ','.join(G_R.value for G_R in sorted(G._right, key=str))
-        return '{{{}|{}}}'.format(lefts, rights)
+        return f'{{{lefts}｜{rights}}}'
 
     def subpositions(G):
         """
@@ -599,156 +598,6 @@ class Game(object):
         v : str
             The value of the Game as a string.
         """
-        return _value_str(G)
+        from .printing import value_str
 
-
-Symbol = namedtuple('Symbol', ['unicode', 'latex'])
-
-
-_SYMBOLS = {
-    'star': Symbol('*', r'\ensuremath{\ast}'),
-    'up': Symbol('↑', r'\ensuremath{\uparrow}'),
-    'down': Symbol('↓', r'\ensuremath{\downarrow}'),
-    '2up': Symbol('↑↑', r'\ensuremath{\Uparrow}'),
-    '2down': Symbol('↓↓', r'\ensuremath{\Downarrow}'),
-    'cdot': Symbol('·', r'\ensuremath{\cdot}'),
-    'pm': Symbol('±', r'\ensuremath{\pm}'),
-    'frac': Symbol((lambda n, d: f"{n}/{d}"), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
-    'miny': Symbol((lambda g: '⧿_' + g), (lambda g: r'\ensuremath{\tminus}_{' + g + '}')),
-    'tiny': Symbol((lambda g: '⧾_' + g), (lambda g: r'\ensuremath{\tplus}_{' + g + '}')),
-}
-
-
-@lru_cache(maxsize=None)
-def _value_str(G, latex=False):
-    """
-    A string representation of the game, accounting for named special games.
-
-    Parameters
-    ----------
-    G : Game
-        The game to compute the representation of.
-
-    Returns
-    -------
-    s : str
-        The name of the game.
-    """
-    G = canonicalize(G)
-    G_hash = hash(G)
-
-    zero = Game()
-
-    if not len(G._left | G._right):
-        return '0'
-
-    star = Game({zero}, {zero})
-
-    if G_hash == hash(star):
-        return _SYMBOLS['star'][bool(latex)]
-
-    # nimbers
-    if G.is_impartial:
-        return _SYMBOLS['star'][bool(latex)] + f"{len(G._left)}"
-
-    # numbers
-    if G.is_number:
-        # non-zero integer
-        if G._left:
-            lf = Fraction(next(iter(G._left)).value)
-        if G._right:
-            rf = Fraction(next(iter(G._right)).value)
-
-        if not G._right:
-            return str(lf + 1)
-        if not G._left:
-            return str(rf - 1)
-
-        v = (lf + rf) / 2
-        n, d = v.numerator, v.denominator
-        return _SYMBOLS['frac'][bool(latex)](n, d)
-
-    # n↑, n↑*, n↓, n↓*
-    up = hash(Game({zero}, {star}))
-    up_star = hash(Game({zero, star}, {zero}))
-    down = hash(Game({star}, {zero}))
-    down_star = hash(Game({zero}, {zero, star}))
-
-    if G_hash == up:
-        return _SYMBOLS['up'][bool(latex)]
-    elif G_hash == up_star:
-        return _SYMBOLS['up'][bool(latex)] + _SYMBOLS['star'][bool(latex)]
-    elif G_hash == down:
-        return _SYMBOLS['down'][bool(latex)]
-    elif G_hash == down_star:
-        return _SYMBOLS['down'][bool(latex)] + _SYMBOLS['star'][bool(latex)]
-
-    g = copy(G)
-    i = 1
-    while True:
-        if g._left == {zero} and len(g._right) == 1:
-            i += 1
-            g = next(iter(g._right))
-            g_hash = hash(g)
-            if g_hash == up:
-                return f"{i}" + _SYMBOLS['cdot'][bool(latex)] + \
-                                _SYMBOLS['up'][bool(latex)] + \
-                                _SYMBOLS['star'][bool(latex)] * ((i+1) % 2)
-            elif g_hash == up_star:
-                return f"{i}" + _SYMBOLS['cdot'][bool(latex)] + \
-                                _SYMBOLS['up'][bool(latex)] + \
-                                _SYMBOLS['star'][bool(latex)] * (i % 2)
-        else:
-            break
-
-    g = copy(G)
-    i = 1
-    while True:
-        if g._right == {zero} and len(g._left) == 1:
-            i += 1
-            g = next(iter(g._left))
-            g_hash = hash(g)
-            if g_hash == down:
-                return f"{i}" + _SYMBOLS['cdot'][bool(latex)] + \
-                                _SYMBOLS['down'][bool(latex)] + \
-                                _SYMBOLS['star'][bool(latex)] * ((i+1) % 2)
-            elif g_hash == down_star:
-                return f"{i}" + _SYMBOLS['cdot'][bool(latex)] + \
-                                _SYMBOLS['down'][bool(latex)] + \
-                                _SYMBOLS['star'][bool(latex)] * (i % 2)
-        else:
-            break
-
-    if len(G._left) == len(G._right) == 1:
-        G_L, G_R = next(iter(G._left)), next(iter(G._right))
-        if G_L.is_number and G_R.is_number:
-            # switches
-            if G_L > G_R:
-                lf = Fraction(G_L.value)
-                rf = Fraction(G_R.value)
-                mean = (lf + rf) / 2
-                diff = (lf - rf) / 2
-                if mean:
-                    return f"{mean}" + _SYMBOLS['pm'][bool(latex)] + f"{diff}"
-                else:
-                    return _SYMBOLS['pm'][bool(latex)] + f"{diff}"
-
-            # tepid games
-            else:  # G_L == G_R; G_L < G_R caught by numbers above.
-                return f"{G_L.value}" + _SYMBOLS['star'][bool(latex)]
-
-    if G._left == {zero} and len(G._right) == 1:
-        G_R = next(iter(G._right))
-        if G_R._left == {zero} and len(G_R._right) == 1:
-            G_RR = next(iter(G_R._right))
-            return _SYMBOLS['tiny'][bool(latex)](f"{(-G_RR).value}")
-
-    if G._right == {zero} and len(G._left) == 1:
-        G_L = next(iter(G._left))
-        if G_L._right == {zero} and len(G_L._left) == 1:
-            G_LL = next(iter(G_L._left))
-            return _SYMBOLS['miny'][bool(latex)](f"{(G_LL).value}")
-
-    #todo: sums
-
-    return repr(G)
+        return value_str(G)
