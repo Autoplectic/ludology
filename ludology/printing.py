@@ -31,7 +31,7 @@ _SYMBOLS = {
     '4down': Symbol('⟱', r'\ensuremath{4\downarrow}'),
     'cdot': Symbol('·', r'\ensuremath{\cdot}'),
     'pm': Symbol('±', r'\ensuremath{\pm}'),
-    'frac': Symbol((lambda n, d: unicode_fraction(n, d)), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
+    'frac': Symbol((lambda n, d: string_fraction(n, d)), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
     'miny': Symbol((lambda g: '⧿_' + g), (lambda g: r'\ensuremath{\tminus}_{' + g + '}')),
     'tiny': Symbol((lambda g: '⧾_' + g), (lambda g: r'\ensuremath{\tplus}_{' + g + '}')),
 }
@@ -60,6 +60,16 @@ _SPECIFIC_FRACTIONS = {
 _SUPERSCRIPTS = "⁰ⁱ²³⁴⁵⁶⁷⁸⁹"
 _SUBSCRIPTS   = "₀₁₂₃₄₅₆₇₈₉"
 _SLASH        = "⁄"
+
+
+def string_fraction(numerator, denominator):
+    """
+    Format a fraction as a simplified string.
+    """
+    if denominator == 1:
+        return f"{numerator}"
+    else:
+        return f"{numerator}/{denominator}"
 
 
 def unicode_fraction(numerator, denominator):
