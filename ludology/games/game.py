@@ -9,8 +9,6 @@ from enum import Enum
 from fractions import Fraction
 from functools import lru_cache, wraps
 
-from ..tools import canonicalize
-
 
 __all__ = [
     'Game',
