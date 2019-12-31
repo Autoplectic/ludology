@@ -8,7 +8,8 @@ from hypothesis.strategies import integers
 
 from ludology import Game
 from ludology.closet import zero, half, one, star, star2, up, pm_one
-from ludology.game import Outcome
+from ludology.games import Outcome
+from ludology.games.printing import unicode_fraction
 from ludology.tools import canonicalize
 
 
@@ -264,7 +265,7 @@ def test_birthday(g, bday):
 
 
 @pytest.mark.parametrize(['g', 'sp'], [
-    (up, {zero, star, zero}),
+    (up, {up, zero, star, zero}),
 ])
 def test_subpositions(g, sp):
     """
@@ -334,7 +335,7 @@ def test_outcome(g, o):
     (Game({0}, {Game({0}, {-2})}), '⧾_2'),
     (Game({Game({2}, {0})}, {0}), '⧿_2'),
     (star2, '∗2'),
-    (Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}), '{3±1,5/2｜-2±2,-3/2±1/2}'),
+    (Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}), '{3±1, ⁵⁄₂｜-2±2, -³⁄₂±½}'),
     (Game({0}, {star2}), '{0｜∗2}'),
     (Game({star2}, {0}), '{∗2｜0}'),
 ])
@@ -350,10 +351,11 @@ def test_value_dyadic_rational(m, j):
     """
     Test the construction of dyadic rationals.
     """
-    f = m/2**j
-    n, d = f.as_integer_ratio()
-    g = Game(f)
-    assert g.value == (f"{n}/{d}" if d > 1 else f"{n}")
+    frac = m/2**j
+    num, denom = frac.as_integer_ratio()
+    string = unicode_fraction(num, denom)
+    game = Game(frac)
+    assert game.value == string
 
 
 def test_game_fail():

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 The basic Game class.
 """
@@ -7,11 +9,12 @@ from enum import Enum
 from fractions import Fraction
 from functools import lru_cache, wraps
 
-from .tools import canonicalize
+from ..tools import canonicalize
 
 
 __all__ = [
     'Game',
+    'Outcome',
 ]
 
 
@@ -106,6 +109,20 @@ class Game(object):
                 G._right = {Game(_) for _ in right}
             else:
                 G._right = set()
+
+    @property
+    def left(G):
+        """
+        The left set.
+        """
+        return copy(G._left)
+
+    @property
+    def right(G):
+        """
+        The right set.
+        """
+        return copy(G._right)
 
     @gamify_inputs
     # @lru_cache(maxsize=None)
@@ -428,8 +445,8 @@ class Game(object):
         r : str
             A representation of G.
         """
-        lefts = ','.join(G_L.value for G_L in sorted(G._left, key=str))
-        rights = ','.join(G_R.value for G_R in sorted(G._right, key=str))
+        lefts = ', '.join(G_L.value for G_L in sorted(G._left, key=str))
+        rights = ', '.join(G_R.value for G_R in sorted(G._right, key=str))
         return f'{{{lefts}｜{rights}}}'
 
     def subpositions(G):
@@ -441,6 +458,7 @@ class Game(object):
         g : Game
             A subposition of G.
         """
+        yield G
         for g in G._left | G._right:
             yield g
             yield from g.subpositions()
@@ -465,7 +483,7 @@ class Game(object):
     def is_dicotic(G):
         """
         A dicotic, or all-small, Game is one where either both or neither player have options
-        at every subposition.
+        at every subposition. These are necessarily infinitesimal.
 
         Returns
         -------
@@ -489,7 +507,7 @@ class Game(object):
         infinitesimal : bool
             Whether the game is infinitesimal or not.
         """
-        from .tools import left_stop, right_stop
+        from ..tools import left_stop, right_stop
         a = left_stop(G, adorn=False) == right_stop(G, adorn=False) == 0
         b = G != 0
         return a and b
@@ -525,7 +543,7 @@ class Game(object):
         numberish : bool
             Whether G is numberish or not.
         """
-        from .tools import left_stop, right_stop
+        from ..tools import left_stop, right_stop
         return left_stop(G, adorn=False) == right_stop(G, adorn=False)
 
     @property
@@ -548,19 +566,18 @@ class Game(object):
     @property
     def birthday(G):
         """
-        The birthday of a game G is defined as the one more than the maximum birthday of its
-        options.
+        The birthday of a game G is defined as the one more than the maximum
+        birthday of its options.
 
         Returns
         -------
         bday : int
             G's birthday.
         """
-        if G._left == G._right == set():
+        if not G._left | G._right:
             bday = 0
         else:
             bday = max(g.birthday for g in G._left | G._right) + 1
-
         return bday
 
     @property

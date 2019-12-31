@@ -10,10 +10,8 @@ it would be pretty rare to sample tinies or the like.
 
 from hypothesis.strategies import composite, integers, lists, recursive, sampled_from, tuples
 
-from .game import Game
+from .games import Game, Nimber, Surreal
 from .lattice import all_games
-from .nimber import Nimber
-from .surreal import Surreal
 from .tools import canonicalize
 
 

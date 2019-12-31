@@ -75,8 +75,8 @@ def test_fail():
 
 @pytest.mark.parametrize(['n', 'v'], [
     (0, '0'),
-    (1, '*'),
-    (6, '*6'),
+    (1, '∗'),
+    (6, '∗6'),
 ])
 def test_nimber_value(n, v):
     """

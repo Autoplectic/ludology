@@ -2,7 +2,8 @@
 A collection of common games.
 """
 
-from .game import Game
+from .games import Game, Nimber, Surreal, Switch
+from .tools import canonicalize
 
 
 __all__ = [
@@ -25,27 +26,42 @@ __all__ = [
 
 
 # numbers
-zero = Game()
-quarter = Game(1/4)
-half = Game(1/2)
-one = Game(1)
-two = Game(2)
+zero = Surreal(0)
+quarter = Surreal(1/4)
+half = Surreal(1/2)
+one = Surreal(1)
+two = Surreal(2)
 
 # nimbers
-star = Game({0}, {0})
-star2 = Game({0, star}, {0, star})
+star = Nimber(1)
+star2 = Nimber(2)
 
 # other infinitesimals
-up = Game({0}, {star})
-upstar = Game({0}, {0, star})
-tiny = Game({0}, {Game({0}, {-1})})
+up = Game({zero}, {star})
+upstar = Game({zero}, {zero, star})
 
 # switch
-pm_one = Game({1}, {-1})
+pm_one = Switch(mean=zero, temp=one)
 
 # more complex examples
-g1 = Game({5/2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})})
-g2 = Game({Game({4}, {2})}, {Game({Game({0}, {-2})}, {Game({-4}, {-6})})})
-g3 = Game({Game({3}, {one + star})}, {Game({-one + star}, {-two + star}), Game({0}, {-3})})
-g4 = Game({5}, {Game({1}, {-9})})
-g5 = Game({Game({2}, {0}), Game({2}, {star})}, {Game({0}, {-2 + star}), Game({star}, {-2 + star})})
+g1 = canonicalize(Game({5/2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})}))
+g2 = canonicalize(Game({Game({4}, {2})}, {Game({Game({0}, {-2})}, {Game({-4}, {-6})})}))
+g3 = canonicalize(Game({Game({3}, {one + star})}, {Game({-one + star}, {-two + star}), Game({0}, {-3})}))
+g4 = canonicalize(Game({5}, {Game({1}, {-9})}))
+g5 = canonicalize(Game({Game({2}, {0}), Game({2}, {star})}, {Game({0}, {-2 + star}), Game({star}, {-2 + star})}))
+
+#
+def tiny(G):
+    """
+    """
+    return canonicalize(Game({0}, {Game({0}, {G})}))
+
+def miny(G):
+    """
+    """
+    return -tiny(G)
+
+def uptimal(*nums):
+    """
+    """
+    raise NotImplementedError

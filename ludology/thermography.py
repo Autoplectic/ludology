@@ -10,7 +10,7 @@ from functools import lru_cache
 import numpy as np
 from scipy.optimize import brentq, minimize
 
-from .game import Game
+from .games import Game
 from .tools import canonicalize
 
 
@@ -104,18 +104,14 @@ def mean(G):
     m : float
         The mean value of G.
     """
+
     value = G.value
     if G.is_number:
-        return float(Fraction(value))
-    elif G.is_switch:
-        m, _ = value.split('±')
-        if m:
-            m = float(Fraction(m))
-        else:
-            m = 0.0
-        return m
-    else:
-        return float(_left_scaffold(G)(temperature(G)))
+        return float(canonicalize(G).n)
+    if G.is_switch:
+        return float(canonicalize(G).mean.n)
+
+    return float(_left_scaffold(G)(temperature(G)))
 
 
 @lru_cache(maxsize=None)
@@ -135,28 +131,26 @@ def temperature(G):
         The temperature of G.
     """
     if G.is_number:
-        return -1/Fraction(G.value).denominator
-    elif G.is_switch:
-        _, temp = G.value.split('±')
-        temp = float(Fraction(temp))
-        return temp
-    else:
-        fl = _left_scaffold(G)
-        fr = _right_scaffold(G)
+        return -1/canonicalize(G).n.denominator
+    if G.is_switch:
+        return float(canonicalize(G).temp.n)
 
-        def f1(t):
-            return fl(t) - fr(t)
+    fl = _left_scaffold(G)
+    fr = _right_scaffold(G)
 
-        def f2(t):
-            return abs(fl(t) - fr(t)) + t/2
+    def f1(t):
+        return fl(t) - fr(t)
 
-        upper = 1
-        while f1(upper) > 0:
-            upper *= 2
+    def f2(t):
+        return abs(fl(t) - fr(t)) + t/2
 
-        root = float(brentq(f1, 0, upper + 1))
+    upper = 1
+    while f1(upper) > 0:
+        upper *= 2
 
-        return round(float(minimize(f2, root).x), 4)
+    root = float(brentq(f1, 0, upper + 1))
+
+    return round(float(minimize(f2, root).x), 4)
 
 
 ###############################################################################

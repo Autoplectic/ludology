@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 The Surreal numbers are the subset of Games which are isomorophic to the hyperreals.
 """
@@ -7,6 +9,7 @@ from functools import lru_cache, total_ordering
 import numbers
 
 from .game import Game
+from ..tools import canonicalize
 
 
 @total_ordering
@@ -27,23 +30,58 @@ class Surreal(Game, numbers.Number):
         value : int, float, Fraction
             The value for the Surreal number.
         """
-        G._n = Fraction(value)
-        if G._n.denominator > 1024:
-            msg = f"{G._n} would result in a very deep game tree."
-            raise ValueError(msg)
-        elif G._n.denominator == 1:
-            if G._n == 0:
-                G._left = set()
-                G._right = set()
-            elif G._n > 0:
-                G._left = {Surreal(value - 1)}
-                G._right = set()
+        if isinstance(value, Surreal):
+            G._left, G._right, G._n = value.left, value.right, value.n
+        elif isinstance(value, Game) and value.is_number:
+            value = canonicalize(value, specify=False)
+            G._left, G._right = value.left, value.right
+
+            if not G._left | G._right:
+                G._n = Fraction(0)
             else:
-                G._left = set()
-                G._right = {Surreal(value + 1)}
+                # non-zero dyadic rational
+                if G._left:
+                    lf = next(iter(G._left)).n
+                if G._right:
+                    rf = next(iter(G._right)).n
+
+                if not G._right:
+                    # positive integer
+                    G._n = lf + 1
+                elif not G._left:
+                    # negative integer
+                    G._n = rf - 1
+                else:
+                    # dyadic rational
+                    G._n = (lf + rf) / 2
         else:
-            G._left = {Surreal(G._n - 1/G._n.denominator)}
-            G._right = {Surreal(G._n + 1/G._n.denominator)}
+            try:
+                G._n = Fraction(value)
+                if G._n.denominator > 1024:
+                    msg = f"{G._n} would result in a very deep game tree."
+                    raise ValueError(msg)
+                if G._n.denominator == 1:
+                    if G._n == 0:
+                        G._left = set()
+                        G._right = set()
+                    elif G._n > 0:
+                        G._left = {Surreal(value - 1)}
+                        G._right = set()
+                    else:
+                        G._left = set()
+                        G._right = {Surreal(value + 1)}
+                else:
+                    G._left = {Surreal(G._n - 1/G._n.denominator)}
+                    G._right = {Surreal(G._n + 1/G._n.denominator)}
+            except ValueError:
+                raise ValueError(f"Can not convert {value} to a Surreal Number.")
+
+    @property
+    def n(G):
+        """
+        The Surreal's value, as a Fraction.
+        """
+        return G._n
 
     @property
     def is_number(G):
@@ -128,7 +166,7 @@ class Surreal(Game, numbers.Number):
         hash : str
             The hash of G.
         """
-        return hash(G._n)
+        return super().__hash__()
 
     @lru_cache(maxsize=None)
     def __ge__(G, H):
@@ -146,10 +184,12 @@ class Surreal(Game, numbers.Number):
         """
         if isinstance(H, Surreal):
             return G._n >= H._n
-        elif isinstance(H, Game):
+        if isinstance(H, numbers.Number):
+            return G._n >= H
+        if isinstance(H, Game):
             return super().__ge__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     def __eq__(G, H):
         """
@@ -165,11 +205,13 @@ class Surreal(Game, numbers.Number):
             Whether G == H or not.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n == H._n)
-        elif isinstance(H, Game):
+            return G._n == H._n
+        if isinstance(H, numbers.Number):
+            return G._n == H
+        if isinstance(H, Game):
             return super().__eq__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     @lru_cache(maxsize=None)
     def __add__(G, H):
@@ -188,10 +230,12 @@ class Surreal(Game, numbers.Number):
         """
         if isinstance(H, Surreal):
             return Surreal(G._n + H._n)
-        elif isinstance(H, Game):
+        if isinstance(H, numbers.Number):
+            return Surreal(G._n + H)
+        if isinstance(H, Game):
             return super().__add__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     @lru_cache(maxsize=None)
     def __mul__(G, H):
@@ -210,11 +254,19 @@ class Surreal(Game, numbers.Number):
         """
         if isinstance(H, Surreal):
             return Surreal(G._n * H._n)
-        elif isinstance(H, Game):
+        if isinstance(H, numbers.Number):
+            return Surreal(G._n * H)
+        if isinstance(H, Game):
             return super().__mul__(H)
-        else:
-            return NotImplemented
 
+        return NotImplemented
+
+    @lru_cache(maxsize=None)
+    def __pow__(G, H):
+        """
+        G ** H = exp(G * log(H))
+        """
+        return NotImplemented
 
     @lru_cache(maxsize=None)
     def __truediv__(G, H):
@@ -233,11 +285,12 @@ class Surreal(Game, numbers.Number):
         """
         if isinstance(H, Surreal):
             return Surreal(G._n / H._n)
-        elif isinstance(H, Game):
+        if isinstance(H, numbers.Number):
+            return Surreal(G._n / H)
+        if isinstance(H, Game):
             return super().__truediv__(H)
-        else:
-            return NotImplemented
 
+        return NotImplemented
 
     @lru_cache(maxsize=None)
     def _invert(G):
@@ -250,3 +303,17 @@ class Surreal(Game, numbers.Number):
             The inverse of G.
         """
         return Surreal(1/G._n)
+
+    @property
+    def value(G):
+        """
+        The value of G.
+
+        Returns
+        -------
+        value : str
+            The value as a string.
+        """
+        from .printing import unicode_fraction
+
+        return unicode_fraction(G._n.numerator, G._n.denominator)

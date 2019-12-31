@@ -4,7 +4,7 @@ This module implements functions related to the structure of the partial order o
 
 from itertools import combinations, product
 
-from .game import Game
+from .games import Game
 from .tools import canonicalize
 from .utils import powerset
 
@@ -71,8 +71,8 @@ def companion(G):
     c : Game
         G's companion.
     """
-    cleft = {companion(G_L) for G_L in G._left}
-    cright = {companion(G_R) for G_R in G._right}
+    cleft = {companion(G_L) for G_L in G.left}
+    cright = {companion(G_R) for G_R in G.right}
     if G == 0:
         c = Game({0} | cleft, {0} | cright)
     elif G > 0:

@@ -4,7 +4,7 @@ A variety of ways of summing games.
 
 from functools import lru_cache, wraps
 
-from .game import Game
+from .games import Game
 from .tools import canonicalize
 
 __all__ = [

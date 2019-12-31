@@ -85,7 +85,8 @@ def left_stop(G, adorn=True):
     LS : Game
         The left stop of G.
     initiative : str
-        '+' if it is left's turn, '-' if right's. Only returned if adorn is True.
+        '+' if it is left's turn, '-' if right's. Only returned if adorn is
+        True.
     """
     if G.is_number:
         ls = (G, '+')
@@ -115,7 +116,8 @@ def right_stop(G, adorn=True):
     RS : Game
         The right stop of G.
     initiative : str
-        '+' if it is left's turn, '-' if right's. Only returned if adorn is True.
+        '+' if it is left's turn, '-' if right's. Only returned if adorn is
+        True.
     """
     if G.is_number:
         rs = (G, '-')
@@ -160,11 +162,12 @@ def replace_reversible(G):
     Remove the reversable options of G.
 
     A left option is reversible if it has a right option which is less than G.
-    In this case, that left option can be replaced with it's right option's left options.
-    Essentially, this means that if left were to make a move to an option from which right
-    has the ability to move to a position which is strictly better for her than G, it is a
-    "no brainer" to do so, and so that left option might as well be replaced with the options
-    available after right makes the obvious responce.
+    In this case, that left option can be replaced with it's right option's left
+    options. Essentially, this means that if left were to make a move to an
+    option from which right has the ability to move to a position which is
+    strictly better for her than G, it is a "no brainer" to do so, and so that
+    left option might as well be replaced with the options available after right
+    makes the obvious responce.
 
     Parameters
     ----------
@@ -194,8 +197,23 @@ def replace_reversible(G):
     G._right = new_right_set
 
 
+def make_specific(G):
+    """
+    """
+    from .games import Nimber, Surreal, Switch
+
+    if G.is_number:
+        return Surreal(G)
+    if G.is_impartial:
+        return Nimber(G)
+    if G.is_switch:
+        return Switch(G)
+
+    return G
+
+
 @lru_cache(maxsize=None)
-def canonicalize(G):
+def canonicalize(G, specify=True):
     """
     Return the canonical form of the game G.
 
@@ -211,15 +229,17 @@ def canonicalize(G):
     """
     cG = copy(G)
 
-    cG._left = {canonicalize(G_L) for G_L in cG._left}
-    cG._right = {canonicalize(G_R) for G_R in cG._right}
+    cG._left = {canonicalize(G_L) for G_L in cG.left}
+    cG._right = {canonicalize(G_R) for G_R in cG.right}
 
     old_left, old_right = set(), set()
-    while cG._left != old_left or cG._right != old_right:
-        old_left, old_right = cG._left, cG._right
+    while cG.left != old_left or cG.right != old_right:
+        old_left, old_right = cG.left, cG.right
         remove_dominated(cG)
         replace_reversible(cG)
 
+    if specify:
+        return make_specific(cG)
     return cG
 
 

@@ -4,14 +4,20 @@ Tests for ludology.tools.
 
 import pytest
 
+import sys
+
 from hypothesis import given
-from ludology.hypothesis import nimbers
+from ludology.hypothesis import games, nimbers
 
 from ludology import Game, Nimber
 from ludology.closet import zero, pm_one, star
 from ludology.sums import conjunctive
-from ludology.tools import (left_stop, right_stop, left_incentives,
-                            right_incentives, remoteness)
+from ludology.tools import (canonicalize, left_stop, right_stop,
+                            left_incentives, right_incentives, remoteness)
+
+
+# double the recursion limit:
+sys.setrecursionlimit(2*sys.getrecursionlimit())
 
 
 @pytest.mark.parametrize(['g', 'v'], [
@@ -23,7 +29,8 @@ def test_left_stop_1(g, v):
     """
     Test left stops with adornment.
     """
-    assert left_stop(g) == v
+    stop = left_stop(g)
+    assert stop == v
 
 
 @pytest.mark.parametrize(['g', 'v'], [
@@ -35,7 +42,9 @@ def test_left_stop_2(g, v):
     """
     Test left stops without adornment.
     """
-    assert left_stop(g, adorn=False) == v
+    stop = left_stop(g, adorn=False)
+    print(type(stop))
+    assert stop == v
 
 
 @pytest.mark.parametrize(['g', 'v'], [
@@ -47,7 +56,8 @@ def test_right_stop_1(g, v):
     """
     Test right stops with adornment.
     """
-    assert right_stop(g) == v
+    stop = right_stop(g)
+    assert stop == v
 
 
 @pytest.mark.parametrize(['g', 'v'], [
@@ -59,7 +69,8 @@ def test_right_stop_2(g, v):
     """
     Test right stops without adornment.
     """
-    assert right_stop(g, adorn=False) == v
+    stop = right_stop(g, adorn=False)
+    assert stop == v
 
 
 def test_left_incentives():
@@ -78,6 +89,14 @@ def test_right_incentives():
     g = Game({0}, {Game({0}, {-2})})
     ri = {Game({Game({2}, {0}), 2}, {0})}
     assert right_incentives(g) == ri
+
+
+@given(G=games())
+def test_canonicalize(G):
+    """
+    Test that canonicalizing doesn't effect the value of the game.
+    """
+    assert canonicalize(G) == G
 
 
 @given(G=nimbers(max_value=5), H=nimbers(max_value=5))

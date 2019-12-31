@@ -9,8 +9,8 @@ from copy import copy
 from fractions import Fraction
 from functools import lru_cache
 
-from .game import Game
-from .tools import canonicalize
+from . import Game, Nimber, Surreal, Switch
+from ..tools import canonicalize
 
 __all__ = [
     'value_str',
@@ -31,7 +31,7 @@ _SYMBOLS = {
     '4down': Symbol('⟱', r'\ensuremath{4\downarrow}'),
     'cdot': Symbol('·', r'\ensuremath{\cdot}'),
     'pm': Symbol('±', r'\ensuremath{\pm}'),
-    'frac': Symbol((lambda n, d: string_fraction(n, d)), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
+    'frac': Symbol((lambda n, d: unicode_fraction(n, d)), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
     'miny': Symbol((lambda g: '⧿_' + g), (lambda g: r'\ensuremath{\tminus}_{' + g + '}')),
     'tiny': Symbol((lambda g: '⧾_' + g), (lambda g: r'\ensuremath{\tplus}_{' + g + '}')),
 }
@@ -95,13 +95,13 @@ def unicode_fraction(numerator, denominator):
     numerator = abs(numerator)
     if (numerator, denominator) in _SPECIFIC_FRACTIONS:
         return sign + _SPECIFIC_FRACTIONS[(numerator, denominator)]
-    else:
-        n = ''.join(_SUPERSCRIPTS[int(i)] for i in str(numerator))
-        d = ''.join(_SUBSCRIPTS[int(i)] for i in str(denominator))
-        return sign + n + _SLASH + d
+
+    num = ''.join(_SUPERSCRIPTS[int(i)] for i in str(numerator))
+    denom = ''.join(_SUBSCRIPTS[int(i)] for i in str(denominator))
+    return sign + num + _SLASH + denom
 
 
-def switch(mean, temp, latex):
+def switch(mean, temp, latex=False):
     """
     Return the value of a switch with mean value `mean` and temperature `temp`.
 
@@ -119,11 +119,21 @@ def switch(mean, temp, latex):
     switch : str
         The value of the switch.
     """
-    if mean:
-        a = _SYMBOLS['frac'][latex](mean.numerator, mean.denominator)
+    if mean != 0:
+        if isinstance(mean, Fraction):
+            a = _SYMBOLS['frac'][latex](mean.numerator, mean.denominator)
+        elif isinstance(mean, Game):
+            a = mean.value
+        else:
+            a = str(mean)
     else:
         a = ''
-    b = _SYMBOLS['frac'][latex](temp.numerator, temp.denominator)
+    if isinstance(temp, Fraction):
+        b = _SYMBOLS['frac'][latex](temp.numerator, temp.denominator)
+    elif isinstance(temp, Game):
+        b = temp.value
+    else:
+        b = str(temp)
     return a + _SYMBOLS['pm'][latex] + b
 
 
@@ -143,40 +153,17 @@ def value_str(G, latex=False):
         The name of the game.
     """
     G = canonicalize(G)
+    if isinstance(G, (Nimber, Surreal, Switch)):
+        return G.value
+
     G_hash = hash(G)
 
     zero = Game()
 
-    if not len(G._left | G._right):
+    if not G.left | G.right:
         return '0'
 
     star = Game({zero}, {zero})
-
-    if G_hash == hash(star):
-        return _SYMBOLS['star'][bool(latex)]
-
-    # nimbers
-    if G.is_impartial:
-        return _SYMBOLS['star'][bool(latex)] + f"{len(G._left)}"
-
-    # numbers
-    if G.is_number:
-        # non-zero dyadic rational
-        if G._left:
-            lf = Fraction(next(iter(G._left)).value)
-        if G._right:
-            rf = Fraction(next(iter(G._right)).value)
-
-        # specifically, integer
-        if not G._right:
-            return str(lf + 1)
-        if not G._left:
-            return str(rf - 1)
-
-        # dyadic rational
-        v = (lf + rf) / 2
-        n, d = v.numerator, v.denominator
-        return _SYMBOLS['frac'][bool(latex)](n, d)
 
     # n↑, n↑*, n↓, n↓*
     up = hash(Game({zero}, {star}))
@@ -196,9 +183,9 @@ def value_str(G, latex=False):
     g = copy(G)
     i = 1
     while True:
-        if g._left == {zero} and len(g._right) == 1:
+        if g.left == {zero} and len(g.right) == 1:
             i += 1
-            g = next(iter(g._right))
+            g = next(iter(g.right))
             g_hash = hash(g)
             if g_hash == up:
                 if i in [2, 3, 4]:
@@ -220,9 +207,9 @@ def value_str(G, latex=False):
     g = copy(G)
     i = 1
     while True:
-        if g._right == {zero} and len(g._left) == 1:
+        if g.right == {zero} and len(g.left) == 1:
             i += 1
-            g = next(iter(g._left))
+            g = next(iter(g.left))
             g_hash = hash(g)
             if g_hash == down:
                 if i in [2, 3, 4]:
@@ -241,31 +228,25 @@ def value_str(G, latex=False):
         else:
             break
 
-    if len(G._left) == len(G._right) == 1:
-        G_L, G_R = next(iter(G._left)), next(iter(G._right))
+    if len(G.left) == len(G.right) == 1:
+        G_L, G_R = next(iter(G.left)), next(iter(G.right))
         if G_L.is_number and G_R.is_number:
-            # switches
-            if G_L > G_R:
-                lf = Fraction(G_L.value)
-                rf = Fraction(G_R.value)
-                mean = (lf + rf) / 2
-                diff = (lf - rf) / 2
-                return switch(mean, diff, latex)
-
             # tepid games
-            else:  # G_L == G_R; G_L < G_R caught by numbers above.
+            if G_L == G_R:  # G_L == G_R; G_L < G_R caught by numbers above.
                 return f"{G_L.value}" + _SYMBOLS['star'][bool(latex)]
 
-    if G._left == {zero} and len(G._right) == 1:
-        G_R = next(iter(G._right))
-        if G_R._left == {zero} and len(G_R._right) == 1:
-            G_RR = next(iter(G_R._right))
+    # tiny
+    if G.left == {zero} and len(G.right) == 1:
+        G_R = next(iter(G.right))
+        if G_R.left == {zero} and len(G_R.right) == 1:
+            G_RR = next(iter(G_R.right))
             return _SYMBOLS['tiny'][bool(latex)](f"{(-G_RR).value}")
 
-    if G._right == {zero} and len(G._left) == 1:
-        G_L = next(iter(G._left))
-        if G_L._right == {zero} and len(G_L._left) == 1:
-            G_LL = next(iter(G_L._left))
+    # miny
+    if G.right == {zero} and len(G.left) == 1:
+        G_L = next(iter(G.left))
+        if G_L.right == {zero} and len(G_L.left) == 1:
+            G_LL = next(iter(G_L.left))
             return _SYMBOLS['miny'][bool(latex)](f"{(G_LL).value}")
 
     #todo: sums

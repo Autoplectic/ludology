@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Nimbers are the values of impartial games.
 """
@@ -5,9 +7,10 @@ Nimbers are the values of impartial games.
 from functools import lru_cache
 from itertools import count
 from math import inf
+import numbers
 
 from .game import Game
-from .utils import mex
+from ..utils import mex
 
 
 __all__ = [
@@ -20,6 +23,7 @@ class Nimber(Game):
     """
     A Nimber is the value of an impartial game.
     """
+
     def __init__(G, n):
         """
         Construct the `n`th Nimber.
@@ -40,7 +44,21 @@ class Nimber(Game):
             raise ValueError(msg)
 
         G._left = G._right = options
-        G._n = n
+        G._n = len(G._left)
+
+    @property
+    def n(G):
+        """
+        The Nimber's value.
+        """
+        return G._n
+
+    @property
+    def birthday(G):
+        """
+        The Nimber's birthday.
+        """
+        return G._n
 
     @property
     def value(G):
@@ -54,10 +72,9 @@ class Nimber(Game):
         """
         if G._n == 0:
             return '0'
-        elif G._n == 1:
-            return '*'
-        else:
-            return f"*{G._n}"
+        if G._n == 1:
+            return '∗'
+        return f"∗{G._n}"
 
     @property
     def is_number(G):
@@ -162,10 +179,10 @@ class Nimber(Game):
         """
         if isinstance(H, Nimber):
             return Nimber(G._n ^ H._n)
-        elif isinstance(H, Game):
+        if isinstance(H, (Game, numbers.Number)):
             return super().__add__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     @lru_cache(maxsize=None)
     def __mul__(G, H):
@@ -184,10 +201,10 @@ class Nimber(Game):
         """
         if isinstance(H, Nimber):
             return Nimber(_mul(G._n, H._n))
-        elif isinstance(H, Game):
+        if isinstance(H, (Game, numbers.Number)):
             return super().__mul__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     def __eq__(G, H):
         """
@@ -205,21 +222,22 @@ class Nimber(Game):
         """
         if isinstance(H, Nimber):
             return G._n == H._n
-        elif isinstance(H, Game):
+        if isinstance(H, (Game, numbers.Number)):
             return super().__eq__(H)
-        else:
-            return NotImplemented
+
+        return NotImplemented
 
     def __hash__(G):
         """
-        Define the hash of a Nimber as the hash of its value.
+        Use Game's hash. We must specifically do it here because of override
+        __eq__.
 
         Returns
         -------
         hash : str
             The hash of G.
         """
-        return hash(G._n)
+        return super().__hash__()
 
 
 class FarStar(Nimber):
