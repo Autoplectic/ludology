@@ -20,7 +20,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       env:
-        FLIT_IGNORE_INVALID: "1"
+        FLIT_ALLOW_INVALID: 1
       run: |
         python -m pip install --upgrade pip
         pip install flit
