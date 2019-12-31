@@ -41,3 +41,4 @@ jobs:
       with:
         # Repository upload token - get it from codecov.io
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: .coverage
