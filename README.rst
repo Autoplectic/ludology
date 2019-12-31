@@ -5,6 +5,12 @@ Ludology
 
 |travis| |appveyor| |codecov| |readthedocs|
 
+.. epigraph::
+
+   *Can't no one compel another man to engage in recreation.*
+
+   -- Buster Scruggs
+
 ``Ludology`` is a package for the study of combinatorial game theory.
 
 
