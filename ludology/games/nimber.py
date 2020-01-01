@@ -237,6 +237,7 @@ class FarStar(Nimber):
     """
     The far-star represents an arbitrarily large Nimber.
     """
+
     def __init__(G):
         """
         """

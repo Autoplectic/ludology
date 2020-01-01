@@ -21,6 +21,7 @@ class Surreal(Game, numbers.Number):
     dyadic rationals, that is, rational numbers whose denominator is a power of
     2.
     """
+
     def __init__(G, value):
         """
         Construct the Surreal with given value.

@@ -42,6 +42,7 @@ class Outcome(Enum):
     """
     Representing the outcome classes of Games.
     """
+
     PREVIOUS = 'P'
     NEXT = 'N'
     LEFT = 'L'

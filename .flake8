@@ -10,12 +10,17 @@ ignore =
     N805   # We use G instead of self for clarity.
     N806   # In keeping with CGT notation, we use capitalized variable names.
     E501   # Prefer use of B950.
-    # temp
+    I002   # I don't use isort
+
+    D205
     D400
     D401
-    I002
-    D204
-    D205
+    D404
+    D504
+    R504
+    RST213
+    RST215
+    RST306
     SF01
 per-file-ignores =
     # Allow assert statements in tests:
@@ -23,6 +28,7 @@ per-file-ignores =
     # Allow * imports in __init__.py files:
     __init__.py: F401, F403
 
+count = True
 docstring-convention = numpy
 max-line-length = 120
 show-source = True
