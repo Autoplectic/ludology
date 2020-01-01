@@ -76,52 +76,55 @@ plotting = [
 
 [tool.coverage.run]
 
-branch = True
-source = ludology
-omit =
-	# don't include tests
-	*/tests/*
+branch = true
+source = [
+    "ludology",
+]
+omit = [
+	"*/tests/*",  # don't include tests
+]
 
 [tool.coverage.report]
 
 # Regexes for lines to exclude from consideration
-exclude_lines =
+exclude_lines = [
     # Have to re-enable the standard pragma
-    pragma: no cover
+    "pragma: no cover",
 
     # Don't complain about missing debug-only code:
-    def __repr__
-    def _repr_html_
-    if self\.debug
+    "def __repr__",
+    "def _repr_html_",
+    "if self\\.debug",
 
     # Don't worry about deprecated code:
-    @removals.remove
+    "@removals.remove",
 
     # don't worry about abstract code:
-    @abstractmethod
+    "@abstractmethod",
 
     # Don't complain if tests don't hit defensive assertion code:
-    raise AssertionError
-    raise NotImplementedError
+    "raise AssertionError",
+    "raise NotImplementedError",
 
     # Don't complain if non-runnable code isn't run:
-    if 0:
-    if __name__ == .__main__.:
+    "if 0:",
+    "if __name__ == .__main__.:",
 
     # ignore fixtures
-    def setup_module
-    def teardown_module
+    "def setup_module",
+    "def teardown_module",
 
     # ignore missing import
     #except ImportError
     #raise ImportError
 
     # runtime errors
-    except RuntimeError
+    "except RuntimeError",
 
     # not implemented forms of binary methods:
-    return NotImplemented
+    "return NotImplemented",
 
     # hard to test (potentially long running)
+]
 
-ignore_errors = True
+ignore_errors = true
