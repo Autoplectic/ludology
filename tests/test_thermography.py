@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.thermography.
 """
@@ -12,7 +14,7 @@ from ludology.thermography import (mean, temperature, cool, heat, overheat,
                                    thermal_dissociation, Particle)
 
 
-@pytest.mark.parametrize(['g', 'm'], [
+@pytest.mark.parametrize(('g', 'm'), [
     (pm_one, 0.0),
     (one + pm_one, 1.0),
     (3 * one, 3.0),
@@ -25,12 +27,12 @@ def test_mean(g, m):
     assert mean(g) == m
 
 
-@pytest.mark.parametrize(['g', 't'], [
+@pytest.mark.parametrize(('g', 't'), [
     (pm_one, 1.0),
     (3 * one, -1.0),
     (g1, 2.5),
-    (half, -1/2),
-    (half + quarter, -1/4),
+    (half, -1 / 2),
+    (half + quarter, -1 / 4),
 ])
 def test_temperature(g, t):
     """
@@ -39,7 +41,7 @@ def test_temperature(g, t):
     assert temperature(g) == t
 
 
-@pytest.mark.parametrize(['g', 't', 'v'], [
+@pytest.mark.parametrize(('g', 't', 'v'), [
     (Game({2}, {-2}), 1.0, Game({1}, {-1})),
     (g1, 2.0, Game({1}, {Game({0}, {0})})),
 ])
@@ -50,7 +52,7 @@ def test_cooling(g, t, v):
     assert cool(g, t) == v
 
 
-@pytest.mark.parametrize(['g', 't', 'v'], [
+@pytest.mark.parametrize(('g', 't', 'v'), [
     (pm_one, one, Game({2}, {-2})),
     (pm_one, 1, Game({2}, {-2})),
     (2 * one, 1.0, 2 * one),
@@ -62,7 +64,7 @@ def test_heating(g, t, v):
     assert heat(g, t) == v
 
 
-@pytest.mark.parametrize(['g', 't', 'v'], [
+@pytest.mark.parametrize(('g', 't', 'v'), [
     (pm_one, 1.0, Game({3}, {-3})),
     (star, 1.0, pm_one),
     (up, 1.0, Game({1}, {Game({0}, {-2})})),
@@ -76,7 +78,7 @@ def test_overheating(g, t, v):
 
 @pytest.mark.parametrize('g', [
     3 * one,
-    Surreal(1/4),
+    Surreal(1 / 4),
     zero,
     -4 * one,
 ])
@@ -110,7 +112,7 @@ def test_is_hot(g):
     assert is_hot(g)
 
 
-@pytest.mark.parametrize(['g', 'dissociation'], [
+@pytest.mark.parametrize(('g', 'dissociation'), [
     (pm_one, (0.0, Particle(star, 1))),
     (g2, (0.0, Particle(star, 3.0), Particle(g5, 2.0), Particle(star, 1.0))),
 ])

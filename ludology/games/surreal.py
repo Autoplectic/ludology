@@ -71,8 +71,8 @@ class Surreal(Game, numbers.Number):
                         G._left = set()
                         G._right = {Surreal(value + 1)}
                 else:
-                    G._left = {Surreal(G._n - 1/G._n.denominator)}
-                    G._right = {Surreal(G._n + 1/G._n.denominator)}
+                    G._left = {Surreal(G._n - 1 / G._n.denominator)}
+                    G._right = {Surreal(G._n + 1 / G._n.denominator)}
             except ValueError:
                 raise ValueError(f"Can not convert {value} to a Surreal Number.")
 
@@ -129,11 +129,13 @@ class Surreal(Game, numbers.Number):
         dicotic : bool
             Whether this number is dicotic.
         """
-        return G._n == 0
+        return G.n == 0
 
     @property
     def is_infinitesimal(G):
         """
+        Determine if the Game is infinitesimal.
+
         A game is infinitesimal if it is non-zero and smaller than any positive number and greater
         than any negative number. Equivalently, it's left and right stops are both zero. Note, this
         does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
@@ -179,11 +181,12 @@ class Surreal(Game, numbers.Number):
             The second Surreal/Game.
 
         Returns
+        -------
         ge : bool
             Whether G >= H or not.
         """
         if isinstance(H, Surreal):
-            return G._n >= H._n
+            return G._n >= H.n
         if isinstance(H, numbers.Number):
             return G._n >= H
         if isinstance(H, Game):
@@ -201,11 +204,12 @@ class Surreal(Game, numbers.Number):
             The second Surreal/Game.
 
         Returns
+        -------
         eq : bool
             Whether G == H or not.
         """
         if isinstance(H, Surreal):
-            return G._n == H._n
+            return G._n == H.n
         if isinstance(H, numbers.Number):
             return G._n == H
         if isinstance(H, Game):
@@ -229,7 +233,7 @@ class Surreal(Game, numbers.Number):
             The sum of G and H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n + H._n)
+            return Surreal(G._n + H.n)
         if isinstance(H, numbers.Number):
             return Surreal(G._n + H)
         if isinstance(H, Game):
@@ -253,7 +257,7 @@ class Surreal(Game, numbers.Number):
             The product of G and H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n * H._n)
+            return Surreal(G._n * H.n)
         if isinstance(H, numbers.Number):
             return Surreal(G._n * H)
         if isinstance(H, Game):
@@ -264,7 +268,23 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def __pow__(G, H):
         """
-        G ** H = exp(G * log(H))
+        Compute the power G ** H.
+
+        Using the definition of the log of a Surreal and the exponential of a
+        Surreal, we can define an arbitrary power as:
+
+        .. math::
+            G ** H = exp(G * log(H))
+
+        Parameters
+        ----------
+        H : Surreal
+            The power to raise G to.
+
+        Returns
+        -------
+        pow : Surreal
+            G ** H.
         """
         return NotImplemented
 
@@ -284,7 +304,7 @@ class Surreal(Game, numbers.Number):
             The quotient of G by H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n / H._n)
+            return Surreal(G._n / H.n)
         if isinstance(H, numbers.Number):
             return Surreal(G._n / H)
         if isinstance(H, Game):
@@ -302,12 +322,12 @@ class Surreal(Game, numbers.Number):
         Ginv : Surreal
             The inverse of G.
         """
-        return Surreal(1/G._n)
+        return Surreal(1 / G._n)
 
     @property
     def value(G):
         """
-        The value of G.
+        Compute the value of G.
 
         Returns
         -------

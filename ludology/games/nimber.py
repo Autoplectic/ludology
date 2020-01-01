@@ -54,13 +54,6 @@ class Nimber(Game):
         return G._n
 
     @property
-    def birthday(G):
-        """
-        The Nimber's birthday.
-        """
-        return G._n
-
-    @property
     def value(G):
         """
         Return the value of the Nimber.

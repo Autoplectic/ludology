@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.utils.
 """
@@ -7,7 +9,7 @@ import pytest
 from ludology.utils import mex, powerset
 
 
-@pytest.mark.parametrize(['s', 'v'], [
+@pytest.mark.parametrize(('s', 'v'), [
     ({1, 2, 3}, 0),
     ({0, 1, 3}, 2),
     ({0, 1, 2}, 3),

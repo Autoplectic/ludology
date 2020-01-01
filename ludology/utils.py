@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Various utilities helpful in computing Game properties.
 """
@@ -26,7 +28,7 @@ def mex(s):
     mex : int
         The smallest non-negative integer not included in `s`.
     """
-    for i in count():  # pragma: no branch
+    for i in count():  # pragma: no branch, noqa: R503
         if i not in s:
             return i
 
@@ -46,4 +48,4 @@ def powerset(iterable):
         An iterator over the powerset of `iterable`.
     """
     s = list(iterable)
-    return chain.from_iterable(combinations(s, r) for r in range(len(s)+1))
+    return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))

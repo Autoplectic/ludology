@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 A variety of ways of summing games.
 """
@@ -20,7 +22,7 @@ __all__ = [
 ]
 
 
-def canon(f):
+def canonize(f):
     """
     Add a `canon` option to `f` which toggles canonicalizes the return value of
     `f`.
@@ -46,7 +48,7 @@ def canon(f):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def disjunctive(G, H):
     """
     Move in exactly one component.
@@ -71,7 +73,7 @@ def disjunctive(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def conjunctive(G, H):
     """
     Move in all components. Play ends when any one of them terminates.
@@ -94,7 +96,7 @@ def conjunctive(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def selective(G, H):
     """
     Move in any number of components, but at least one.
@@ -121,7 +123,7 @@ def selective(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def diminished_disjunctive(G, H):
     """
     Move in exactly one component. Play ends immediately when any one of them terminates.
@@ -149,7 +151,7 @@ def diminished_disjunctive(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def continued_conjunctive(G, H):
     """
     Move in all nonterminal components. Play ends only after all components terminate.
@@ -175,7 +177,7 @@ def continued_conjunctive(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def shortened_selective(G, H):
     """
     Move in any number of components. Play ends immediately when any one of them terminates.
@@ -205,7 +207,7 @@ def shortened_selective(G, H):
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def ordinal(G, H):
     """
     Move in G or H; any move on G annihilates H.
@@ -222,15 +224,13 @@ def ordinal(G, H):
     sum : Game
         The ordinal sum of G and H.
     """
-    left_1 = {G_L for G_L in G._left}
-    left_2 = {ordinal(G, H_L) for H_L in H._left}
-    right_1 = {G_R for G_R in G._right}
-    right_2 = {ordinal(G, H_R) for H_R in H._right}
-    return Game(left_1 | left_2, right_1 | right_2)
+    left = {ordinal(G, H_L) for H_L in H.left}
+    right = {ordinal(G, H_R) for H_R in H.right}
+    return Game(G.left | left, G.right | right)
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def side(G, H):
     """
     Move in G or H; Left's moves on H annihilate G, and Right's moves on G annihilate H.
@@ -247,15 +247,13 @@ def side(G, H):
     sum : Game
         The side sum of G and H.
     """
-    left_1 = {side(G_L, H) for G_L in G._left}
-    left_2 = {H_L for H_L in H._left}
-    right_1 = {G_R for G_R in G._right}
-    right_2 = {side(G, H_R) for H_R in H._right}
-    return Game(left_1 | left_2, right_1 | right_2)
+    left = {side(G_L, H) for G_L in G.left}
+    right = {side(G, H_R) for H_R in H.right}
+    return Game(left | H.left, G.right | right)
 
 
 @lru_cache(maxsize=None)
-@canon
+@canonize
 def sequential(G, H):
     """
     Move in G unless G has terminated; in that case move in H.

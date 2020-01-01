@@ -43,9 +43,9 @@ class Outcome(Enum):
     Representing the outcome classes of Games.
     """
     PREVIOUS = 'P'
-    NEXT     = 'N'
-    LEFT     = 'L'
-    RIGHT    = 'R'
+    NEXT = 'N'
+    LEFT = 'L'
+    RIGHT = 'R'
 
 
 class Game(object):
@@ -81,18 +81,18 @@ class Game(object):
                     G._left = set()
                     G._right = set()
                 elif v > 0:
-                    G._left = {Game(v-1)}
+                    G._left = {Game(v - 1)}
                     G._right = set()
                 else:
                     G._left = set()
-                    G._right = {Game(v+1)}
+                    G._right = {Game(v + 1)}
             else:
                 _, d = v.as_integer_ratio()
                 if d > 1024:
                     msg = f"{v} would result in a very deep game tree."
                     raise ValueError(msg)
-                G._left = {Game(v - 1/d)}
-                G._right = {Game(v + 1/d)}
+                G._left = {Game(v - 1 / d)}
+                G._right = {Game(v + 1 / d)}
         # passed in a game
         elif isinstance(left, Game):
             G._left = copy(left._left)
@@ -573,10 +573,9 @@ class Game(object):
             G's birthday.
         """
         if not G._left | G._right:
-            bday = 0
-        else:
-            bday = max(g.birthday for g in G._left | G._right) + 1
-        return bday
+            return 0
+
+        return max(g.birthday for g in G._left | G._right) + 1
 
     @property
     def outcome(G):

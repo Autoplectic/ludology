@@ -1,10 +1,12 @@
 [build-system]
+
 requires = [
     "flit",
 ]
 build-backend = "flit.buildapi"
 
 [tool.flit.metadata]
+
 module = "ludology"
 author = "Ryan G. James"
 author-email = "ryangregoryjames@gmail.com"
@@ -30,8 +32,23 @@ requires = [
 requires-python = "~=3.3"
 
 [tool.flit.metadata.requires-extra]
+
 dev = [
     'codecov',
+    'coverage[toml]',
+    'flake8',
+    'flake8-awesome',
+    'flake8-bandit',
+    'flake8-broken-line',
+    'flake8-bugbear',
+    'flake8-coding',
+    'flake8-commas',
+    'flake8-docstrings',
+    'flake8-mutable',
+    'flake8-rst',
+    'flake8-rst-docstrings',
+    'flake8-self',
+    'flake8-todos',
     'hypothesis',
     'ipython[nbconvert]',
     'pytest >= 4.4.0',
@@ -56,3 +73,55 @@ test = [
 plotting = [
     'matplotlib',
 ]
+
+[tool.coverage.run]
+
+branch = True
+source = ludology
+omit =
+	# don't include tests
+	*/tests/*
+
+[tool.coverage.report]
+
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+
+    # Don't complain about missing debug-only code:
+    def __repr__
+    def _repr_html_
+    if self\.debug
+
+    # Don't worry about deprecated code:
+    @removals.remove
+
+    # don't worry about abstract code:
+    @abstractmethod
+
+    # Don't complain if tests don't hit defensive assertion code:
+    raise AssertionError
+    raise NotImplementedError
+
+    # Don't complain if non-runnable code isn't run:
+    if 0:
+    if __name__ == .__main__.:
+
+    # ignore fixtures
+    def setup_module
+    def teardown_module
+
+    # ignore missing import
+    #except ImportError
+    #raise ImportError
+
+    # runtime errors
+    except RuntimeError
+
+    # not implemented forms of binary methods:
+    return NotImplemented
+
+    # hard to test (potentially long running)
+
+ignore_errors = True

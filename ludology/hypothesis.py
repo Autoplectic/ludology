@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 A hypothesis strategy for sampling Games.
 
@@ -107,6 +109,7 @@ def surreals(draw, max_numerator=5, max_denominator_exponent=5):  # pragma: no c
     max_numerator : int >= 0
         The maximum numerator to generate.
     max_denominator_exponent : int >= 0
+        The maximum exponent for the denominator.
 
     Returns
     -------

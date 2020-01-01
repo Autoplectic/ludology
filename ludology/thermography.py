@@ -1,10 +1,11 @@
+# -*- coding: utf-8 -*-
+
 """
 Functions related to the calculation of thermographic properties.
 """
 
 from collections import namedtuple
 from copy import copy
-from fractions import Fraction
 from functools import lru_cache
 
 import numpy as np
@@ -104,8 +105,6 @@ def mean(G):
     m : float
         The mean value of G.
     """
-
-    value = G.value
     if G.is_number:
         return float(canonicalize(G).n)
     if G.is_switch:
@@ -131,7 +130,7 @@ def temperature(G):
         The temperature of G.
     """
     if G.is_number:
-        return -1/canonicalize(G).n.denominator
+        return -1 / canonicalize(G).n.denominator
     if G.is_switch:
         return float(canonicalize(G).temp.n)
 
@@ -142,7 +141,7 @@ def temperature(G):
         return fl(t) - fr(t)
 
     def f2(t):
-        return abs(fl(t) - fr(t)) + t/2
+        return abs(fl(t) - fr(t)) + t / 2
 
     upper = 1
     while f1(upper) > 0:

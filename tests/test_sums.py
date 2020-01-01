@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.sums.
 """
@@ -13,7 +15,7 @@ from ludology.sums import (disjunctive, conjunctive, selective, diminished_disju
 G = Game({0}, {pm_one})
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, Game({1}, {Game({1}, {1})})),
     (G, zero, G),
     (zero, G, G),
@@ -25,7 +27,7 @@ def test_disjunctive(G, H, J):
     assert canonicalize(disjunctive(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, Game({1}, {Game({1}, {1})})),
     (G, zero, G),
     (zero, G, G),
@@ -37,7 +39,7 @@ def test_disjunctive_2(G, H, J):
     assert canonicalize(disjunctive(G, H, canon=False)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, up),
     (G, zero, zero),
     (zero, G, zero),
@@ -49,7 +51,7 @@ def test_conjunctive(G, H, J):
     assert canonicalize(conjunctive(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, Game({1}, {Game({1, one + star}, {-1, -one + star}), Game({1}, {1, pm_one})})),
     (G, zero, G),
     (zero, G, G),
@@ -61,7 +63,7 @@ def test_selective(G, H, J):
     assert canonicalize(selective(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, up),
     (G, zero, zero),
     (zero, G, zero),
@@ -73,7 +75,7 @@ def test_diminished_disjunctive(G, H, J):
     assert canonicalize(diminished_disjunctive(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, one),
     (G, zero, G),
     (zero, G, G),
@@ -85,7 +87,7 @@ def test_continued_conjunctive(G, H, J):
     assert canonicalize(continued_conjunctive(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, Game({0}, {star, Game({0, star}, {0, star})})),
     (G, zero, zero),
     (zero, G, zero),
@@ -97,7 +99,7 @@ def test_shortened_selective(G, H, J):
     assert canonicalize(shortened_selective(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, Game({1}, {Game({1}, {1, pm_one}), pm_one})),
     (G, zero, G),
     (zero, G, G),
@@ -109,8 +111,8 @@ def test_ordinal(G, H, J):
     assert canonicalize(ordinal(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
-    (G, up, Game({0}, {1/2})),
+@pytest.mark.parametrize(('G', 'H', 'J'), [
+    (G, up, Game({0}, {1 / 2})),
     (G, zero, G),
     (zero, G, G),
 ])
@@ -121,7 +123,7 @@ def test_side(G, H, J):
     assert canonicalize(side(G, H)) == J
 
 
-@pytest.mark.parametrize(['G', 'H', 'J'], [
+@pytest.mark.parametrize(('G', 'H', 'J'), [
     (G, up, one),
     (G, zero, G),
     (zero, G, G),

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.lattice.
 """
@@ -26,7 +28,7 @@ def test_all_games_gen_2():
     assert len(gen2) == 22
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (zero, star),
     (one, one),
     (up, -upstar),

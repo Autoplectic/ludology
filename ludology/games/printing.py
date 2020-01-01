@@ -31,7 +31,8 @@ _SYMBOLS = {
     '4down': Symbol('⟱', r'\ensuremath{4\downarrow}'),
     'cdot': Symbol('·', r'\ensuremath{\cdot}'),
     'pm': Symbol('±', r'\ensuremath{\pm}'),
-    'frac': Symbol((lambda n, d: unicode_fraction(n, d)), (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
+    'frac': Symbol((lambda n, d: unicode_fraction(n, d)),
+                   (lambda n, d: f'\\ensuremath{{\\nicefrac{{{n}}}{{{d}}}}}')),
     'miny': Symbol((lambda g: '⧿_' + g), (lambda g: r'\ensuremath{\tminus}_{' + g + '}')),
     'tiny': Symbol((lambda g: '⧾_' + g), (lambda g: r'\ensuremath{\tplus}_{' + g + '}')),
 }
@@ -58,8 +59,8 @@ _SPECIFIC_FRACTIONS = {
 }
 
 _SUPERSCRIPTS = "⁰ⁱ²³⁴⁵⁶⁷⁸⁹"
-_SUBSCRIPTS   = "₀₁₂₃₄₅₆₇₈₉"
-_SLASH        = "⁄"
+_SUBSCRIPTS = "₀₁₂₃₄₅₆₇₈₉"
+_SLASH = "⁄"
 
 
 def string_fraction(numerator, denominator):
@@ -140,7 +141,7 @@ def switch(mean, temp, latex=False):
 @lru_cache(maxsize=None)
 def value_str(G, latex=False):
     """
-    A string representation of the game, accounting for named special games.
+    Compute a string representation of the game, accounting for special games.
 
     Parameters
     ----------
@@ -192,7 +193,7 @@ def value_str(G, latex=False):
                     arrow = _SYMBOLS[f'{i}up'][bool(latex)]
                 else:
                     arrow = f"{i}" + _SYMBOLS['cdot'][bool(latex)] + _SYMBOLS['up'][bool(latex)]
-                arrow += _SYMBOLS['star'][bool(latex)] * ((i+1) % 2)
+                arrow += _SYMBOLS['star'][bool(latex)] * ((i + 1) % 2)
                 return arrow
             elif g_hash == up_star:
                 if i in [2, 3, 4]:
@@ -216,7 +217,7 @@ def value_str(G, latex=False):
                     arrow = _SYMBOLS[f'{i}down'][bool(latex)]
                 else:
                     arrow = f"{i}" + _SYMBOLS['cdot'][bool(latex)] + _SYMBOLS['down'][bool(latex)]
-                arrow += _SYMBOLS['star'][bool(latex)] * ((i+1) % 2)
+                arrow += _SYMBOLS['star'][bool(latex)] * ((i + 1) % 2)
                 return arrow
             elif g_hash == down_star:
                 if i in [2, 3, 4]:
@@ -249,6 +250,6 @@ def value_str(G, latex=False):
             G_LL = next(iter(G_L.left))
             return _SYMBOLS['miny'][bool(latex)](f"{(G_LL).value}")
 
-    #todo: sums
+    # TODO(ryan): sums
 
     return repr(G)

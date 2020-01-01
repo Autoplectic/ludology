@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.nimber.
 """
@@ -73,7 +75,7 @@ def test_fail():
         Nimber(0.5)
 
 
-@pytest.mark.parametrize(['n', 'v'], [
+@pytest.mark.parametrize(('n', 'v'), [
     (0, '0'),
     (1, '∗'),
     (6, '∗6'),

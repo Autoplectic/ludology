@@ -20,7 +20,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'ludology'
-copyright = '2018, Ryan G. James'
+copyright = '2020, Ryan G. James'
 author = 'Ryan G. James'
 
 # The short X.Y version
@@ -155,7 +155,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     (master_doc, 'ludology', 'ludology Documentation',
-     [author], 1)
+     [author], 1),
 ]
 
 

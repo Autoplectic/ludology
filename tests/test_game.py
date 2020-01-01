@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.game.
 """
@@ -13,7 +15,7 @@ from ludology.games.printing import unicode_fraction
 from ludology.tools import canonicalize
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (one, zero),
     (one, half),
     (one, -one),
@@ -32,7 +34,7 @@ def test_ge(g1, g2):
     assert g1 >= g2
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (one, zero),
     (one, half),
     (one, -one),
@@ -49,7 +51,7 @@ def test_gt(g1, g2):
     assert g1 > g2
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (zero, one),
     (half, one),
     (-one, one),
@@ -68,7 +70,7 @@ def test_le(g1, g2):
     assert g1 <= g2
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (zero, one),
     (half, one),
     (-one, one),
@@ -85,7 +87,7 @@ def test_lt(g1, g2):
     assert g1 < g2
 
 
-@pytest.mark.parametrize(['g1', 'g2'], [
+@pytest.mark.parametrize(('g1', 'g2'), [
     (star, zero),
     (star, up),
     (one, pm_one),
@@ -239,7 +241,7 @@ def test_numberish(g):
 
 @pytest.mark.parametrize('g', [
     pm_one,
-    Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}),
+    Game({5 / 2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}),
 ])
 def test_not_numberish(g):
     """
@@ -248,7 +250,7 @@ def test_not_numberish(g):
     assert not g.is_numberish
 
 
-@pytest.mark.parametrize(['g', 'bday'], [
+@pytest.mark.parametrize(('g', 'bday'), [
     (zero, 0),
     (one, 1),
     (-one, 1),
@@ -264,16 +266,17 @@ def test_birthday(g, bday):
     assert g.birthday == bday
 
 
-@pytest.mark.parametrize(['g', 'sp'], [
+@pytest.mark.parametrize(('g', 'sp'), [
     (up, {up, zero, star, zero}),
 ])
 def test_subpositions(g, sp):
     """
+    Test that subpositions are yielded correctly.
     """
     assert set(g.subpositions()) == sp
 
 
-@pytest.mark.parametrize(['a', 'b', 'c'], [
+@pytest.mark.parametrize(('a', 'b', 'c'), [
     (zero, zero, zero),
     (star, star, zero),
     (one, -one, zero),
@@ -291,7 +294,7 @@ def test_add(a, b, c):
     assert a + b == c
 
 
-@pytest.mark.parametrize(['a', 'b', 'c'], [
+@pytest.mark.parametrize(('a', 'b', 'c'), [
     (zero, zero, zero),
     (star, star, star),
     (one, -one, -1),
@@ -305,7 +308,7 @@ def test_mul(a, b, c):
     assert a * b == c
 
 
-@pytest.mark.parametrize(['g', 'o'], [
+@pytest.mark.parametrize(('g', 'o'), [
     (zero, Outcome.PREVIOUS),
     (star, Outcome.NEXT),
     (one, Outcome.LEFT),
@@ -319,7 +322,7 @@ def test_outcome(g, o):
     assert g.outcome == o
 
 
-@pytest.mark.parametrize(['g', 'v'], [
+@pytest.mark.parametrize(('g', 'v'), [
     (star, '∗'),
     (pm_one, '±1'),
     (Game({Game(3)}, {Game(1)}), '2±1'),
@@ -335,7 +338,7 @@ def test_outcome(g, o):
     (Game({0}, {Game({0}, {-2})}), '⧾_2'),
     (Game({Game({2}, {0})}, {0}), '⧿_2'),
     (star2, '∗2'),
-    (Game({5/2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}), '{3±1, ⁵⁄₂｜-2±2, -³⁄₂±½}'),
+    (Game({5 / 2, Game({4}, {2})}, {Game({-1}, {-2}), Game({0}, {-4})}), '{3±1, ⁵⁄₂｜-2±2, -³⁄₂±½}'),
     (Game({0}, {star2}), '{0｜∗2}'),
     (Game({star2}, {0}), '{∗2｜0}'),
 ])
@@ -351,7 +354,7 @@ def test_value_dyadic_rational(m, j):
     """
     Test the construction of dyadic rationals.
     """
-    frac = m/2**j
+    frac = m / 2**j
     num, denom = frac.as_integer_ratio()
     string = unicode_fraction(num, denom)
     game = Game(frac)
@@ -363,4 +366,4 @@ def test_game_fail():
     Test that Game punts when constructing "deep" games.
     """
     with pytest.raises(ValueError):
-        Game(1/3)
+        Game(1 / 3)

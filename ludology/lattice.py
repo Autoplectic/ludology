@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 This module implements functions related to the structure of the partial order of games.
 """
@@ -14,6 +16,7 @@ __all__ = [
     'companion',
     'is_lonely',
 ]
+
 
 def is_antichain(stuff):
     """
@@ -50,7 +53,7 @@ def all_games(generation):
     if generation == 0:
         return {Game()}
     else:
-        priors = all_games(generation-1)
+        priors = all_games(generation - 1)
         antichains = {games for games in powerset(priors) if is_antichain(games)}
         news = {canonicalize(Game(a, b)) for a, b in product(antichains, repeat=2)}
         return priors | news

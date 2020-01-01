@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for ludology.tools.
 """
@@ -17,10 +19,10 @@ from ludology.tools import (canonicalize, left_stop, right_stop,
 
 
 # double the recursion limit:
-sys.setrecursionlimit(2*sys.getrecursionlimit())
+sys.setrecursionlimit(2 * sys.getrecursionlimit())
 
 
-@pytest.mark.parametrize(['g', 'v'], [
+@pytest.mark.parametrize(('g', 'v'), [
     (zero, (0, '+')),
     (pm_one, (1, '-')),
     (star, (0, '-')),
@@ -33,7 +35,7 @@ def test_left_stop_1(g, v):
     assert stop == v
 
 
-@pytest.mark.parametrize(['g', 'v'], [
+@pytest.mark.parametrize(('g', 'v'), [
     (zero, 0),
     (pm_one, 1),
     (star, 0),
@@ -43,11 +45,10 @@ def test_left_stop_2(g, v):
     Test left stops without adornment.
     """
     stop = left_stop(g, adorn=False)
-    print(type(stop))
     assert stop == v
 
 
-@pytest.mark.parametrize(['g', 'v'], [
+@pytest.mark.parametrize(('g', 'v'), [
     (zero, (0, '-')),
     (pm_one, (-1, '+')),
     (star, (0, '+')),
@@ -60,7 +61,7 @@ def test_right_stop_1(g, v):
     assert stop == v
 
 
-@pytest.mark.parametrize(['g', 'v'], [
+@pytest.mark.parametrize(('g', 'v'), [
     (zero, 0),
     (pm_one, -1),
     (star, 0),

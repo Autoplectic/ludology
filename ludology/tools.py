@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Various tools for computing properties of Games.
 """
@@ -58,11 +60,10 @@ def right_incentives(G):
 
 def stop_order(item):
     """
-    if x > y:
+    If x > y:
         x_- > x_+ > y_- > y_+
 
-    since L is lexicographically less than R, we
-    can't rely on natural ordering.
+    Since L is lexicographically less than R, we can't rely on natural ordering.
     """
     g, s = item
     return (g, s == '-')
@@ -199,6 +200,17 @@ def replace_reversible(G):
 
 def make_specific(G):
     """
+    Return G as a more specific subtype of Game, if possible.
+
+    Parameters
+    ----------
+    G : Game
+        The game to make specific.
+
+    Returns
+    -------
+    G : [Game, Nimber, Surreal, Switch]
+        G as a subclass of Game.
     """
     from .games import Nimber, Surreal, Switch
 
