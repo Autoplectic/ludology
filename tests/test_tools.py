@@ -92,6 +92,7 @@ def test_right_incentives():
     assert right_incentives(g) == ri
 
 
+@pytest.mark.flaky(reruns=5)
 @given(G=games())
 def test_canonicalize(G):
     """

@@ -62,6 +62,7 @@ test = [
     'hypothesis',
     'pytest >= 4.4.0',
     'pytest-cov',
+    'pytest-rerunfailures',
     'pytest-xdist',
 ]
 plotting = [
