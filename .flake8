@@ -6,23 +6,23 @@ exclude =
 
 select = A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,B9
 enable_extensions =
-    H601
-    I100
-    I101
-    I201
-    I202
+    H601    # Cohesion
+    I100    # Your import statements are in the wrong order.
+    I101    # The names in your from import are in the wrong order.
+    I201    # Missing newline between import groups.
+    I202    # Additional newline in a group of imports.
 ignore =
     B902    # We use G instead of self for clarity.
     D200    # One line docstrings are fine.
     D401    # Allow first line of docstring to be passive.
+    E501    # Prefer use of B950.
+    H601    # Cohesion seems to fail because of using G instead of self.
+    I002    # I don't use isort.
     IF100   # x if bool else y is good.
     N803    # Variables like G, H are OK.
     N805    # We use G instead of self for clarity.
     N806    # In keeping with CGT notation, we use capitalized variable names.
-    E501    # Prefer use of B950.
-    I002    # I don't use isort.
     RST301  # Allow directives in docstrings.
-    H601    # Cohesion seems to fail because of using G instead of self.
 per-file-ignores =
     # Allow assert statements in tests:
     test_*.py: S101
