@@ -6,7 +6,7 @@ Tests for ludology.nimber.
 
 import pytest
 
-from ludology import Game, Nimber, FarStar
+from ludology import FarStar, Game, Nimber
 from ludology.closet import one
 
 

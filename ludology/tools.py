@@ -21,8 +21,9 @@ __all__ = [
 @lru_cache(maxsize=None)
 def left_incentives(G):
     """
-    Compute the left incentives of G:
+    Compute the left incentives of G.
 
+    The left incentives are defined as:
         { G_L - G }
 
     Parameters
@@ -35,14 +36,15 @@ def left_incentives(G):
     incentives : set
         The left incentives of G.
     """
-    return {canonicalize(G_L - G) for G_L in G._left}
+    return {canonicalize(G_L - G) for G_L in G.left}
 
 
 @lru_cache(maxsize=None)
 def right_incentives(G):
     """
-    Compute the right incentives of G:
+    Compute the right incentives of G.
 
+    The right incentives are defined as:
         { G - G_R }
 
     Parameters
@@ -55,15 +57,28 @@ def right_incentives(G):
     incentives : set
         The right incentives of G.
     """
-    return {canonicalize(G - G_R) for G_R in G._right}
+    return {canonicalize(G - G_R) for G_R in G.right}
 
 
 def stop_order(item):
     """
+    Construct a key for ordering left and right stops.
+
     If x > y:
-        x_- > x_+ > y_- > y_+
+        x- > x+ > y- > y+
 
     Since L is lexicographically less than R, we can't rely on natural ordering.
+
+    Parameters
+    ----------
+    item : tuple
+        A game, and an adornment.
+
+    Returns
+    -------
+    item : tuple
+        The same tuple, but with the second argument augmented for proper
+        ordering.
     """
     g, s = item
     return (g, s == '-')
@@ -92,7 +107,7 @@ def left_stop(G, adorn=True):
     if G.is_number:
         ls = (G, '+')
     else:
-        ls = max((right_stop(G_L) for G_L in G._left), key=stop_order)
+        ls = max((right_stop(G_L) for G_L in G.left), key=stop_order)
 
     if adorn:
         return ls
@@ -123,7 +138,7 @@ def right_stop(G, adorn=True):
     if G.is_number:
         rs = (G, '-')
     else:
-        rs = min((left_stop(G_R) for G_R in G._right), key=stop_order)
+        rs = min((left_stop(G_R) for G_R in G.right), key=stop_order)
 
     if adorn:
         return rs
@@ -146,12 +161,12 @@ def remove_dominated(G):
     G : Game
         The Game of interest.
     """
-    left = copy(G._left)
-    for g in G._left:
+    left = copy(G.left)
+    for g in G.left:
         if any(g < G_L for G_L in left):
             left.remove(g)
-    right = copy(G._right)
-    for g in G._right:
+    right = copy(G.right)
+    for g in G.right:
         if any(g > G_R for G_R in right):
             right.remove(g)
     G._left = left
@@ -176,10 +191,10 @@ def replace_reversible(G):
         The Game of interest.
     """
     new_left_set = set()
-    for G_L in G._left:
-        for G_LR in G_L._right:
+    for G_L in G.left:
+        for G_LR in G_L.right:
             if G_LR <= G:  # G_L is reversible through G_LR
-                for G_LRL in G_LR._left:
+                for G_LRL in G_LR.left:
                     new_left_set.add(G_LRL)
                 break
         else:  # Not reversible
@@ -187,10 +202,10 @@ def replace_reversible(G):
     G._left = new_left_set
 
     new_right_set = set()
-    for G_R in G._right:
-        for G_RL in G_R._left:
+    for G_R in G.right:
+        for G_RL in G_R.left:
             if G_RL >= G:  # G_R is reversible through G_RL
-                for G_RLR in G_RL._right:
+                for G_RLR in G_RL.right:
                     new_right_set.add(G_RLR)
                 break
         else:  # Not reversible
@@ -227,7 +242,7 @@ def make_specific(G):
 @lru_cache(maxsize=None)
 def canonicalize(G, specify=True):
     """
-    Return the canonical form of the game G.
+    Compute the canonical form of the game G.
 
     Parameters
     ----------
@@ -258,7 +273,7 @@ def canonicalize(G, specify=True):
 @lru_cache(maxsize=None)
 def remoteness(N):
     """
-    The remoteness of N.
+    Compute the remoteness of N.
 
     Parameters
     ----------
@@ -270,10 +285,10 @@ def remoteness(N):
     remote : int
         The remoteness of N.
     """
-    if N._n == 0:
+    if N.n == 0:
         return 0
 
-    remotes = {remoteness(n) for n in N._left}
+    remotes = {remoteness(n) for n in N.left}
 
     if all(remote % 2 == 1 for remote in remotes):
         return 1 + max(remotes)

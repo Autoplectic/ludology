@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 
 """
-The Surreal numbers are the subset of Games which are isomorophic to the hyperreals.
+The Surreal numbers.
+
+The Surreal numbers are the subset of Games which are isomorphic to the
+maximal hyperreals. They form a totally ordered proper class, and are a
+universal ordered field containing the reals. This means that any other ordered
+field containing the reals can be realized as a subfield of the Surreals.
 """
 
+import numbers
 from fractions import Fraction
 from functools import lru_cache, total_ordering
-import numbers
 
 from .game import Game
 from ..tools import canonicalize
@@ -15,11 +20,12 @@ from ..tools import canonicalize
 @total_ordering
 class Surreal(Game, numbers.Number):
     """
+    Surreal Numbers: a universal ordered field and totally ordered proper class.
+
     The Surreal numbers are the subset of games such that G_L <= G_R, and that
-    is true for all options as well. The Surreal numbers are isomorphic to the
-    hyperreals. All Surreal numbers with finite birthdays correspond to the
-    dyadic rationals, that is, rational numbers whose denominator is a power of
-    2.
+    is true for all options as well. All Surreal numbers with finite birthdays
+    correspond to the dyadic rationals, that is, rational numbers whose
+    denominator is a power of 2.
     """
 
     def __init__(G, value):
@@ -81,13 +87,20 @@ class Surreal(Game, numbers.Number):
     def n(G):
         """
         The Surreal's value, as a Fraction.
+
+        Returns
+        -------
+        n : Fraction
+            The value of G.
         """
         return G._n
 
     @property
     def is_number(G):
         """
-        Whether the Surreal number is a number or not. By definition, this is True.
+        Determine if G is a number.
+
+        Each Surreal is a number.
 
         Returns
         -------
@@ -99,7 +112,9 @@ class Surreal(Game, numbers.Number):
     @property
     def is_numberish(G):
         """
-        A Game is numberish if it is infinitesimally close to a number. All Numbers are numberish.
+        Determine if G is numberish.
+
+        Each Surreal is numberish.
 
         Returns
         -------
@@ -111,7 +126,9 @@ class Surreal(Game, numbers.Number):
     @property
     def is_impartial(G):
         """
-        Whether the Surreal number is impartial or not. Only the Surreal 0 is impartial.
+        Determine if G is impartial.
+
+        Only the Surreal 0 is impartial.
 
         Returns
         -------
@@ -123,7 +140,9 @@ class Surreal(Game, numbers.Number):
     @property
     def is_dicotic(G):
         """
-        Whether the Surreal number is dicotic or not. Only the Surreal 0 is dicotic.
+        Determine if G is dicotic.
+
+        Only the Surreal 0 is dicotic.
 
         Returns
         -------
@@ -135,11 +154,10 @@ class Surreal(Game, numbers.Number):
     @property
     def is_infinitesimal(G):
         """
-        Determine if the Game is infinitesimal.
+        Determine if G is infinitesimal.
 
-        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
-        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
-        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+        While there are infinitesimal Surreals, this code base does not
+        currently support them.
 
         Returns
         -------
@@ -151,7 +169,9 @@ class Surreal(Game, numbers.Number):
     @property
     def is_switch(G):
         """
-        Whether the Surreal number is a switch or not. By definition, this is not the case.
+        Determine if G is a switch.
+
+        No Surreal is a switch.
 
         Returns
         -------
@@ -162,7 +182,10 @@ class Surreal(Game, numbers.Number):
 
     def __hash__(G):
         """
-        Define the hash of a Surreal as the hash of its value.
+        Construct the hash for G.
+
+        Use the parent class Game's hash. We must specifically do it here
+        because __eq__ is defined for this class.
 
         Returns
         -------
@@ -174,7 +197,9 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def __ge__(G, H):
         """
-        Test if one Surreal is greather than or equal to another.
+        Determine if G is greather than or equal to H.
+
+        This is defined in the normal fashion.
 
         Parameters
         ----------
@@ -197,7 +222,9 @@ class Surreal(Game, numbers.Number):
 
     def __eq__(G, H):
         """
-        Test if one Surreal is equal to another.
+        Determine if G is equal to H.
+
+        This is defined in the normal fashion.
 
         Parameters
         ----------
@@ -221,7 +248,9 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def __add__(G, H):
         """
-        The sum of two Surreals.
+        Compute the sum of G and H.
+
+        The sum of two Surreals is defined in the normal fashion.
 
         Parameters
         ----------
@@ -245,7 +274,9 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def __mul__(G, H):
         """
-        The product of two Surreals.
+        Compute the product of G and H.
+
+        The product of two Surreals is defined in the normal fashion.
 
         Parameters
         ----------
@@ -275,7 +306,7 @@ class Surreal(Game, numbers.Number):
         Surreal, we can define an arbitrary power as:
 
         .. math::
-            G ** H = exp(G * log(H))
+           G ** H = exp(G * log(H))
 
         Parameters
         ----------
@@ -292,7 +323,9 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def __truediv__(G, H):
         """
-        The quotient of a Surreal by another.
+        Compute the quotient of G by H.
+
+        The quotient of two Surreals is defined in the normal fashion.
 
         Parameters
         ----------
@@ -316,7 +349,9 @@ class Surreal(Game, numbers.Number):
     @lru_cache(maxsize=None)
     def _invert(G):
         """
-        The inverse of G.
+        Compute the inverse of G.
+
+        The inverse of a Surreal is defined in the normal fashion.
 
         Returns
         -------
@@ -328,7 +363,7 @@ class Surreal(Game, numbers.Number):
     @property
     def value(G):
         """
-        Compute the value of G.
+        The value of G.
 
         Returns
         -------

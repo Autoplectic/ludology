@@ -15,8 +15,11 @@ __all__ = [
 
 class Switch(Game):
     """
+    Switches: the simplest hot games.
+
     A switch is the simplest type of "hot" game: one in which both players have
-    an incentive to play.
+    an incentive to play. It is of the form {G_L | G_R}, where both G_L and G_R
+    are numbers, and G_L > G_R.
     """
 
     def __init__(G, mean, temp=None):
@@ -53,7 +56,7 @@ class Switch(Game):
     @property
     def value(G):
         """
-        Return the value of G as a string.
+        The value of G as a string.
 
         Returns
         -------
@@ -63,3 +66,87 @@ class Switch(Game):
         from .printing import switch
 
         return switch(G._mean, G._temp)
+
+    @property
+    def is_impartial(G):
+        """
+        Determine if G is impartial.
+
+        No switch is impartial.
+
+        Returns
+        -------
+        impartial : bool
+            Whether G is impartial or not.
+        """
+        return False
+
+    @property
+    def is_dicotic(G):
+        """
+        Determine if G is dicotic.
+
+        No switch is dicotic.
+
+        Returns
+        -------
+        dicotic : bool
+            Whether the Game is dicotic or not.
+        """
+        return False
+
+    @property
+    def is_infinitesimal(G):
+        """
+        Determine if G is infinitesimal.
+
+        No switch is infinitesimal.
+
+        Returns
+        -------
+        infinitesimal : bool
+            Whether the game is infinitesimal or not.
+        """
+        return False
+
+    @property
+    def is_number(G):
+        """
+        Determine if G is a number.
+
+        No switch is a number.
+
+        Returns
+        -------
+        number : bool
+            Whether G is a number or not.
+        """
+        return False
+
+    @property
+    def is_numberish(G):
+        """
+        Determine if G is numberish.
+
+        No switch is numberish..
+
+        Returns
+        -------
+        numberish : bool
+            Whether G is numberish or not.
+        """
+        return False
+
+    @property
+    def is_switch(G):
+        """
+        Determine if G is a switch.
+
+        Every switch is a switch.
+
+        Returns
+        -------
+        number : bool
+            Whether G is a switch or not.
+        """
+        return True

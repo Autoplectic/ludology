@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-This module implements functions related to the structure of the partial order of games.
+The lattice structure of games.
 """
 
 from itertools import combinations, product
@@ -20,8 +20,9 @@ __all__ = [
 
 def is_antichain(stuff):
     """
-    Whether the elements of `stuff` form an antichain or not. An antichain is a set where no two
-    elements are comparable.
+    Determine if `stuff` forms an antichain.
+
+    An antichain is a set where no two elements are comparable.
 
     Parameters
     ----------
@@ -61,8 +62,10 @@ def all_games(generation):
 
 def companion(G):
     """
-    The companion of a Game G is the dual of G under the unique order-preserving automorphism of
-    Games born by day n.
+    Compute the companion of G.
+
+    The companion of a Game G is the dual of G under the unique order-preserving
+    automorphism of Games born by day n.
 
     Parameters
     ----------
@@ -89,6 +92,8 @@ def companion(G):
 
 def is_lonely(G):
     """
+    Determine if G is lonely.
+
     A Game is lonely if it is its own companion.
 
     Parameters

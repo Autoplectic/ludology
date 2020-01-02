@@ -4,18 +4,17 @@
 Tests for ludology.tools.
 """
 
-import pytest
-
 import sys
 
+import pytest
 from hypothesis import given
-from ludology.hypothesis import games, nimbers
 
 from ludology import Game, Nimber
-from ludology.closet import zero, pm_one, star
+from ludology.closet import pm_one, star, zero
+from ludology.hypothesis import games, nimbers
 from ludology.sums import conjunctive
-from ludology.tools import (canonicalize, left_stop, right_stop,
-                            left_incentives, right_incentives, remoteness)
+from ludology.tools import (canonicalize, left_incentives, left_stop,
+                            remoteness, right_incentives, right_stop)
 
 
 # double the recursion limit:

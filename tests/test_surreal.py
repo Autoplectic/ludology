@@ -7,7 +7,7 @@ Tests for ludology.surreal.
 import pytest
 
 from ludology import Game, Surreal
-from ludology.closet import zero, one, star
+from ludology.closet import one, star, zero
 
 
 @pytest.mark.parametrize('n', [

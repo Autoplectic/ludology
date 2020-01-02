@@ -3,25 +3,26 @@ exclude =
     docs/conf.py
     .git
     __pycache__
-ignore =
-    D200   # One line docstrings are fine.
-    IF100  # x if bool else y is good.
-    N803   # Variables like G, H are OK.
-    N805   # We use G instead of self for clarity.
-    N806   # In keeping with CGT notation, we use capitalized variable names.
-    E501   # Prefer use of B950.
-    I002   # I don't use isort
 
-    D205
-    D400
-    D401
-    D404
-    D504
-    R504
-    RST213
-    RST215
-    RST306
-    SF01
+select = A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,B9
+enable_extensions =
+    H601
+    I100
+    I101
+    I201
+    I202
+ignore =
+    B902    # We use G instead of self for clarity.
+    D200    # One line docstrings are fine.
+    D401    # Allow first line of docstring to be passive.
+    IF100   # x if bool else y is good.
+    N803    # Variables like G, H are OK.
+    N805    # We use G instead of self for clarity.
+    N806    # In keeping with CGT notation, we use capitalized variable names.
+    E501    # Prefer use of B950.
+    I002    # I don't use isort.
+    RST301  # Allow directives in docstrings.
+    H601    # Cohesion seems to fail because of using G instead of self.
 per-file-ignores =
     # Allow assert statements in tests:
     test_*.py: S101
@@ -33,3 +34,5 @@ docstring-convention = numpy
 max-line-length = 120
 show-source = True
 statistics = True
+import-order-style = pycharm
+application-import-names = ludology

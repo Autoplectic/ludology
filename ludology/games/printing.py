@@ -104,7 +104,7 @@ def unicode_fraction(numerator, denominator):
 
 def switch(mean, temp, latex=False):
     """
-    Return the value of a switch with mean value `mean` and temperature `temp`.
+    The value of a switch with mean value `mean` and temperature `temp`.
 
     Parameters
     ----------

@@ -7,7 +7,7 @@ Tests for ludology.lattice.
 import pytest
 
 from ludology import Game
-from ludology.closet import zero, one, star, up, upstar
+from ludology.closet import one, star, up, upstar, zero
 from ludology.lattice import all_games, companion, is_lonely
 
 

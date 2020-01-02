@@ -50,7 +50,7 @@ def gamify(options):
 @composite
 def games(draw, base_day=2, max_options=2):  # pragma: no cover
     """
-    A Hypothesis strategy for generating Games.
+    Build a Hypothesis strategy for generating Games.
 
     Parameters
     ----------
@@ -78,7 +78,7 @@ def games(draw, base_day=2, max_options=2):  # pragma: no cover
 @composite
 def nimbers(draw, max_value=20):  # pragma: no cover
     """
-    A Hypothesis strategy for generating Nimbers.
+    Build a Hypothesis strategy for generating Nimbers.
 
     Parameters
     ----------
@@ -100,7 +100,7 @@ def nimbers(draw, max_value=20):  # pragma: no cover
 @composite
 def surreals(draw, max_numerator=5, max_denominator_exponent=5):  # pragma: no cover
     """
-    A Hypothesis strategy for generating Surreal Numbers.
+    Build a Hypothesis strategy for generating Surreal Numbers.
 
     Parameters
     ----------

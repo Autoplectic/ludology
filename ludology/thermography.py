@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Functions related to the calculation of thermographic properties.
+Functions related to the calculation of classical thermographic properties.
 """
 
 from collections import namedtuple
@@ -35,6 +35,8 @@ __all__ = [
 
 def is_cold(G):
     """
+    Determine if G is cold.
+
     A Game is cold if it is a number.
 
     Parameters
@@ -52,8 +54,10 @@ def is_cold(G):
 
 def is_tepid(G):
     """
-    A Game is tepid if it is numberish, but not a number; that is, it differs from a number by an
-    infinitesimal amount.
+    Determine if G is tepid.
+
+    A Game is tepid if it is numberish, but not a number; that is, it differs
+    from a number by an infinitesimal amount.
 
     Parameters
     ----------
@@ -70,7 +74,10 @@ def is_tepid(G):
 
 def is_hot(G):
     """
-    A Game is hot if it is not numberish; that is, it's left and right stops do not coincide.
+    Determine if G is hot.
+
+    A Game is hot if it is not numberish; that is, it's left and right stops do
+    not coincide.
 
     Parameters
     ----------
@@ -92,8 +99,13 @@ def is_hot(G):
 @lru_cache(maxsize=None)
 def mean(G):
     """
-    Compute the mean value of a Game. The mean value is defined as the value to which a Game cools
-    to. It is, by definition, a surreal number.
+    Compute the mean value of G.
+
+    CThe mean value of a Game is defined as the value to which a Game cools to.
+    It is, by definition, a Surreal number. It also has many properties one
+    would expect a mean value to have, such as:
+    .. math::
+       lim_{n -> inf} n * G = n * mean(G)
 
     Parameters
     ----------
@@ -116,8 +128,11 @@ def mean(G):
 @lru_cache(maxsize=None)
 def temperature(G):
     """
-    Compute the temperature of a game. It is the amount by which a Game must be cooled in order to
-    become a number.
+    Compute the temperature of G.
+
+    The temperature of a Game is the amount by which it must be cooled in order
+    to become a number. This determines, broadly, the impetus with which the
+    player would want to move in this component.
 
     Parameters
     ----------
@@ -159,10 +174,13 @@ def temperature(G):
 @lru_cache(maxsize=None)
 def cool(G, t):
     """
-    Cool a game down. To cool a game, one taxes each player for the right to play. This results in
-    both players having less incentive to play. At some point both the left stop and the right stop
-    of the game coincide, at which point the game has become tepid (infinitesimally close to a
-    number) and cooling by any more will make the game cold (a number).
+    Cool the game G by t.
+
+    To cool a game, one taxes each player for the right to play. This results in
+    both players having less incentive to play. At some point both the left stop
+    and the right stop of the game coincide, at which point the game has become
+    tepid (infinitesimally close to a number) and cooling by any more will make
+    the game cold (a number).
 
     Parameters
     ----------
@@ -178,8 +196,8 @@ def cool(G, t):
     """
     if t <= temperature(G):
         t = Game(t)
-        lefts = {canonicalize(cool(G_L, t) - t) for G_L in G._left}
-        rights = {canonicalize(cool(G_R, t) + t) for G_R in G._right}
+        lefts = {canonicalize(cool(G_L, t) - t) for G_L in G.left}
+        rights = {canonicalize(cool(G_R, t) + t) for G_R in G.right}
         cooled = Game(lefts, rights)
     else:
         cooled = Game(mean(G))
@@ -189,7 +207,9 @@ def cool(G, t):
 @lru_cache(maxsize=None)
 def heat(G, t):
     """
-    Heat up a game. In some sense, heating is the opposite of cooling.
+    Heat a Game G by t.
+
+    In some sense, heating is the opposite of cooling.
 
     Parameters
     ----------
@@ -216,7 +236,9 @@ def heat(G, t):
 @lru_cache(maxsize=None)
 def overheat(G, t):
     """
-    Overheat a game. This is similar to heating, except applies to numbers also.
+    Overheat the Game G by t.
+
+    This is similar to heating, except applies to numbers also.
 
     Parameters
     ----------
@@ -232,8 +254,8 @@ def overheat(G, t):
     """
     if not isinstance(t, Game):
         t = Game(t)
-    lefts = {canonicalize(overheat(G_L, t) + t) for G_L in G._left}
-    rights = {canonicalize(overheat(G_R, t) - t) for G_R in G._right}
+    lefts = {canonicalize(overheat(G_L, t) + t) for G_L in G.left}
+    rights = {canonicalize(overheat(G_R, t) - t) for G_R in G.right}
     return canonicalize(Game(lefts, rights))
 
 
@@ -241,13 +263,16 @@ def overheat(G, t):
 # thermal dissociation
 
 
+# TODO(ryan): Make Partical a class with a nice value.
 Particle = namedtuple('Particle', ['particle', 'critical_temperature'])
 
 
 def thermal_dissociation(G):
     """
+    Construct the thermal dissociation of G.
+
     The thermal dissociation of a Game G is its mean value, plus a series of
-    heated infinitesimals.
+    heated infinitesimals, such that the sum is equal to G.
 
     Parameters
     ----------
@@ -260,9 +285,7 @@ def thermal_dissociation(G):
         A tuple consisting of the mean value, followed by Particles.
     """
     g = copy(G)
-
     m = mean(g)
-
     particles = []
 
     while not g.is_infinitesimal and g != 0:
@@ -280,7 +303,10 @@ def thermal_dissociation(G):
 
 def cooled_left_stop(G):  # pragma: no cover
     """
-    The left stop of `G` cooled down. Useful for plotting thermographs.
+    Compute the cooled left stop of G.
+
+    This constructs a function which cools all left options of G by a supplied
+    temperature t. It is useful for plotting thermographs.
 
     Parameters
     ----------
@@ -293,7 +319,7 @@ def cooled_left_stop(G):  # pragma: no cover
         A function which returns the left stop of `G` cooled by `t`.
     """
     m = mean(G)
-    crss = [cooled_right_stop(G_L) for G_L in G._left]
+    crss = [cooled_right_stop(G_L) for G_L in G.left]
 
     @np.vectorize
     def inner(t):
@@ -317,7 +343,10 @@ def cooled_left_stop(G):  # pragma: no cover
 
 def cooled_right_stop(G):  # pragma: no cover
     """
-    The right stop of `G` cooled down. Useful for plotting thermographs.
+    Compute the cooled right stop of G.
+
+    This constructs a function which cools all right options of G by a supplied
+    temperature t. It is useful for plotting thermographs.
 
     Parameters
     ----------
@@ -330,7 +359,7 @@ def cooled_right_stop(G):  # pragma: no cover
         A function which returns the right stop of `G` cooled by `t`.
     """
     m = mean(G)
-    clss = [cooled_left_stop(G_R) for G_R in G._right]
+    clss = [cooled_left_stop(G_R) for G_R in G.right]
 
     @np.vectorize
     def inner(t):
@@ -366,7 +395,7 @@ def _left_scaffold(G):
     ls : func
         The left scaffold as a function of temperature.
     """
-    crss = [cooled_right_stop(G_L) for G_L in G._left]
+    crss = [cooled_right_stop(G_L) for G_L in G.left]
 
     @np.vectorize
     def inner(t):
@@ -402,7 +431,7 @@ def _right_scaffold(G):
     rs : func
         The right scaffold as a function of temperature.
     """
-    clss = [cooled_left_stop(G_R) for G_R in G._right]
+    clss = [cooled_left_stop(G_R) for G_R in G.right]
 
     @np.vectorize
     def inner(t):
@@ -427,7 +456,7 @@ def _right_scaffold(G):
 @lru_cache(maxsize=None)
 def number_height(G):  # pragma: no cover
     """
-    Return the height of the game tree truncated at numbers.
+    Compute the height of the game tree truncated at numbers.
 
     Parameters
     ----------
@@ -441,8 +470,8 @@ def number_height(G):  # pragma: no cover
     """
     if G.is_number:
         return 1
-    else:
-        return max(number_height(g) for g in G._left | G._right) + 1
+
+    return max(number_height(g) for g in G.left | G.right) + 1
 
 
 ###############################################################################

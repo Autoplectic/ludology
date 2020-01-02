@@ -15,8 +15,9 @@ __all__ = [
 
 def mex(s):
     """
-    Compute the *m*inimum *ex*cluded element of the set `s`. The universe is assumed to be the
-    nonnegative integers.
+    Compute the minimum excluded element of the set `s`.
+
+    The universe is assumed to be the nonnegative integers.
 
     Parameters
     ----------

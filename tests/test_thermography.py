@@ -7,11 +7,11 @@ Tests for ludology.thermography.
 import pytest
 
 from ludology import Game, Surreal
-from ludology.closet import (zero, quarter, half, one, pm_one, up, star, g1,
-                             g2, g5)
-from ludology.thermography import (mean, temperature, cool, heat, overheat,
-                                   is_cold, is_tepid, is_hot,
-                                   thermal_dissociation, Particle)
+from ludology.closet import (g1, g2, g5, half, one, pm_one, quarter, star, up,
+                             zero)
+from ludology.thermography import (Particle, cool, heat, is_cold, is_hot,
+                                   is_tepid, mean, overheat, temperature,
+                                   thermal_dissociation)
 
 
 @pytest.mark.parametrize(('g', 'm'), [

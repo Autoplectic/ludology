@@ -4,10 +4,10 @@
 Nimbers are the values of impartial games.
 """
 
+import numbers
 from functools import lru_cache
 from itertools import count
 from math import inf
-import numbers
 
 from .game import Game
 from ..utils import mex
@@ -21,12 +21,15 @@ __all__ = [
 
 class Nimber(Game):
     """
-    A Nimber is the value of an impartial game.
+    Nimbers: Impartial Games.
+
+    A Nimber is the value of an impartial game. They are an important and well
+    understood subset of Games.
     """
 
     def __init__(G, n):
         """
-        Construct the `n`th Nimber.
+        Construct the nth Nimber.
 
         Parameters
         ----------
@@ -49,14 +52,19 @@ class Nimber(Game):
     @property
     def n(G):
         """
-        The Nimber's value.
+        The Nimber's integer value.
+
+        Returns
+        -------
+        n : int
+            The integer value of the Nimber.
         """
         return G._n
 
     @property
     def value(G):
         """
-        Return the value of the Nimber.
+        The value of the Nimber.
 
         Returns
         -------
@@ -72,7 +80,9 @@ class Nimber(Game):
     @property
     def is_number(G):
         """
-        Whether the Nimber is a number or not. Only the Nimber 0 is a number.
+        Determine if G is a number.
+
+        Only the Nimber 0 is a number.
 
         Returns
         -------
@@ -84,7 +94,10 @@ class Nimber(Game):
     @property
     def is_numberish(G):
         """
-        A Game is numberish if it is infinitesimally close to a number. All Nimbers are numberish.
+        Determine if G is numberish.
+
+        A Game is numberish if it is infinitesimally close to a number. All
+        Nimbers are numberish.
 
         Returns
         -------
@@ -96,7 +109,10 @@ class Nimber(Game):
     @property
     def is_impartial(G):
         """
-        Whether the Nimber is impartial or not. All Nimbers are impartial.
+        Determine if G is impartial.
+
+        A Game is impartial if its left and right options are the same, all its
+        options are impartial. All Nimbers are impartial.
 
         Returns
         -------
@@ -108,9 +124,12 @@ class Nimber(Game):
     @property
     def is_infinitesimal(G):
         """
-        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
-        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
-        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+        Determine if G is infinitesimal.
+
+        A game is infinitesimal if it is non-zero and smaller than any positive
+        number and greater than any negative number. Equivalently, it's left and
+        right stops are both zero. Note, this does not imply that an
+        infinitesimal can not be positive (> 0) or negative (< 0).
 
         Returns
         -------
@@ -122,6 +141,8 @@ class Nimber(Game):
     @property
     def is_dicotic(G):
         """
+        Determine if G is dicotic.
+
         A dicotic, or all-small, Game is one where either both or neither player have options
         at every subposition. All Nimbers are dicotic by definition of an impartial game.
 
@@ -133,9 +154,25 @@ class Nimber(Game):
         return True
 
     @property
+    def is_switch(G):
+        """
+        Determine if G is a switch.
+
+        No Nimbers are switches.
+
+        Returns
+        -------
+        number : bool
+            Whether G is a switch or not.
+        """
+        return False
+
+    @property
     def birthday(G):
         """
         The Nimber's birthday.
+
+        The birthday of a Nimber is its integer value.
 
         Returns
         -------
@@ -146,7 +183,9 @@ class Nimber(Game):
 
     def __neg__(G):
         """
-        The negation of the Nimber `G`. A Nimber is its own inverse.
+        Compute the negation of the Nimber `G`.
+
+        A Nimber is its own inverse.
 
         Returns
         -------
@@ -158,7 +197,10 @@ class Nimber(Game):
     @lru_cache(maxsize=None)
     def __add__(G, H):
         """
-        The sum of two Nimbers.
+        Compute the sum of G and H.
+
+        The sum of two Nimbers is equal it their mex (maximum excluded element),
+        which can be found via their exclusive or.
 
         Parameters
         ----------
@@ -180,7 +222,14 @@ class Nimber(Game):
     @lru_cache(maxsize=None)
     def __mul__(G, H):
         """
-        The product of two Nimbers.
+        Compute the product of G and H.
+
+        The product of two Nimbers can be found using a simple recursive
+        formula:
+        .. math::
+           mex(G' * H + G * H' + G' * H') for all G' < G and H' < H
+
+        where * and + are nimber products and sums, respectively.
 
         Parameters
         ----------
@@ -201,7 +250,9 @@ class Nimber(Game):
 
     def __eq__(G, H):
         """
-        The equality of two Nimbers.
+        Determine if G equals H.
+
+        Two Nimbers are equal if their integer values are equal.
 
         Parameters
         ----------
@@ -222,8 +273,10 @@ class Nimber(Game):
 
     def __hash__(G):
         """
-        Use Game's hash. We must specifically do it here because of override
-        __eq__.
+        Construct the hash for G.
+
+        Use the parent class Game's hash. We must specifically do it here
+        because __eq__ is defined for this class.
 
         Returns
         -------
@@ -235,38 +288,61 @@ class Nimber(Game):
 
 class FarStar(Nimber):
     """
-    The far-star represents an arbitrarily large Nimber.
+    The Far-Star.
+
+    The Far-Star represents an arbitrarily large Nimber, and is useful for
+    evaluating outcome class of many dicotic games.
     """
 
     def __init__(G):
         """
+        Construct the Far-Star.
         """
         G._n = inf
 
     @property
-    def _left(G):
+    def left(G):
         """
-        The "left set" of far-star.
+        The "left set" of Far-Star.
+
+        Returns
+        -------
+        left_set : generator
+            All nimbers.
         """
         return (Nimber(i) for i in count())  # pragma: no branch
 
     @property
-    def _right(G):
+    def right(G):
         """
-        The "right set" of far-star.
+        The "right set" of Far-Star.
+
+        Returns
+        -------
+        right_set : generator
+            All nimbers.
         """
         return (Nimber(i) for i in count())  # pragma: no branch
 
     @property
     def value(G):
         """
-        A white star is used to represented far-star.
+        The value of G.
+
+        A white star is used to represented Far-Star.
+
+        Returns
+        -------
+        star : str
+            The value of Far-Star.
         """
         return "☆"
 
     def __add__(G, H):
         """
-        The sum of far-star with any Nimber is far-star.
+        Compute the sum of G and H.
+
+        The sum of Far-Star with any Nimber is Far-Star.
 
         Parameters
         ----------
@@ -286,7 +362,7 @@ class FarStar(Nimber):
 
 def _mul(n1, n2):
     """
-    The nimber product of `n1` and `n2`.
+    Compute the Nimber product of `n1` and `n2`.
 
     Parameters
     ----------

@@ -9,7 +9,7 @@ from hypothesis import given
 from hypothesis.strategies import integers
 
 from ludology import Game
-from ludology.closet import zero, half, one, star, star2, up, pm_one
+from ludology.closet import half, one, pm_one, star, star2, up, zero
 from ludology.games import Outcome
 from ludology.games.printing import unicode_fraction
 from ludology.tools import canonicalize

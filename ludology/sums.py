@@ -24,8 +24,10 @@ __all__ = [
 
 def canonize(f):
     """
-    Add a `canon` option to `f` which toggles canonicalizes the return value of
-    `f`.
+    Construct a decorator to add a `canon` option to f.
+
+    Add a `canon` option to `f` which toggles whether the function canonicalizes
+    its return value.
 
     Parameters
     ----------
@@ -41,7 +43,8 @@ def canonize(f):
     def wrapped(G, H, canon=True):
         game = f(G, H)
         if canon:
-            game = canonicalize(game)
+            return canonicalize(game)
+
         return game
 
     return wrapped
@@ -51,6 +54,8 @@ def canonize(f):
 @canonize
 def disjunctive(G, H):
     """
+    Compute the disjunctive sum of G and H.
+
     Move in exactly one component.
 
     Parameters
@@ -65,10 +70,10 @@ def disjunctive(G, H):
     sum : Game
         The disjunctive sum of G and H.
     """
-    left_1 = {disjunctive(G_L, H) for G_L in G._left}
-    left_2 = {disjunctive(G, H_L) for H_L in H._left}
-    right_1 = {disjunctive(G_R, H) for G_R in G._right}
-    right_2 = {disjunctive(G, H_R) for H_R in H._right}
+    left_1 = {disjunctive(G_L, H) for G_L in G.left}
+    left_2 = {disjunctive(G, H_L) for H_L in H.left}
+    right_1 = {disjunctive(G_R, H) for G_R in G.right}
+    right_2 = {disjunctive(G, H_R) for H_R in H.right}
     return Game(left_1 | left_2, right_1 | right_2)
 
 
@@ -76,6 +81,8 @@ def disjunctive(G, H):
 @canonize
 def conjunctive(G, H):
     """
+    Compute the conjunctive sum of G and H.
+
     Move in all components. Play ends when any one of them terminates.
 
     Parameters
@@ -90,8 +97,8 @@ def conjunctive(G, H):
     sum : Game
         The conjunctive sum of G and H.
     """
-    left = {conjunctive(G_L, H_L) for G_L in G._left for H_L in H._left}
-    right = {conjunctive(G_R, H_R) for G_R in G._right for H_R in H._right}
+    left = {conjunctive(G_L, H_L) for G_L in G.left for H_L in H.left}
+    right = {conjunctive(G_R, H_R) for G_R in G.right for H_R in H.right}
     return Game(left, right)
 
 
@@ -99,6 +106,8 @@ def conjunctive(G, H):
 @canonize
 def selective(G, H):
     """
+    Compute the selective sum of G and H.
+
     Move in any number of components, but at least one.
 
     Parameters
@@ -113,12 +122,12 @@ def selective(G, H):
     sum : Game
         The selective sum of G and H.
     """
-    left_1 = {selective(G_L, H) for G_L in G._left}
-    left_2 = {selective(G, H_L) for H_L in H._left}
-    left_3 = {selective(G_L, H_L) for G_L in G._left for H_L in H._left}
-    right_1 = {selective(G_R, H) for G_R in G._right}
-    right_2 = {selective(G, H_R) for H_R in H._right}
-    right_3 = {selective(G_R, H_R) for G_R in G._right for H_R in H._right}
+    left_1 = {selective(G_L, H) for G_L in G.left}
+    left_2 = {selective(G, H_L) for H_L in H.left}
+    left_3 = {selective(G_L, H_L) for G_L in G.left for H_L in H.left}
+    right_1 = {selective(G_R, H) for G_R in G.right}
+    right_2 = {selective(G, H_R) for H_R in H.right}
+    right_3 = {selective(G_R, H_R) for G_R in G.right for H_R in H.right}
     return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
@@ -126,7 +135,10 @@ def selective(G, H):
 @canonize
 def diminished_disjunctive(G, H):
     """
-    Move in exactly one component. Play ends immediately when any one of them terminates.
+    Compute the diminished disjunctive sum of G and H.
+
+    Move in exactly one component. Play ends immediately when any one of them
+    terminates.
 
     Parameters
     ----------
@@ -143,10 +155,10 @@ def diminished_disjunctive(G, H):
     if G == 0 or H == 0:
         return Game(0)
     else:
-        left_1 = {diminished_disjunctive(G_L, H) for G_L in G._left}
-        left_2 = {diminished_disjunctive(G, H_L) for H_L in H._left}
-        right_1 = {diminished_disjunctive(G_R, H) for G_R in G._right}
-        right_2 = {diminished_disjunctive(G, H_R) for H_R in H._right}
+        left_1 = {diminished_disjunctive(G_L, H) for G_L in G.left}
+        left_2 = {diminished_disjunctive(G, H_L) for H_L in H.left}
+        right_1 = {diminished_disjunctive(G_R, H) for G_R in G.right}
+        right_2 = {diminished_disjunctive(G, H_R) for H_R in H.right}
         return Game(left_1 | left_2, right_1 | right_2)
 
 
@@ -154,6 +166,8 @@ def diminished_disjunctive(G, H):
 @canonize
 def continued_conjunctive(G, H):
     """
+    Compute the continued conjunctive sum of G and H.
+
     Move in all nonterminal components. Play ends only after all components terminate.
 
     Parameters
@@ -171,8 +185,8 @@ def continued_conjunctive(G, H):
     if G == 0 or H == 0:
         return disjunctive(G, H)
     else:
-        left = {continued_conjunctive(G_L, H_L) for G_L in G._left for H_L in H._left}
-        right = {continued_conjunctive(G_R, H_R) for G_R in G._right for H_R in H._right}
+        left = {continued_conjunctive(G_L, H_L) for G_L in G.left for H_L in H.left}
+        right = {continued_conjunctive(G_R, H_R) for G_R in G.right for H_R in H.right}
         return Game(left, right)
 
 
@@ -180,6 +194,8 @@ def continued_conjunctive(G, H):
 @canonize
 def shortened_selective(G, H):
     """
+    Compute the shortened selective sum of G and H.
+
     Move in any number of components. Play ends immediately when any one of them terminates.
 
     Parameters
@@ -197,12 +213,12 @@ def shortened_selective(G, H):
     if G == 0 or H == 0:
         return Game(0)
     else:
-        left_1 = {shortened_selective(G_L, H) for G_L in G._left}
-        left_2 = {shortened_selective(G, H_L) for H_L in H._left}
-        left_3 = {shortened_selective(G_L, H_L) for G_L in G._left for H_L in H._left}
-        right_1 = {shortened_selective(G_R, H) for G_R in G._right}
-        right_2 = {shortened_selective(G, H_R) for H_R in H._right}
-        right_3 = {shortened_selective(G_R, H_R) for G_R in G._right for H_R in H._right}
+        left_1 = {shortened_selective(G_L, H) for G_L in G.left}
+        left_2 = {shortened_selective(G, H_L) for H_L in H.left}
+        left_3 = {shortened_selective(G_L, H_L) for G_L in G.left for H_L in H.left}
+        right_1 = {shortened_selective(G_R, H) for G_R in G.right}
+        right_2 = {shortened_selective(G, H_R) for H_R in H.right}
+        right_3 = {shortened_selective(G_R, H_R) for G_R in G.right for H_R in H.right}
         return Game(left_1 | left_2 | left_3, right_1 | right_2 | right_3)
 
 
@@ -210,6 +226,8 @@ def shortened_selective(G, H):
 @canonize
 def ordinal(G, H):
     """
+    Compute the ordinal sum of G and H.
+
     Move in G or H; any move on G annihilates H.
 
     Parameters
@@ -233,7 +251,10 @@ def ordinal(G, H):
 @canonize
 def side(G, H):
     """
-    Move in G or H; Left's moves on H annihilate G, and Right's moves on G annihilate H.
+    Compute the side sum of G and H.
+
+    Move in G or H; Left's moves on H annihilate G, and Right's moves on G
+    annihilate H.
 
     Parameters
     ----------
@@ -256,6 +277,8 @@ def side(G, H):
 @canonize
 def sequential(G, H):
     """
+    Compute the sequential sum of G and H.
+
     Move in G unless G has terminated; in that case move in H.
 
     Parameters
@@ -273,6 +296,6 @@ def sequential(G, H):
     if G == 0:
         return H
     else:
-        left = {sequential(G_L, H) for G_L in G._left}
-        right = {sequential(G_R, H) for G_R in G._right}
+        left = {sequential(G_L, H) for G_L in G.left}
+        right = {sequential(G_R, H) for G_R in G.right}
         return Game(left, right)

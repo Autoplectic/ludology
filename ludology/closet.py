@@ -56,7 +56,7 @@ g5 = canonicalize(Game({Game({2}, {0}), Game({2}, {star})}, {Game({0}, {-2 + sta
 # Factories for specific game types.
 def tiny(G):
     """
-    Construct a Tiny Game: {0 || 0 | G}
+    Construct a Tiny Game: {0 || 0 | G}.
 
     Parameters
     ----------
@@ -73,7 +73,7 @@ def tiny(G):
 
 def miny(G):
     """
-    Construct a Miny Game: {-G | 0 || 0}
+    Construct a Miny Game: {-G | 0 || 0}.
 
     Parameters
     ----------

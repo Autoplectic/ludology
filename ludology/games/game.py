@@ -18,7 +18,7 @@ __all__ = [
 
 def gamify_inputs(f):
     """
-    A decorator to cast all arguments to a function into Games.
+    Construct a decorator to cast all arguments to a function into Games.
 
     Parameters
     ----------
@@ -40,7 +40,13 @@ def gamify_inputs(f):
 
 class Outcome(Enum):
     """
-    Representing the outcome classes of Games.
+    The outcome classes for Partizan Games under normal play conditions.
+
+    Each Game belongs to one of four outcome classes:
+      - P: The Game is a win for the previous player.
+      - N: The Game is a win for the next player.
+      - L: The Game is a win for the left player.
+      - R: The Game is a win for the right player.
     """
 
     PREVIOUS = 'P'
@@ -51,6 +57,8 @@ class Outcome(Enum):
 
 class Game(object):
     """
+    Partizan Games.
+
     A game consists of a *left set* and a *right set*, and is often written:
 
         { G_L | G_R }
@@ -113,6 +121,11 @@ class Game(object):
     def left(G):
         """
         The left set.
+
+        Returns
+        -------
+        G_L : set
+            The left set.
         """
         return copy(G._left)
 
@@ -120,6 +133,11 @@ class Game(object):
     def right(G):
         """
         The right set.
+
+        Returns
+        -------
+        G_R : set
+            The right set.
         """
         return copy(G._right)
 
@@ -127,8 +145,10 @@ class Game(object):
     # @lru_cache(maxsize=None)
     def __ge__(G, H):
         """
-        A Game G is greater than or equal to a Game H so long as there are no G_R such that
-        H >= G_R and there are no H_L such that H_L >= G.
+        Determine if G is greater than H.
+
+        A Game G is greater than or equal to a Game H so long as there are no
+        G_R such that H >= G_R and there are no H_L such that H_L >= G.
 
         Parameters
         ----------
@@ -148,7 +168,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __le__(G, H):
         """
-        G <= H if H >= G.
+        Determine if G is less than or equal to H.
+
+        A Game G is less than or equal to H if H is greather than or equal to G:
+        .. math::
+           G <= H <=> H >= G.
 
         Parameters
         ----------
@@ -166,7 +190,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __gt__(G, H):
         """
-        G > H if G >= H and not G == H.
+        Determine if G is strictly greather than H.
+
+        G is strictly greather than H if:
+        .. math::
+           G > H <=> G >= H and not H >= G.
 
         Parameters
         ----------
@@ -184,7 +212,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __lt__(G, H):
         """
-        G < H if G <= H and not G == H.
+        Determine if G is strictly less than H.
+
+        G is strictly less than H if H is strictly greather than G:
+        .. math::
+           G < H <=> H > G
 
         Parameters
         ----------
@@ -202,7 +234,12 @@ class Game(object):
     # @lru_cache(maxsize=None)
     def __eq__(G, H):
         """
-        G == H if G >= H and G <= H.
+        Determine if G and H are equal.
+
+        G and H are equal if G is greater than or equal to H, and H is greater
+        than or equal to G:
+        .. math::
+           G == H <=> G >= H and G <= H.
 
         Parameters
         ----------
@@ -223,7 +260,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __or__(G, H):
         """
-        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H.
+        Determine if G is confused with H.
+
+        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H:
+        .. math::
+           G | H <=> not G >= H and not H >= G
 
         Parameters
         ----------
@@ -241,7 +282,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __ror__(G, H):
         """
-        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H.
+        Determine if G is confused with H.
+
+        G | H ('fuzzy' or 'confused with') if neither G >= H nor G <= H:
+        .. math::
+           G | H <=> not G >= H and not H >= G
 
         Parameters
         ----------
@@ -259,7 +304,9 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __neg__(G):
         """
-        -{G_L | G_R} is recursively defined as {-G_R | -G_L}.
+        Compute the negation of G.
+
+        -{G_L | G_R} is defined recursively as {-G_R | -G_L}.
 
         Returns
         -------
@@ -272,8 +319,13 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __add__(G, H):
         """
-        The disjoint sum of two games:
-            G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
+        Compute the disjoint sum of G and H.
+
+        The disjoint sum is defined as the result of playing on exactly one of G
+        or H. Therefore, the left options of G + H are of the form G + H_L and
+        H + G_L:
+        .. math::
+           G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
 
         Parameters
         ----------
@@ -304,8 +356,13 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __radd__(G, H):
         """
-        The disjoint sum of two games:
-            G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
+        Compute the disjoint sum of G and H.
+
+        The disjoint sum is defined as the result of playing on exactly one of G
+        or H. Therefore, the left options of G + H are of the form G + H_L and
+        H + G_L:
+        .. math::
+           G + H = {G + H_L, H + G_L | G + H_R, H + G_R}
 
         Parameters
         ----------
@@ -323,8 +380,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __sub__(G, H):
         """
-        The disjoint difference of two games:
-            G - H = G + (-H)
+        Compute the disjoint difference of G and H.
+
+        The difference is defined as the sum of G and -H:
+        .. math::
+           G - H = G + (-H)
 
         Parameters
         ----------
@@ -342,7 +402,15 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __mul__(G, H):
         """
-        The Norton product of G and H.
+        Compute the Norton product of G and H.
+
+        The product is defined by the property:
+        .. math::
+           a' < a, b' < b => (a - a') * (b - b') > 0
+                          => a' * b + a * b' - a' * b' < a * b
+
+        implying that quantities like the sum on the left should be in the left
+        set of a * b.
 
         Parameters
         ----------
@@ -364,7 +432,15 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __rmul__(G, H):
         """
-        The Norton product of G and H.
+        Compute the Norton product of G and H.
+
+        The product is defined by the property:
+        .. math::
+           a' < a, b' < b => (a - a') * (b - b') > 0
+                          => a' * b + a * b' - a' * b' < a * b
+
+        implying that quantities like the sum on the left should be in the left
+        set of a * b.
 
         Parameters
         ----------
@@ -382,7 +458,9 @@ class Game(object):
     @lru_cache(maxsize=None)
     def _inverse(G):
         """
-        Invert the Game G.
+        Compute the inverse the Game G.
+
+        The inverse is defined as:
 
         Returns
         -------
@@ -396,9 +474,11 @@ class Game(object):
     @lru_cache(maxsize=None)
     def __truediv__(G, H):
         """
-        The Norton quotient of G by H:
+        Compute the Norton quotient of G by H.
 
-            G / H = G * (1/H)
+        The Norton quotient is defined as:
+        .. math::
+           G / H = G * (1 / H)
 
         Parameters
         ----------
@@ -414,11 +494,14 @@ class Game(object):
 
     def __hash__(G):
         """
-        Define the hash of a game as the hash of the left and right options.
+        Construct the hash of a Game.
+
+        We define the hash as the hash of the left and right options. Python
+        does the "right thing" and sets with equal members have the same hash.
 
         Returns
         -------
-        hash : str
+        hash : int
             The hash of G.
         """
         return hash((frozenset(G._left), frozenset(G._right)))
@@ -436,12 +519,14 @@ class Game(object):
 
     def __repr__(G):
         """
-        Construct a representation of G. It is of the form {G_L|G_R}, where the options are
-        their shorthand values if possible.
+        Construct the repr for G.
+
+        G is represented with the canonical Conway notation: {G_L | G_R}, where
+        the options are their shorthand values if possible.
 
         Returns
         -------
-        r : str
+        repr : str
             A representation of G.
         """
         lefts = ', '.join(G_L.value for G_L in sorted(G._left, key=str))
@@ -450,7 +535,10 @@ class Game(object):
 
     def subpositions(G):
         """
-        Return an iterator over all subpositions of G.
+        Construct an iterator over all subpositions of G.
+
+        A subposition is G, or any Game reachable through any sequence of left
+        or right options.
 
         Yields
         ------
@@ -465,8 +553,10 @@ class Game(object):
     @property
     def is_impartial(G):
         """
-        A game is impartial if its left options equal its right options, and each of its options
-        are impartial.
+        Determine if G is impartial.
+
+        A game is impartial if its left options equal its right options, and
+        each of its options are impartial.
 
         Returns
         -------
@@ -481,8 +571,10 @@ class Game(object):
     @property
     def is_dicotic(G):
         """
-        A dicotic, or all-small, Game is one where either both or neither player have options
-        at every subposition. These are necessarily infinitesimal.
+        Determine if G is dicotic.
+
+        A dicotic, or all-small, Game is one where either both or neither player
+        have options at every subposition. These are necessarily infinitesimal.
 
         Returns
         -------
@@ -497,9 +589,12 @@ class Game(object):
     @property
     def is_infinitesimal(G):
         """
-        A game is infinitesimal if it is non-zero and smaller than any positive number and greater
-        than any negative number. Equivalently, it's left and right stops are both zero. Note, this
-        does not imply that an infinitesimal can not be positive (> 0) or negative (< 0).
+        Determine if G is infinitesimal.
+
+        A Game is infinitesimal if it is non-zero and smaller than any positive
+        real number and greater than any negative real number. Equivalently,
+        it's left and right stops are both zero. Note, this does not imply that
+        an infinitesimal can not be positive (> 0) or negative (< 0).
 
         Returns
         -------
@@ -514,8 +609,10 @@ class Game(object):
     @property
     def is_number(G):
         """
-        A game is a (surreal) number if each of it left options is less than each of its right
-        options, and all its options are also numbers.
+        Determine if G is a number.
+
+        A game is a (surreal) number if each of it left options is less than
+        each of its right options, and all its options are also numbers.
 
         Returns
         -------
@@ -524,9 +621,9 @@ class Game(object):
 
         Note
         ----
-        The definition implies that, in canonical form, the number has at most one left option and
-        one right option, because one must dominate. Also, if either of the two sets of options is
-        empty, the number is an integer.
+        The definition implies that, in canonical form, the number has at most
+        one left option and one right option, because one must dominate. Also,
+        if either of the two sets of options is empty, the number is an integer.
         """
         a = all(g.is_number for g in G._left | G._right)
         b = all(G_L < G_R for G_L in G._left for G_R in G._right)
@@ -535,6 +632,8 @@ class Game(object):
     @property
     def is_numberish(G):
         """
+        Determine if G is numberish.
+
         A Game is numberish if it is infinitesimally close to a number.
 
         Returns
@@ -548,7 +647,10 @@ class Game(object):
     @property
     def is_switch(G):
         """
-        A game is a switch if it's left and right options are numbers, and G_L > G_R.
+        Determine if G is a switch.
+
+        A game is a switch if it's left and right options are single numbers
+        such that G_L > G_R.
 
         Returns
         -------
@@ -565,8 +667,12 @@ class Game(object):
     @property
     def birthday(G):
         """
+        The birthday of G.
+
         The birthday of a game G is defined as the one more than the maximum
-        birthday of its options.
+        birthday of its options. The birthday of the Game 0 is 0. It is the
+        number of iterations one must apply, starting from the Game 0, to
+        construct G under the normal Conway construction of a Game.
 
         Returns
         -------
@@ -581,6 +687,8 @@ class Game(object):
     @property
     def outcome(G):
         """
+        The outcome class of G.
+
         The outcome of a Game belongs to one of four equivalence classes:
 
             P : A win for the second player.
@@ -606,7 +714,10 @@ class Game(object):
     @property
     def value(G):
         """
-        The value of the game in short-hand.
+        The value of the Game.
+
+        The value of the game, potentially using the standard short-hand names
+        for many important types of Games.
 
         Returns
         -------

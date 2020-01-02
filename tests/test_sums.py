@@ -7,9 +7,10 @@ Tests for ludology.sums.
 import pytest
 
 from ludology import Game, canonicalize
-from ludology.closet import zero, one, star, pm_one, up
-from ludology.sums import (disjunctive, conjunctive, selective, diminished_disjunctive,
-                           continued_conjunctive, shortened_selective, ordinal, side, sequential)
+from ludology.closet import one, pm_one, star, up, zero
+from ludology.sums import (conjunctive, continued_conjunctive,
+                           diminished_disjunctive, disjunctive, ordinal,
+                           selective, sequential, shortened_selective, side)
 
 
 G = Game({0}, {pm_one})
