@@ -202,7 +202,7 @@ def test_far_star_left(n):
     """
     Test that far star's left set contains an arbitrary Nimber.
     """
-    assert n in FarStar()._left
+    assert n in FarStar().left
 
 
 @pytest.mark.parametrize('n', [
@@ -214,4 +214,4 @@ def test_far_star_right(n):
     """
     Test that far star's right set contains an arbitrary Nimber.
     """
-    assert n in FarStar()._right
+    assert n in FarStar().right
