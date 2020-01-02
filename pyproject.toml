@@ -33,6 +33,7 @@ requires-python = "~=3.3"
 dev = [
     'codecov',
     'coverage[toml]',
+    # 'darglint',
     'flake8',
     'flake8-awesome',
     'flake8-bandit',

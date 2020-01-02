@@ -9,7 +9,7 @@ from hypothesis import given
 from hypothesis.strategies import integers
 
 from ludology import Game
-from ludology.closet import half, one, pm_one, star, star2, up, zero
+from ludology.closet import half, miny, one, pm_one, star, star2, tiny, up, zero
 from ludology.games import Outcome
 from ludology.games.printing import unicode_fraction
 from ludology.tools import canonicalize
@@ -203,9 +203,9 @@ def test_not_switch(g):
 
 
 @pytest.mark.parametrize('g', [
-    zero,
     star,
     up,
+    zero,
 ])
 def test_dicotic(g):
     """
@@ -215,8 +215,10 @@ def test_dicotic(g):
 
 
 @pytest.mark.parametrize('g', [
+    miny(3),
     one,
-    Game({0}, {Game({0}, {-1})}),
+    pm_one,
+    tiny(one),
 ])
 def test_not_dicotic(g):
     """

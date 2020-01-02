@@ -213,6 +213,7 @@ def replace_reversible(G):
     G._right = new_right_set
 
 
+@lru_cache(maxsize=None)
 def make_specific(G):
     """
     Return G as a more specific subtype of Game, if possible.
@@ -240,7 +241,7 @@ def make_specific(G):
 
 
 @lru_cache(maxsize=None)
-def canonicalize(G, specify=True):
+def canonical(G):
     """
     Compute the canonical form of the game G.
 
@@ -265,8 +266,29 @@ def canonicalize(G, specify=True):
         remove_dominated(cG)
         replace_reversible(cG)
 
+    return cG
+
+
+@lru_cache(maxsize=None)
+def canonicalize(G, specify=True):
+    """
+    Compute the canonical form of the game G.
+
+    Parameters
+    ----------
+    G : Game
+        The Game of interest.
+
+    Returns
+    -------
+    K : Game
+        The Game G in canonical form.
+    """
+    cG = canonical(G)
+
     if specify:
-        return make_specific(cG)
+        cG = make_specific(cG)
+
     return cG
 
 
