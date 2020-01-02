@@ -4,12 +4,15 @@
 Various utilities helpful in computing Game properties.
 """
 
+import sys
+from contextlib import contextmanager
 from itertools import chain, combinations, count
 
 
 __all__ = [
     'mex',
     'powerset',
+    'recursion_limit',
 ]
 
 
@@ -50,3 +53,19 @@ def powerset(iterable):
     """
     s = list(iterable)
     return chain.from_iterable(combinations(s, r) for r in range(len(s) + 1))
+
+
+@contextmanager
+def recursion_limit(limit):
+    """
+    Temporarily set the recursion limit to `limit`.
+
+    Parameters
+    ----------
+    limit : int > 0
+        The new limit.
+    """
+    old_limit = sys.getrecursionlimit()
+    sys.setrecursionlimit(limit)
+    yield
+    sys.setrecursionlimit(old_limit)

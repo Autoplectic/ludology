@@ -4,8 +4,6 @@
 Tests for ludology.tools.
 """
 
-import sys
-
 import pytest
 from hypothesis import given
 
@@ -15,10 +13,7 @@ from ludology.hypothesis import games, nimbers
 from ludology.sums import conjunctive
 from ludology.tools import (canonicalize, left_incentives, left_stop,
                             remoteness, right_incentives, right_stop)
-
-
-# double the recursion limit:
-sys.setrecursionlimit(2 * sys.getrecursionlimit())
+from ludology.utils import recursion_limit
 
 
 @pytest.mark.parametrize(('g', 'v'), [
@@ -97,7 +92,8 @@ def test_canonicalize(G):
     """
     Test that canonicalizing doesn't effect the value of the game.
     """
-    assert canonicalize(G) == G
+    with recursion_limit(10_000):
+        assert canonicalize(G) == G
 
 
 @given(G=nimbers(max_value=5), H=nimbers(max_value=5))
