@@ -9,21 +9,23 @@ from .tools import canonicalize
 
 
 __all__ = [
-    'zero',
-    'quarter',
-    'half',
-    'one',
-    'two',
-    'star',
-    'star2',
-    'up',
-    'tiny',
-    'pm_one',
     'g1',
     'g2',
     'g3',
     'g4',
     'g5',
+    'half',
+    'miny',
+    'one',
+    'pm_one',
+    'quarter',
+    'star',
+    'star2',
+    'tiny',
+    'two',
+    'up',
+    'uptimal',
+    'zero',
 ]
 
 
