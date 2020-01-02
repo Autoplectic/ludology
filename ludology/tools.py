@@ -286,10 +286,7 @@ def canonicalize(G, specify=True):
     """
     cG = canonical(G)
 
-    if specify:
-        cG = make_specific(cG)
-
-    return cG
+    return make_specific(cG) if specify else cG
 
 
 @lru_cache(maxsize=None)

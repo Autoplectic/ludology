@@ -23,6 +23,7 @@ ignore =
     N805    # We use G instead of self for clarity.
     N806    # In keeping with CGT notation, we use capitalized variable names.
     RST301  # Allow directives in docstrings.
+    SF01    # Too many false positives.
 per-file-ignores =
     # Allow assert statements in tests:
     test_*.py: S101
@@ -30,9 +31,13 @@ per-file-ignores =
     __init__.py: F401, F403
 
 count = True
-docstring-convention = numpy
 max-line-length = 120
 show-source = True
 statistics = True
+
+radon-max-cc = 12
+
+docstring-convention = numpy
+
 import-order-style = pycharm
 application-import-names = ludology

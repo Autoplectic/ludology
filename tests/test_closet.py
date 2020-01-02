@@ -13,6 +13,6 @@ from ludology.hypothesis import games
 @given(G=games())
 def test_tiny_fixedpoint(G):
     """
-    Test the tiny fixed point: tiny(tiny(tiny(G))) = up
+    Test the tiny fixed point: tiny(tiny(tiny(G))) = up.
     """
     assert tiny(tiny(tiny(G))) == up
