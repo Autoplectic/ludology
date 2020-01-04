@@ -14,7 +14,6 @@ from fractions import Fraction
 from functools import lru_cache, total_ordering
 
 from .game import Game
-from ..tools import canonicalize
 
 
 @total_ordering
@@ -28,60 +27,76 @@ class Surreal(Game, numbers.Number):
     denominator is a power of 2.
     """
 
-    def __init__(G, value):
+    def __init__(G, left=None, right=None):
         """
         Construct the Surreal with given value.
 
         Parameters
         ----------
-        value : int, float, Fraction
-            The value for the Surreal number.
+        left : set
+            The left set.
+        right : set
+            The right set.
         """
-        if isinstance(value, Surreal):
-            G._left, G._right, G._n = value.left, value.right, value.n
-        elif isinstance(value, Game) and value.is_number:
-            value = canonicalize(value, specify=False)
-            G._left, G._right = value.left, value.right
+        if not all(opt.is_number for opt in left | right):
+            msg = "All options must be numbers."
+            raise ValueError(msg)
 
-            if not G._left | G._right:
-                G._n = Fraction(0)
-            else:
-                # non-zero dyadic rational
-                if G._left:
-                    lf = next(iter(G._left)).n
-                if G._right:
-                    rf = next(iter(G._right)).n
+        G._left = {Surreal(G_L.left, G_L.right) for G_L in left}
+        G._right = {Surreal(G_R.left, G_R.right) for G_R in right}
 
-                if not G._right:
-                    # positive integer
-                    G._n = lf + 1
-                elif not G._left:
-                    # negative integer
-                    G._n = rf - 1
-                else:
-                    # dyadic rational
-                    G._n = (lf + rf) / 2
+        if not all(G_L < G_R for G_L in left for G_R in right):
+            msg = "There exists a G_L >= G_R."
+            raise ValueError(msg)
+
+        if not G._left | G._right:
+            G._n = Fraction(0)
         else:
-            try:
-                G._n = Fraction(value)
-                if G._n.denominator > 1024:
-                    msg = f"{G._n} would result in a very deep game tree."
-                    raise ValueError(msg)
-                if G._n.denominator == 1:
-                    if G._n == 0:
-                        G._left = set()
-                        G._right = set()
-                    elif G._n > 0:
-                        G._left = {Surreal(value - 1)}
-                        G._right = set()
-                    else:
-                        G._left = set()
-                        G._right = {Surreal(value + 1)}
-                else:
-                    G._left = {Surreal(G._n - 1 / G._n.denominator)}
-                    G._right = {Surreal(G._n + 1 / G._n.denominator)}
-            except ValueError:
-                raise ValueError(f"Can not convert {value} to a Surreal Number.")
+            # non-zero dyadic rational
+            if G._left:
+                lf = next(iter(G._left)).n
+            if G._right:
+                rf = next(iter(G._right)).n
+
+            if not right:
+                # positive integer
+                G._n = lf + 1
+            elif not left:
+                # negative integer
+                G._n = rf - 1
+            else:
+                # dyadic rational
+                G._n = (lf + rf) / 2
+
+    @classmethod
+    def from_value(cls, value):
+        """
+        Construct a Surreal from its value.
+
+        Parameters
+        ----------
+        value : Number
+            The value.
+        """
+        value = Fraction(value)
+        if value.denominator > 1024:
+            msg = f"{value} would result in a very deep game tree."
+            raise ValueError(msg)
+        if value.denominator == 1:
+            if value == 0:
+                left = set()
+                right = set()
+            elif value > 0:
+                left = {Surreal.from_value(value - 1)}
+                right = set()
+            else:
+                left = set()
+                right = {Surreal.from_value(value + 1)}
+        else:
+            left = {Surreal.from_value(value - 1 / value.denominator)}
+            right = {Surreal.from_value(value + 1 / value.denominator)}
+
+        return cls(left=left, right=right)
 
     @property
     def n(G):
@@ -263,9 +278,9 @@ class Surreal(Game, numbers.Number):
             The sum of G and H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n + H.n)
+            return Surreal.from_value(G._n + H.n)
         if isinstance(H, numbers.Number):
-            return Surreal(G._n + H)
+            return Surreal.from_value(G._n + H)
         if isinstance(H, Game):
             return super().__add__(H)
 
@@ -289,9 +304,9 @@ class Surreal(Game, numbers.Number):
             The product of G and H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n * H.n)
+            return Surreal.from_value(G._n * H.n)
         if isinstance(H, numbers.Number):
-            return Surreal(G._n * H)
+            return Surreal.from_value(G._n * H)
         if isinstance(H, Game):
             return super().__mul__(H)
 
@@ -338,9 +353,9 @@ class Surreal(Game, numbers.Number):
             The quotient of G by H.
         """
         if isinstance(H, Surreal):
-            return Surreal(G._n / H.n)
+            return Surreal.from_value(G._n / H.n)
         if isinstance(H, numbers.Number):
-            return Surreal(G._n / H)
+            return Surreal.from_value(G._n / H)
         if isinstance(H, Game):
             return super().__truediv__(H)
 
@@ -358,7 +373,7 @@ class Surreal(Game, numbers.Number):
         Ginv : Surreal
             The inverse of G.
         """
-        return Surreal(1 / G._n)
+        return Surreal.from_value(1 / G._n)
 
     @property
     def value(G):

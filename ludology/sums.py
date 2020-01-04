@@ -168,7 +168,8 @@ def continued_conjunctive(G, H):
     """
     Compute the continued conjunctive sum of G and H.
 
-    Move in all nonterminal components. Play ends only after all components terminate.
+    Move in all nonterminal components. Play ends only after all components
+    terminate.
 
     Parameters
     ----------
@@ -196,7 +197,8 @@ def shortened_selective(G, H):
     """
     Compute the shortened selective sum of G and H.
 
-    Move in any number of components. Play ends immediately when any one of them terminates.
+    Move in any number of components. Play ends immediately when any one of them
+    terminates.
 
     Parameters
     ----------

@@ -78,7 +78,7 @@ def test_overheating(g, t, v):
 
 @pytest.mark.parametrize('g', [
     3 * one,
-    Surreal(1 / 4),
+    Surreal.from_value(1 / 4),
     zero,
     -4 * one,
 ])

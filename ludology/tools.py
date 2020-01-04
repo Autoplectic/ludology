@@ -7,6 +7,8 @@ Various tools for computing properties of Games.
 from copy import copy
 from functools import lru_cache
 
+from .games import Game
+
 
 __all__ = [
     'canonicalize',
@@ -231,13 +233,15 @@ def make_specific(G):
     from .games import Nimber, Surreal, Switch
 
     if G.is_number:
-        return Surreal(G)
-    if G.is_impartial:
-        return Nimber(G)
-    if G.is_switch:
-        return Switch(G)
-
-    return G
+        return Surreal(left=G.left, right=G.right)
+    elif G.is_impartial:
+        return Nimber(left=G.left, right=G.right)
+    elif G.is_switch:
+        return Switch(left=G.left, right=G.right)
+    else:
+        left = {make_specific(G_L) for G_L in G.left}
+        right = {make_specific(G_R) for G_R in G.right}
+        return Game(left=left, right=right)
 
 
 @lru_cache(maxsize=None)
@@ -257,8 +261,8 @@ def canonical(G):
     """
     cG = copy(G)
 
-    cG._left = {canonicalize(G_L) for G_L in cG.left}
-    cG._right = {canonicalize(G_R) for G_R in cG.right}
+    cG._left = {canonical(G_L) for G_L in cG.left}
+    cG._right = {canonical(G_R) for G_R in cG.right}
 
     old_left, old_right = set(), set()
     while cG.left != old_left or cG.right != old_right:

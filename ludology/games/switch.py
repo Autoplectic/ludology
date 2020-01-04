@@ -4,6 +4,8 @@
 Switches.
 """
 
+import numbers
+
 from .game import Game
 from .surreal import Surreal
 
@@ -22,22 +24,67 @@ class Switch(Game):
     are numbers, and G_L > G_R.
     """
 
-    def __init__(G, mean, temp=None):
+    def __init__(G, left=None, right=None):
         """
+        Construct the Switch.
+
+        Parameters
+        ----------
+        left : set
+            The left set.
+        right : set
+            The right set.
         """
-        if isinstance(mean, Game) and mean.is_switch:
-            G._left, G._right = mean.left, mean.right
+        if not left or not right:
+            msg = "The left and right sets must not be empty."
+            raise ValueError(msg)
+        if not all(opt.is_number for opt in left | right):
+            msg = "All options must be numbers."
+            raise ValueError(msg)
+        left = {Surreal(G_L.left, G_L.right) for G_L in left}
+        right = {Surreal(G_R.left, G_R.right) for G_R in right}
+        max_left = max(left)
+        min_right = min(right)
 
-            lf = Surreal(next(iter(G._left))).n
-            rf = Surreal(next(iter(G._right))).n
+        if max_left <= min_right:
+            msg = "The confusion interval has zero length.x"
+            raise ValueError(msg)
 
-            G._mean = Surreal((lf + rf) / 2)
-            G._temp = Surreal((lf - rf) / 2)
-        else:
-            G._mean = Surreal(mean)
-            G._temp = Surreal(temp)
-            G._left = {Surreal(G._mean.n + G._temp.n)}
-            G._right = {Surreal(G._mean.n - G._temp.n)}
+        G._left = left
+        G._right = right
+        G._mean = Surreal.from_value((max_left.n + min_right.n) / 2)
+        G._temperature = Surreal.from_value((max_left.n - min_right.n) / 2)
+
+    @classmethod
+    def from_mean_and_temperature(cls, mean, temperature):
+        """
+        Construct a Switch from its mean value and temperature.
+
+        Parameters
+        ----------
+        mean : Number, Surreal
+            The mean value.
+        temperature : Number, Surreal
+            The temperature.
+        """
+        if not isinstance(mean, Surreal):
+            if isinstance(mean, numbers.Number):
+                mean = Surreal.from_value(mean)
+            elif isinstance(mean, Game):
+                mean = Surreal(left=mean.left, right=mean.right)
+            else:
+                msg = f"Can not convert {mean} to a Surreal."
+                raise ValueError(msg)
+        if not isinstance(temperature, Surreal):
+            if isinstance(temperature, numbers.Number):
+                temperature = Surreal.from_value(temperature)
+            elif isinstance(temperature, Game):
+                temperature = Surreal(left=temperature.left, right=temperature.right)
+            else:
+                msg = f"Can not convert {temperature} to a Surreal."
+                raise ValueError(msg)
+
+        return cls(left={mean + temperature}, right={mean - temperature})
 
     @property
     def mean(G):
@@ -47,11 +94,11 @@ class Switch(Game):
         return G._mean
 
     @property
-    def temp(G):
+    def temperature(G):
         """
         The temperature of the switch.
         """
-        return G._temp
+        return G._temperature
 
     @property
     def value(G):
@@ -65,7 +112,7 @@ class Switch(Game):
         """
         from .printing import switch
 
-        return switch(G._mean, G._temp)
+        return switch(G._mean, G._temperature)
 
     @property
     def is_impartial(G):

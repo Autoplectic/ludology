@@ -14,9 +14,9 @@ def test_add_nimbers():
     """
     Test that Nimbers add correctly.
     """
-    a = Nimber(5)
-    b = Nimber(6)
-    c = Nimber(3)
+    a = Nimber.from_integer(5)
+    b = Nimber.from_integer(6)
+    c = Nimber.from_integer(3)
     assert a + b == c
 
 
@@ -24,9 +24,9 @@ def test_add_nimber_game():
     """
     Test that Nimbers add with Games correctly.
     """
-    a = Nimber(3)
-    b = Game(Nimber(2))
-    c = Game(Nimber(1))
+    a = Nimber.from_integer(3)
+    b = Game(Nimber.from_integer(2))
+    c = Game(Nimber.from_integer(1))
     assert a + b == c
 
 
@@ -34,9 +34,9 @@ def test_mul_nimbers():
     """
     Test that Nimbers multiply correctly.
     """
-    a = Nimber(2)
-    b = Nimber(6)
-    c = Nimber(11)
+    a = Nimber.from_integer(2)
+    b = Nimber.from_integer(6)
+    c = Nimber.from_integer(11)
     assert a * b == c
 
 
@@ -44,9 +44,9 @@ def test_mul_nimber_game():
     """
     Test that Nimbers multiply with Games correctly.
     """
-    a = Nimber(2)
-    b = Game(Nimber(2))
-    c = Game(Nimber(3))
+    a = Nimber.from_integer(2)
+    b = Game(Nimber.from_integer(2))
+    c = Game(Nimber.from_integer(3))
     assert a * b == c
 
 
@@ -54,7 +54,7 @@ def test_neg_nimbers():
     """
     Test that a Nimber is its own negative.
     """
-    a = Nimber(5)
+    a = Nimber.from_integer(5)
     assert a == -a
 
 
@@ -62,7 +62,7 @@ def test_eq_nimber_game():
     """
     Test that Nimbers and Games equate properly.
     """
-    a = Nimber(3)
+    a = Nimber.from_integer(3)
     b = 3 * one
     assert not a == b
 
@@ -72,7 +72,7 @@ def test_fail():
     Test that Nimbers must have integral values.
     """
     with pytest.raises(ValueError):
-        Nimber(0.5)
+        Nimber.from_integer(0.5)
 
 
 @pytest.mark.parametrize(('n', 'v'), [
@@ -84,13 +84,13 @@ def test_nimber_value(n, v):
     """
     Test that the value of a Nimber is represented correctly.
     """
-    assert Nimber(n).value == v
+    assert Nimber.from_integer(n).value == v
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(3),
-    Nimber(4),
-    Nimber(7),
+    Nimber.from_integer(3),
+    Nimber.from_integer(4),
+    Nimber.from_integer(7),
 ])
 def test_nimber_is_number(n):
     """
@@ -103,13 +103,13 @@ def test_nimber_is_number_2():
     """
     Test that the Nimber 0 is a number.
     """
-    assert Nimber(0).is_number
+    assert Nimber.from_integer(0).is_number
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(3),
-    Nimber(4),
-    Nimber(7),
+    Nimber.from_integer(3),
+    Nimber.from_integer(4),
+    Nimber.from_integer(7),
 ])
 def test_nimber_is_infinitesimal(n):
     """
@@ -122,13 +122,13 @@ def test_nimber_is_infinitesimal_2():
     """
     Test that the Nimber 0 is not infinitesimal.
     """
-    assert not Nimber(0).is_infinitesimal
+    assert not Nimber.from_integer(0).is_infinitesimal
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(3),
-    Nimber(7),
+    Nimber.from_integer(0),
+    Nimber.from_integer(3),
+    Nimber.from_integer(7),
 ])
 def test_nimber_is_impartial(n):
     """
@@ -138,9 +138,9 @@ def test_nimber_is_impartial(n):
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(3),
-    Nimber(7),
+    Nimber.from_integer(0),
+    Nimber.from_integer(3),
+    Nimber.from_integer(7),
 ])
 def test_nimber_is_numberish(n):
     """
@@ -150,9 +150,9 @@ def test_nimber_is_numberish(n):
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(3),
-    Nimber(7),
+    Nimber.from_integer(0),
+    Nimber.from_integer(3),
+    Nimber.from_integer(7),
 ])
 def test_nimber_is_dicotic(n):
     """
@@ -170,13 +170,13 @@ def test_nimber_birthday(n):
     """
     Test that Nimbers have the right birthdays.
     """
-    assert Nimber(n).birthday == n
+    assert Nimber.from_integer(n).birthday == n
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(1),
-    Nimber(2),
+    Nimber.from_integer(0),
+    Nimber.from_integer(1),
+    Nimber.from_integer(2),
 ])
 def test_far_star_sum(n):
     """
@@ -194,9 +194,9 @@ def test_far_star_value():
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(2),
-    Nimber(7),
+    Nimber.from_integer(0),
+    Nimber.from_integer(2),
+    Nimber.from_integer(7),
 ])
 def test_far_star_left(n):
     """
@@ -206,9 +206,9 @@ def test_far_star_left(n):
 
 
 @pytest.mark.parametrize('n', [
-    Nimber(0),
-    Nimber(2),
-    Nimber(7),
+    Nimber.from_integer(0),
+    Nimber.from_integer(2),
+    Nimber.from_integer(7),
 ])
 def test_far_star_right(n):
     """

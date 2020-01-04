@@ -11,11 +11,11 @@ from ludology.closet import one, star, zero
 
 
 @pytest.mark.parametrize('n', [
-    Surreal(0),
-    Surreal(1 / 2),
-    Surreal(0.125),
-    Surreal(-1),
-    Surreal(2),
+    Surreal.from_value(0),
+    Surreal.from_value(1 / 2),
+    Surreal.from_value(0.125),
+    Surreal.from_value(-1),
+    Surreal.from_value(2),
 ])
 def test_is_number(n):
     """
@@ -25,11 +25,11 @@ def test_is_number(n):
 
 
 @pytest.mark.parametrize(('n', 'v'), [
-    (Surreal(0), True),
-    (Surreal(1 / 2), False),
-    (Surreal(0.125), False),
-    (Surreal(-1), False),
-    (Surreal(2), False),
+    (Surreal.from_value(0), True),
+    (Surreal.from_value(1 / 2), False),
+    (Surreal.from_value(0.125), False),
+    (Surreal.from_value(-1), False),
+    (Surreal.from_value(2), False),
 ])
 def test_is_impartial(n, v):
     """
@@ -39,11 +39,11 @@ def test_is_impartial(n, v):
 
 
 @pytest.mark.parametrize(('n', 'v'), [
-    (Surreal(0), True),
-    (Surreal(1 / 2), False),
-    (Surreal(0.125), False),
-    (Surreal(-1), False),
-    (Surreal(2), False),
+    (Surreal.from_value(0), True),
+    (Surreal.from_value(1 / 2), False),
+    (Surreal.from_value(0.125), False),
+    (Surreal.from_value(-1), False),
+    (Surreal.from_value(2), False),
 ])
 def test_is_dicotic(n, v):
     """
@@ -53,11 +53,11 @@ def test_is_dicotic(n, v):
 
 
 @pytest.mark.parametrize('n', [
-    Surreal(0),
-    Surreal(1 / 2),
-    Surreal(0.125),
-    Surreal(-1),
-    Surreal(2),
+    Surreal.from_value(0),
+    Surreal.from_value(1 / 2),
+    Surreal.from_value(0.125),
+    Surreal.from_value(-1),
+    Surreal.from_value(2),
 ])
 def test_is_infinitesimal(n):
     """
@@ -67,11 +67,11 @@ def test_is_infinitesimal(n):
 
 
 @pytest.mark.parametrize('n', [
-    Surreal(0),
-    Surreal(1 / 2),
-    Surreal(0.125),
-    Surreal(-1),
-    Surreal(2),
+    Surreal.from_value(0),
+    Surreal.from_value(1 / 2),
+    Surreal.from_value(0.125),
+    Surreal.from_value(-1),
+    Surreal.from_value(2),
 ])
 def test_is_numberish(n):
     """
@@ -81,11 +81,11 @@ def test_is_numberish(n):
 
 
 @pytest.mark.parametrize('n', [
-    Surreal(0),
-    Surreal(1 / 2),
-    Surreal(0.125),
-    Surreal(-1),
-    Surreal(2),
+    Surreal.from_value(0),
+    Surreal.from_value(1 / 2),
+    Surreal.from_value(0.125),
+    Surreal.from_value(-1),
+    Surreal.from_value(2),
 ])
 def test_is_switch(n):
     """
@@ -106,13 +106,13 @@ def test_order(a, b):
     """
     Test the addition of two Surreals.
     """
-    assert (Surreal(a) >= Surreal(b)) == (a >= b)
+    assert (Surreal.from_value(a) >= Surreal.from_value(b)) == (a >= b)
 
 
 @pytest.mark.parametrize(('a', 'b'), [
-    (Surreal(0), zero),
-    (Surreal(1 / 2), zero),
-    (Surreal(3 / 4), star),
+    (Surreal.from_value(0), zero),
+    (Surreal.from_value(1 / 2), zero),
+    (Surreal.from_value(3 / 4), star),
 ])
 def test_order_game(a, b):
     """
@@ -133,12 +133,12 @@ def test_add(a, b):
     """
     Test the addition of two Surreals.
     """
-    assert Surreal(a) + Surreal(b) == Surreal(a + b)
+    assert Surreal.from_value(a) + Surreal.from_value(b) == Surreal.from_value(a + b)
 
 
 @pytest.mark.parametrize(('a', 'b', 'c'), [
-    (Surreal(1), star, one + star),
-    (Surreal(2), 3 * one, Surreal(5)),
+    (Surreal.from_value(1), star, one + star),
+    (Surreal.from_value(2), 3 * one, Surreal.from_value(5)),
 ])
 def test_add_game(a, b, c):
     """
@@ -159,7 +159,7 @@ def test_add_game_2(a, b):
     """
     Test the addition of two Surreals.
     """
-    assert Surreal(a) + Surreal(b) == Game(a + b)
+    assert Surreal.from_value(a) + Surreal.from_value(b) == Game(a + b)
 
 
 @pytest.mark.parametrize(('a', 'b'), [
@@ -174,7 +174,7 @@ def test_mul(a, b):
     """
     Test the multiplication of two Surreals.
     """
-    assert Surreal(a) * Surreal(b) == Surreal(a * b)
+    assert Surreal.from_value(a) * Surreal.from_value(b) == Surreal.from_value(a * b)
 
 
 @pytest.mark.parametrize(('a', 'b'), [
@@ -189,7 +189,7 @@ def test_mul_game(a, b):
     """
     Test the multiplication of two Surreals.
     """
-    assert Surreal(a) * Game(b) == Surreal(a * b)
+    assert Surreal.from_value(a) * Game(b) == Surreal.from_value(a * b)
 
 
 @pytest.mark.parametrize(('a', 'b'), [
@@ -204,7 +204,7 @@ def test_mul_game_2(a, b):
     """
     Test the multiplication of two Surreals.
     """
-    assert Surreal(a) * Surreal(b) == Game(a * b)
+    assert Surreal.from_value(a) * Surreal.from_value(b) == Game(a * b)
 
 
 @pytest.mark.parametrize(('a', 'b'), [
@@ -216,7 +216,7 @@ def test_div(a, b):
     """
     Test the division of two Surreals.
     """
-    assert Surreal(a) / Surreal(b) == Surreal(a / b)
+    assert Surreal.from_value(a) / Surreal.from_value(b) == Surreal.from_value(a / b)
 
 
 @pytest.mark.xfail
@@ -229,7 +229,7 @@ def test_div_game(a, b):
     """
     Test the division of a Surreal by a Game.
     """
-    assert Surreal(a) / Game(b) == Game(a / b)
+    assert Surreal.from_value(a) / Game(b) == Game(a / b)
 
 
 @pytest.mark.parametrize('n', [
@@ -243,7 +243,7 @@ def test_invert(n):
     """
     Test the inversion of a Surreal.
     """
-    assert Surreal(n)._invert() == Surreal(1 / n)
+    assert Surreal.from_value(n)._invert() == Surreal.from_value(1 / n)
 
 
 def test_surreal_fail():
@@ -251,4 +251,4 @@ def test_surreal_fail():
     Test that Surreal doesn't try to construct things like 1/3.
     """
     with pytest.raises(ValueError):
-        Surreal(1 / 3)
+        Surreal.from_value(1 / 3)

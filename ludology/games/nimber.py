@@ -5,6 +5,7 @@ Nimbers are the values of impartial games.
 """
 
 import numbers
+from copy import copy
 from functools import lru_cache
 from itertools import count
 from math import inf
@@ -27,7 +28,32 @@ class Nimber(Game):
     understood subset of Games.
     """
 
-    def __init__(G, n):
+    def __init__(G, left=None, right=None):
+        """
+        Construct a Nimber.
+
+        Parameters
+        ----------
+        left : set
+            The left set.
+        right : set
+            The right set.
+        """
+        if not left == right:
+            msg = f"The left and right options are not identical."
+            raise ValueError(msg)
+        if not all(G_L.is_impartial for G_L in left):
+            msg = "The options are not all impartial."
+            raise ValueError(msg)
+
+        left = {G_L if isinstance(G_L, Nimber) else Nimber(G_L.left, G_L.right) for G_L in left}
+        G._n = mex({G_L.n for G_L in left})
+
+        G._left = left
+        G._right = right
+
+    @classmethod
+    def from_integer(cls, n):
         """
         Construct the nth Nimber.
 
@@ -36,18 +62,12 @@ class Nimber(Game):
         n : int >= 0
             The value of Nimber to construct.
         """
-        if n == 0:
-            options = set()
-        elif isinstance(n, int):
-            options = {Nimber(i) for i in range(n)}
-        elif isinstance(n, Game) and n.is_impartial:
-            options = {Nimber(i) for i in range(len(n._left))}
-        else:
-            msg = "Nimbers must have an integer value."
+        if not n == int(n):
+            msg = f"{n} is not an integer."
             raise ValueError(msg)
 
-        G._left = G._right = options
-        G._n = len(G._left)
+        options = {Nimber.from_integer(i) for i in range(n)}
+        return cls(left=options, right=copy(options))
 
     @property
     def n(G):
@@ -213,7 +233,7 @@ class Nimber(Game):
             The sum of G and H.
         """
         if isinstance(H, Nimber):
-            return Nimber(G._n ^ H._n)
+            return Nimber.from_integer(G._n ^ H._n)
         if isinstance(H, (Game, numbers.Number)):
             return super().__add__(H)
 
@@ -242,7 +262,7 @@ class Nimber(Game):
             The product of G and H.
         """
         if isinstance(H, Nimber):
-            return Nimber(_mul(G._n, H._n))
+            return Nimber.from_integer(_mul(G._n, H._n))
         if isinstance(H, (Game, numbers.Number)):
             return super().__mul__(H)
 
@@ -310,7 +330,7 @@ class FarStar(Nimber):
         left_set : generator
             All nimbers.
         """
-        return (Nimber(i) for i in count())  # pragma: no branch
+        return (Nimber.from_integer(i) for i in count())  # pragma: no branch
 
     @property
     def right(G):
@@ -322,7 +342,7 @@ class FarStar(Nimber):
         right_set : generator
             All nimbers.
         """
-        return (Nimber(i) for i in count())  # pragma: no branch
+        return (Nimber.from_integer(i) for i in count())  # pragma: no branch
 
     @property
     def value(G):

@@ -30,22 +30,22 @@ __all__ = [
 
 
 # numbers
-zero = Surreal(0)
-one = Surreal(1)
-two = Surreal(2)
-half = Surreal(1 / 2)
-quarter = Surreal(1 / 4)
+zero = Surreal.from_value(0)
+one = Surreal.from_value(1)
+two = Surreal.from_value(2)
+half = Surreal.from_value(1 / 2)
+quarter = Surreal.from_value(1 / 4)
 
 # nimbers
-star = Nimber(1)
-star2 = Nimber(2)
+star = Nimber.from_integer(1)
+star2 = Nimber.from_integer(2)
 
 # other infinitesimals
 up = Game({zero}, {star})
 upstar = Game({zero}, {zero, star})
 
 # switch
-pm_one = Switch(mean=zero, temp=one)
+pm_one = Switch.from_mean_and_temperature(mean=zero, temperature=one)
 
 # more complex examples
 g1 = canonicalize(Game({5 / 2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})}))

@@ -101,4 +101,6 @@ def test_remoteness(G, H):
     """
     Tests for remoteness.
     """
-    assert remoteness(Nimber(conjunctive(G, H))) == min([remoteness(G), remoteness(H)])
+    G_plus_H = conjunctive(G, H)
+    G_plus_H = Nimber(left=G_plus_H.left, right=G_plus_H.right)
+    assert remoteness(G_plus_H) == min([remoteness(G), remoteness(H)])

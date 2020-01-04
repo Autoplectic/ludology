@@ -147,7 +147,7 @@ def temperature(G):
     if G.is_number:
         return -1 / canonicalize(G).n.denominator
     if G.is_switch:
-        return float(canonicalize(G).temp.n)
+        return float(canonicalize(G).temperature.n)
 
     fl = _left_scaffold(G)
     fr = _right_scaffold(G)

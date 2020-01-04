@@ -94,7 +94,7 @@ def nimbers(draw, max_value=20):  # pragma: no cover
     """
     value = draw(integers(min_value=0, max_value=max_value))
 
-    return Nimber(value)
+    return Nimber.from_integer(value)
 
 
 @composite
@@ -119,4 +119,4 @@ def surreals(draw, max_numerator=5, max_denominator_exponent=5):  # pragma: no c
     numerator = draw(integers(min_value=-max_numerator, max_value=max_numerator))
     denominator_exponent = draw(integers(min_value=0, max_value=max_denominator_exponent))
 
-    return Surreal(numerator / 2**denominator_exponent)
+    return Surreal.from_value(numerator / 2**denominator_exponent)
