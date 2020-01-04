@@ -52,6 +52,7 @@ dev = [
     'pytest >= 4.4.0',
     'pytest-cov',
     'pytest-xdist',
+    'radon',
     'sphinx',
 ]
 doc = [
