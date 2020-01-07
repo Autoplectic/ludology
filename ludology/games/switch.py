@@ -47,7 +47,7 @@ class Switch(Game):
         min_right = min(right)
 
         if max_left <= min_right:
-            msg = "The confusion interval has zero length.x"
+            msg = "The confusion interval has zero length."
             raise ValueError(msg)
 
         G._left = left

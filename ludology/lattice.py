@@ -6,8 +6,8 @@ The lattice structure of games.
 
 from itertools import combinations, product
 
+from .canonical_form import canonical_form
 from .games import Game
-from .tools import canonicalize
 from .utils import powerset
 
 
@@ -56,7 +56,7 @@ def all_games(generation):
     else:
         priors = all_games(generation - 1)
         antichains = {games for games in powerset(priors) if is_antichain(games)}
-        news = {canonicalize(Game(a, b)) for a, b in product(antichains, repeat=2)}
+        news = {canonical_form(Game(a, b)) for a, b in product(antichains, repeat=2)}
         return priors | news
 
 
@@ -87,7 +87,7 @@ def companion(G):
         c = Game(cleft, {0} | cright)
     else:
         c = Game(cleft, cright)
-    return canonicalize(c)
+    return canonical_form(c)
 
 
 def is_lonely(G):

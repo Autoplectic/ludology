@@ -7,7 +7,7 @@ A variety of ways of summing games.
 from functools import lru_cache, wraps
 
 from .games import Game
-from .tools import canonicalize
+from .canonical_form import canonical_form
 
 __all__ = [
     'disjunctive',
@@ -26,8 +26,8 @@ def canonize(f):
     """
     Construct a decorator to add a `canon` option to f.
 
-    Add a `canon` option to `f` which toggles whether the function canonicalizes
-    its return value.
+    Add a `canon` option to `f` which toggles whether the function returns the
+    canonical form of the value.
 
     Parameters
     ----------
@@ -43,7 +43,7 @@ def canonize(f):
     def wrapped(G, H, canon=True):
         game = f(G, H)
         if canon:
-            return canonicalize(game)
+            return canonical_form(game)
 
         return game
 

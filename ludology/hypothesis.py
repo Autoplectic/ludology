@@ -14,7 +14,7 @@ from hypothesis.strategies import composite, integers, lists, recursive, sampled
 
 from .games import Game, Nimber, Surreal
 from .lattice import all_games
-from .tools import canonicalize
+from .canonical_form import canonical_form
 
 
 __all__ = [
@@ -42,7 +42,7 @@ def gamify(options):
         left, right = options
         left = [gamify(_) for _ in left]
         right = [gamify(_) for _ in right]
-        return canonicalize(Game(left, right))
+        return canonical_form(Game(left, right))
     except TypeError:
         return options
 

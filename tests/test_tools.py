@@ -8,11 +8,12 @@ import pytest
 from hypothesis import given
 
 from ludology import Game, Nimber
-from ludology.closet import pm_one, star, zero
+from ludology.canonical_form import canonical_form
+from ludology.closet import pm_one, star, tiny, zero
 from ludology.hypothesis import games, nimbers
 from ludology.sums import conjunctive
-from ludology.tools import (canonicalize, left_incentives, left_stop,
-                            remoteness, right_incentives, right_stop)
+from ludology.tools import (left_incentives, left_stop, remoteness,
+                            right_incentives, right_stop)
 from ludology.utils import recursion_limit
 
 
@@ -72,7 +73,7 @@ def test_left_incentives():
     """
     Test for the incentives of a known example.
     """
-    g = Game({0}, {Game({0}, {-2})})
+    g = tiny(2)
     li = {Game({Game({2}, {0})}, {0})}
     assert left_incentives(g) == li
 
@@ -88,12 +89,12 @@ def test_right_incentives():
 
 @pytest.mark.flaky(reruns=5)
 @given(G=games())
-def test_canonicalize(G):
+def test_canonical_form(G):
     """
     Test that canonicalizing doesn't effect the value of the game.
     """
     with recursion_limit(10_000):
-        assert canonicalize(G) == G
+        assert canonical_form(G) == G
 
 
 @given(G=nimbers(max_value=5), H=nimbers(max_value=5))

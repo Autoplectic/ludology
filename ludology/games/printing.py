@@ -10,7 +10,7 @@ from fractions import Fraction
 from functools import lru_cache
 
 from . import Game, Nimber, Surreal, Switch
-from ..tools import canonicalize
+from ..canonical_form import canonical_form
 
 __all__ = [
     'value_str',
@@ -153,7 +153,7 @@ def value_str(G, latex=False):
     s : str
         The name of the game.
     """
-    G = canonicalize(G)
+    G = canonical_form(G)
     if isinstance(G, (Nimber, Surreal, Switch)):
         return G.value
 

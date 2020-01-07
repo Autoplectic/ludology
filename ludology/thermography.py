@@ -11,8 +11,8 @@ from functools import lru_cache
 import numpy as np
 from scipy.optimize import brentq, minimize
 
+from .canonical_form import canonical_form
 from .games import Game
-from .tools import canonicalize
 
 
 __all__ = [
@@ -118,9 +118,9 @@ def mean(G):
         The mean value of G.
     """
     if G.is_number:
-        return float(canonicalize(G).n)
+        return float(canonical_form(G).n)
     if G.is_switch:
-        return float(canonicalize(G).mean.n)
+        return float(canonical_form(G).mean.n)
 
     return float(_left_scaffold(G)(temperature(G)))
 
@@ -145,9 +145,9 @@ def temperature(G):
         The temperature of G.
     """
     if G.is_number:
-        return -1 / canonicalize(G).n.denominator
+        return -1 / canonical_form(G).n.denominator
     if G.is_switch:
-        return float(canonicalize(G).temperature.n)
+        return float(canonical_form(G).temperature.n)
 
     fl = _left_scaffold(G)
     fr = _right_scaffold(G)
@@ -196,12 +196,12 @@ def cool(G, t):
     """
     if t <= temperature(G):
         t = Game(t)
-        lefts = {canonicalize(cool(G_L, t) - t) for G_L in G.left}
-        rights = {canonicalize(cool(G_R, t) + t) for G_R in G.right}
+        lefts = {canonical_form(cool(G_L, t) - t) for G_L in G.left}
+        rights = {canonical_form(cool(G_R, t) + t) for G_R in G.right}
         cooled = Game(lefts, rights)
     else:
         cooled = Game(mean(G))
-    return canonicalize(cooled)
+    return canonical_form(cooled)
 
 
 @lru_cache(maxsize=None)
@@ -228,9 +228,9 @@ def heat(G, t):
     else:
         if not isinstance(t, Game):
             t = Game(t)
-        lefts = {canonicalize(heat(G_L, t) + t) for G_L in G._left}
-        rights = {canonicalize(heat(G_R, t) - t) for G_R in G._right}
-        return canonicalize(Game(lefts, rights))
+        lefts = {canonical_form(heat(G_L, t) + t) for G_L in G._left}
+        rights = {canonical_form(heat(G_R, t) - t) for G_R in G._right}
+        return canonical_form(Game(lefts, rights))
 
 
 @lru_cache(maxsize=None)
@@ -254,9 +254,9 @@ def overheat(G, t):
     """
     if not isinstance(t, Game):
         t = Game(t)
-    lefts = {canonicalize(overheat(G_L, t) + t) for G_L in G.left}
-    rights = {canonicalize(overheat(G_R, t) - t) for G_R in G.right}
-    return canonicalize(Game(lefts, rights))
+    lefts = {canonical_form(overheat(G_L, t) + t) for G_L in G.left}
+    rights = {canonical_form(overheat(G_R, t) - t) for G_R in G.right}
+    return canonical_form(Game(lefts, rights))
 
 
 ###############################################################################
@@ -290,9 +290,9 @@ def thermal_dissociation(G):
 
     while not g.is_infinitesimal and g != 0:
         t = temperature(g)
-        p = canonicalize(cool(g, t) - mean(g))
+        p = canonical_form(cool(g, t) - mean(g))
         particles.append(Particle(p, t))
-        g = canonicalize(g - heat(p, t))
+        g = canonical_form(g - heat(p, t))
 
     return tuple([m] + particles)
 

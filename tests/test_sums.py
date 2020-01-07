@@ -6,7 +6,8 @@ Tests for ludology.sums.
 
 import pytest
 
-from ludology import Game, canonicalize
+from ludology import Game
+from ludology.canonical_form import canonical_form
 from ludology.closet import one, pm_one, star, up, zero
 from ludology.sums import (conjunctive, continued_conjunctive,
                            diminished_disjunctive, disjunctive, ordinal,
@@ -25,7 +26,7 @@ def test_disjunctive(G, H, J):
     """
     Test that the disjunctive sum matches known results.
     """
-    assert canonicalize(disjunctive(G, H)) == J
+    assert canonical_form(disjunctive(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -37,7 +38,7 @@ def test_disjunctive_2(G, H, J):
     """
     Test that the disjunctive sum matches known results, without canonizing.
     """
-    assert canonicalize(disjunctive(G, H, canon=False)) == J
+    assert canonical_form(disjunctive(G, H, canon=False)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -49,7 +50,7 @@ def test_conjunctive(G, H, J):
     """
     Test that the conjunctive sum matches known results.
     """
-    assert canonicalize(conjunctive(G, H)) == J
+    assert canonical_form(conjunctive(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -61,7 +62,7 @@ def test_selective(G, H, J):
     """
     Test that the selective sum matches known results.
     """
-    assert canonicalize(selective(G, H)) == J
+    assert canonical_form(selective(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -73,7 +74,7 @@ def test_diminished_disjunctive(G, H, J):
     """
     Test that the diminished disjunctive sum matches known results.
     """
-    assert canonicalize(diminished_disjunctive(G, H)) == J
+    assert canonical_form(diminished_disjunctive(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -85,7 +86,7 @@ def test_continued_conjunctive(G, H, J):
     """
     Test that the continued conjunctive sum matches known results.
     """
-    assert canonicalize(continued_conjunctive(G, H)) == J
+    assert canonical_form(continued_conjunctive(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -97,7 +98,7 @@ def test_shortened_selective(G, H, J):
     """
     Test that the shortened selective sum matches known results.
     """
-    assert canonicalize(shortened_selective(G, H)) == J
+    assert canonical_form(shortened_selective(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -109,7 +110,7 @@ def test_ordinal(G, H, J):
     """
     Test that the ordinal sum matches known results.
     """
-    assert canonicalize(ordinal(G, H)) == J
+    assert canonical_form(ordinal(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -121,7 +122,7 @@ def test_side(G, H, J):
     """
     Test that the side sum matches known results.
     """
-    assert canonicalize(side(G, H)) == J
+    assert canonical_form(side(G, H)) == J
 
 
 @pytest.mark.parametrize(('G', 'H', 'J'), [
@@ -133,4 +134,4 @@ def test_sequential(G, H, J):
     """
     Test that the sequential sum matches known results.
     """
-    assert canonicalize(sequential(G, H)) == J
+    assert canonical_form(sequential(G, H)) == J

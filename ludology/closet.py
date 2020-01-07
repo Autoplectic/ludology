@@ -5,7 +5,7 @@ A collection of common games.
 """
 
 from .games import Game, Nimber, Surreal, Switch
-from .tools import canonicalize
+from .canonical_form import canonical_form
 
 
 __all__ = [
@@ -48,11 +48,11 @@ upstar = Game({zero}, {zero, star})
 pm_one = Switch.from_mean_and_temperature(mean=zero, temperature=one)
 
 # more complex examples
-g1 = canonicalize(Game({5 / 2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})}))
-g2 = canonicalize(Game({Game({4}, {2})}, {Game({Game({0}, {-2})}, {Game({-4}, {-6})})}))
-g3 = canonicalize(Game({Game({3}, {one + star})}, {Game({-one + star}, {-two + star}), Game({0}, {-3})}))
-g4 = canonicalize(Game({5}, {Game({1}, {-9})}))
-g5 = canonicalize(Game({Game({2}, {0}), Game({2}, {star})}, {Game({0}, {-2 + star}), Game({star}, {-2 + star})}))
+g1 = canonical_form(Game({5 / 2, Game({4}, {2})}, {Game({0}, {-4}), Game({-1}, {-2})}))
+g2 = canonical_form(Game({Game({4}, {2})}, {Game({Game({0}, {-2})}, {Game({-4}, {-6})})}))
+g3 = canonical_form(Game({Game({3}, {one + star})}, {Game({-one + star}, {-two + star}), Game({0}, {-3})}))
+g4 = canonical_form(Game({5}, {Game({1}, {-9})}))
+g5 = canonical_form(Game({Game({2}, {0}), Game({2}, {star})}, {Game({0}, {-2 + star}), Game({star}, {-2 + star})}))
 
 
 # Factories for specific game types.
@@ -70,7 +70,7 @@ def tiny(G):
     T : Game
         {0 || 0 | G}
     """
-    return canonicalize(Game({0}, {Game({0}, {-G})}))
+    return canonical_form(Game({0}, {Game({0}, {-G})}))
 
 
 def miny(G):

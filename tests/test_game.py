@@ -9,10 +9,10 @@ from hypothesis import given
 from hypothesis.strategies import integers
 
 from ludology import Game
+from ludology.canonical_form import canonical_form
 from ludology.closet import half, miny, one, pm_one, star, star2, tiny, up, zero
 from ludology.games import Outcome
 from ludology.games.printing import unicode_fraction
-from ludology.tools import canonicalize
 
 
 @pytest.mark.parametrize(('g1', 'g2'), [
@@ -258,7 +258,7 @@ def test_not_numberish(g):
     (-one, 1),
     (star, 1),
     (up, 2),
-    (canonicalize(up + star), 2),
+    (canonical_form(up + star), 2),
     (half, 2),
 ])
 def test_birthday(g, bday):
