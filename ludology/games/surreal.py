@@ -207,7 +207,10 @@ class Surreal(Game, numbers.Number):
         hash : str
             The hash of G.
         """
-        return super().__hash__()
+        hash_should_be = hash((frozenset(G._left), frozenset(G._right)))
+        hash_is = super().__hash__()
+        print(f"a: {hash_should_be}, b: {hash_is}")
+        return hash_is
 
     @lru_cache(maxsize=None)
     def __ge__(G, H):

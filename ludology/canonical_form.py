@@ -36,12 +36,13 @@ def remove_dominated(G):
     for g in G.left:
         if any(g < G_L for G_L in left):
             left.remove(g)
+
     right = copy(G.right)
     for g in G.right:
         if any(g > G_R for G_R in right):
             right.remove(g)
-    G._left = left
-    G._right = right
+
+    return Game(left=left, right=right)
 
 
 @lru_cache(maxsize=None)
@@ -62,27 +63,27 @@ def replace_reversible(G):
     G : Game
         The Game of interest.
     """
-    new_left_set = set()
+    left = set()
     for G_L in G.left:
         for G_LR in G_L.right:
             if G_LR <= G:  # G_L is reversible through G_LR
                 for G_LRL in G_LR.left:
-                    new_left_set.add(G_LRL)
+                    left.add(G_LRL)
                 break
         else:  # Not reversible
-            new_left_set.add(G_L)
-    G._left = new_left_set
+            left.add(G_L)
 
-    new_right_set = set()
+    right = set()
     for G_R in G.right:
         for G_RL in G_R.left:
             if G_RL >= G:  # G_R is reversible through G_RL
                 for G_RLR in G_RL.right:
-                    new_right_set.add(G_RLR)
+                    right.add(G_RLR)
                 break
         else:  # Not reversible
-            new_right_set.add(G_R)
-    G._right = new_right_set
+            right.add(G_R)
+
+    return Game(left=left, right=right)
 
 
 @lru_cache(maxsize=None)
@@ -129,16 +130,15 @@ def canonical(G):
     K : Game
         The Game G in canonical form.
     """
-    cG = copy(G)
-
-    cG._left = {canonical(G_L) for G_L in cG.left}
-    cG._right = {canonical(G_R) for G_R in cG.right}
+    left = {canonical(G_L) for G_L in G.left}
+    right = {canonical(G_R) for G_R in G.right}
+    cG = Game(left=left, right=right)
 
     old_left, old_right = set(), set()
     while cG.left != old_left or cG.right != old_right:
         old_left, old_right = cG.left, cG.right
-        remove_dominated(cG)
-        replace_reversible(cG)
+        cG = remove_dominated(cG)
+        cG = replace_reversible(cG)
 
     return cG
 

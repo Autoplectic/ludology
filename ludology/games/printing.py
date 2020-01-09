@@ -172,6 +172,13 @@ def value_str(G, latex=False):
     down = hash(Game({star}, {zero}))
     down_star = hash(Game({zero}, {zero, star}))
 
+    print(f"zero: {hash(zero)}")
+    print(f"star: {hash(star)}")
+    print(f"up: {up}")
+    print(f"up_star: {up_star}")
+    print(f"down: {down}")
+    print(f"down_star: {down_star}")
+
     if G_hash == up:
         return _SYMBOLS['up'][bool(latex)]
     elif G_hash == up_star:
@@ -184,9 +191,26 @@ def value_str(G, latex=False):
     g = copy(G)
     i = 1
     while True:
+        print(g.left)
+        print(g.right)
         if g.left == {zero} and len(g.right) == 1:
             i += 1
             g = next(iter(g.right))
+            print(f"g: {g}: {repr(g)}: {hash(g)}")
+            print("Lefts:")
+            for g_L in g.left:
+                print(f"g_L: {g_L}: {repr(g_L)}: {hash(g_L)}")
+            print("Rights:")
+            for g_R in g.right:
+                print(f"g_G: {g_R}: {repr(g_R)}: {hash(g_R)}")
+            h = canonical_form(g)
+            print(f"h: {h}: {hash(h)}")
+            print("Lefts:")
+            for h_L in h.left:
+                print(f"h_L: {h_L}: {repr(h_L)}: {hash(h_L)}")
+            print("Rights:")
+            for h_R in h.right:
+                print(f"h_G: {h_R}: {repr(h_R)}: {hash(h_R)}")
             g_hash = hash(g)
             if g_hash == up:
                 if i in [2, 3, 4]:
