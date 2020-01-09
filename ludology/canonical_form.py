@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
-Various tools for computing properties of Games.
+Computing the canonical form of a Game.
 """
 
-from copy import copy
 from functools import lru_cache
 
 from .games import Game
@@ -32,12 +31,12 @@ def remove_dominated(G):
     G : Game
         The Game of interest.
     """
-    left = copy(G.left)
+    left = G.left
     for g in G.left:
         if any(g < G_L for G_L in left):
             left.remove(g)
 
-    right = copy(G.right)
+    right = G.right
     for g in G.right:
         if any(g > G_R for G_R in right):
             right.remove(g)
@@ -67,8 +66,7 @@ def replace_reversible(G):
     for G_L in G.left:
         for G_LR in G_L.right:
             if G_LR <= G:  # G_L is reversible through G_LR
-                for G_LRL in G_LR.left:
-                    left.add(G_LRL)
+                left |= G_LR.left
                 break
         else:  # Not reversible
             left.add(G_L)
@@ -77,8 +75,7 @@ def replace_reversible(G):
     for G_R in G.right:
         for G_RL in G_R.left:
             if G_RL >= G:  # G_R is reversible through G_RL
-                for G_RLR in G_RL.right:
-                    right.add(G_RLR)
+                right |= G_RL.right
                 break
         else:  # Not reversible
             right.add(G_R)
@@ -140,7 +137,7 @@ def canonical(G):
         cG = remove_dominated(cG)
         cG = replace_reversible(cG)
 
-    return cG
+    return cG  # noqa: R504
 
 
 @lru_cache(maxsize=None)

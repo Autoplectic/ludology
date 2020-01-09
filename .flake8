@@ -35,7 +35,7 @@ max-line-length = 120
 show-source = True
 statistics = True
 
-radon-max-cc = 10
+radon-max-cc = 15
 
 docstring-convention = numpy
 

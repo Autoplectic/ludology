@@ -4,8 +4,8 @@
 A collection of common games.
 """
 
-from .games import Game, Nimber, Surreal, Switch
 from .canonical_form import canonical_form
+from .games import Game, Nimber, Surreal, Switch
 
 
 __all__ = [

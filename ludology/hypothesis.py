@@ -12,9 +12,9 @@ it would be pretty rare to sample tinies or the like.
 
 from hypothesis.strategies import composite, integers, lists, recursive, sampled_from, tuples
 
+from .canonical_form import canonical_form
 from .games import Game, Nimber, Surreal
 from .lattice import all_games
-from .canonical_form import canonical_form
 
 
 __all__ = [

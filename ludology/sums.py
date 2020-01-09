@@ -6,8 +6,8 @@ A variety of ways of summing games.
 
 from functools import lru_cache, wraps
 
-from .games import Game
 from .canonical_form import canonical_form
+from .games import Game
 
 __all__ = [
     'disjunctive',

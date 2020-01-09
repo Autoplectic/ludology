@@ -303,10 +303,7 @@ class Nimber(Game):
         hash : str
             The hash of G.
         """
-        hash_should_be = hash((frozenset(G._left), frozenset(G._right)))
-        hash_is = super().__hash__()
-        print(f"a: {hash_should_be}, b: {hash_is}")
-        return hash_is
+        return super().__hash__()
 
 
 class FarStar(Nimber):
