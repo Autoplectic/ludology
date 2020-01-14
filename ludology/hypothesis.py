@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 A hypothesis strategy for sampling Games.
 

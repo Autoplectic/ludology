@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Games, both generic and specific.
 """

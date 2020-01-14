@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Nimbers are the values of impartial games.
 """

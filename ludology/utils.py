@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Various utilities helpful in computing Game properties.
 """

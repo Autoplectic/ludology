@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Ludology is a package for the study of combinatorial game theory.
 """

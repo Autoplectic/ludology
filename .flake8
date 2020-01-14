@@ -41,3 +41,5 @@ docstring-convention = numpy
 
 import-order-style = pycharm
 application-import-names = ludology
+
+no-accept-encodings = True

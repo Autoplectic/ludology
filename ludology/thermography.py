@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Functions related to the calculation of classical thermographic properties.
 """

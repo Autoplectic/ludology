@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Computing the canonical form of a Game.
 """
